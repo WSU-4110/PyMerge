@@ -44,3 +44,5 @@ canvasR.insert( tk.INSERT, inString )
 
 
 root.mainloop()
+
+# Testing commit - Malcolm

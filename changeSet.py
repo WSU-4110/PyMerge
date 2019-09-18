@@ -1,7 +1,4 @@
 import pmEnums
-
-class outVal:
-    data = pmEnums.ATTRIB.DATA
     
 class changeSet:
 

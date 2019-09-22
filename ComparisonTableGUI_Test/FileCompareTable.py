@@ -6,62 +6,6 @@ from PyQt5 import QtGui
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot
 
-from copy import deepcopy
-
-"""
-Undo function can be implemented by keeping a buffer of each row array. That is, each time a change is made, the list containing
-all the row class instances is deep copied to a list containing the last n number of row copies. If undo is selected, the 
-undo index is recorded and that copy of the array is used to replace the current working version. The current working version
-is then copied to a redo buffer. 
-"""
-
-
-class Stack(object):
-    def __init__(self, stack_size):
-        self.max_size = stack_size
-        self.stack = []
-
-    def push(self, item):
-        if len(self.stack) < self.max_size:
-            self.stack.append(item)
-
-    def pop(self):
-        if len(self.stack) > 0:
-            obj = self.stack.pop()
-            return obj
-        return None
-
-    def _size(self):
-        return len(self.stack)
-
-
-class Undo(object):
-    def __init__(self, buf_size):
-        self.redo_buf = Stack(buf_size)
-        self.undo_buf = Stack(buf_size)
-
-        for n in range(buf_size):
-            self.redo_buf.push(None)
-            self.undo_buf.push(None)
-
-    def undo(self, current_row_list):
-        undo_obj = self.undo_buf.pop()
-
-        if undo_obj is not None:
-            self.redo_buf.push(deepcopy(current_row_list))
-            current_row_list = deepcopy(undo_obj)
-            return True
-        return False
-
-    def redo(self, current_row_list):
-        undo_obj = self.redo_buf.pop()
-
-        if undo_obj is not None:
-            self.undo_buf.push(deepcopy(current_row_list))
-            current_row_list = deepcopy(undo_obj)
-            return True
-        return False
-
 
 class Row(QtCore.QObject):
     def __init__(self, row, table, right_text, left_text):
@@ -87,8 +31,10 @@ class Row(QtCore.QObject):
 
 
 class App(QWidget):
-    def __init__(self):
+    def __init__(self, file1, file2):
         super().__init__()
+        self.file1 = file1
+        self.file2 = file2
         self.title = 'PyMerge'
         self.left = 0
         self.top = 0
@@ -102,6 +48,9 @@ class App(QWidget):
         self.create_table()
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.table)
+
+
+
         self.setLayout(self.layout)
         self.show()
 
@@ -143,10 +92,14 @@ class App(QWidget):
         self.table.setHorizontalHeaderItem(2, QTableWidgetItem("Merge Left"))
         self.table.setHorizontalHeaderItem(3, QTableWidgetItem(""))
 
-        with open("file2.c", 'r') as file:
-            file1_contents = file.read().splitlines()
-        with open("file1.c", 'r') as file:
-            file2_contents = file.read().splitlines()
+        if self.file1 == "" and self.file2 == "":
+            file1_contents = []
+            file2_contents = []
+        else:
+            with open(self.file1, 'r') as file:
+                file1_contents = file.read().splitlines()
+            with open(self.file2, 'r') as file:
+                file2_contents = file.read().splitlines()
 
         # Make lists equal length (needs different implementation obviously)
         if len(file1_contents) > len(file2_contents):
@@ -162,7 +115,9 @@ class App(QWidget):
         self.table.move(0, 0)
 
 
-if __name__ == '__main__':
+def run_app(file1, file2):
     app = QApplication(sys.argv)
-    ex = App()
-    sys.exit(app.exec_())  
+    ex = App(file1, file2)
+    sys.exit(app.exec_())
+
+#run_app("file1.c", "file2.c")

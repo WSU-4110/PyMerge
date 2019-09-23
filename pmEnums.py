@@ -1,3 +1,7 @@
+"""
+various enumerations, to standardize the output and input that functions 
+are expecting to get. 
+"""
 from enum import Enum
 
 class RESULT( Enum ):

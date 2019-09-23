@@ -1,3 +1,7 @@
+"""
+algorithm class. Must be provided with two files, and two changeSet objects. It will compare
+the files and populate the ChangeSet Objects
+"""
 import pmEnums
 
 class algorithm:

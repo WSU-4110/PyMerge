@@ -1,3 +1,8 @@
+"""
+fileIO class, providing an interface for the GUI to input files, and get changeSets. After the GUI has two
+changeSet objects, it is able to handle the rest of the application requirements on its
+own untill it is time to write changes. 
+"""
 import pmEnums
 import changeSet
 

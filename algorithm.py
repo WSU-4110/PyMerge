@@ -6,10 +6,12 @@ import pmEnums
 import changeSet
 
 class algorithm:
-    def __init__():
+    def __init__( ):
         pass
 
     def generateChangeSets( iFileA, iFileB, ochangeSetA, ochangeSetB ):
         #file line 1 = stringA
         # ioFileA.attributeStorageVariable = stringA
         return pmEnums.RESULT.NOTIMPL
+
+    

@@ -82,6 +82,9 @@ class PyMergeCLI(object):
 
     def invoke_application(self, file1, file2):
         """Invoke the main application here"""
+        #should simply start the GUI, and if there are files
+        #supplied in the arguments, the GUI will have a constructor with
+        #args that will autocall the merge algorithm with the said files
         return
 
 

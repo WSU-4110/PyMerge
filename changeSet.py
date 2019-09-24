@@ -9,7 +9,7 @@ class changeSet:
     def __init__():
         pass
         
-    def access( ilineNum, iattrib, oreturnObj ):
+    def access( ilineNum, oChangeType, oData ):
         oreturnObj[0] = pmEnums.CHANGEDENUM.CHANGED
         return pmEnums.RESULT.NOTIMPL
 

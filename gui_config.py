@@ -18,3 +18,8 @@ COLORS = {
     "PAD_SPACE": QtGui.QColor(240, 240, 240),
     "DEFAULT": QtGui.QColor(255, 255, 255)
 }
+
+FONTS = {
+    "TBL_HEADER_DEFAULT": QtGui.QFont('Open Sans Bold', weight=QtGui.QFont.Bold),
+    "TOOLBAR_DEFAULT": QtGui.QFont('Open Sans Bold', weight=QtGui.QFont.Bold)
+}

@@ -18,17 +18,21 @@ from PyQt5.QtCore import pyqtSlot
 from copy import deepcopy
 
 import gui_config
+import undo_redo
+
+undo_ctrlr = undo_redo.Undo(10)
 
 
 class Row(QtCore.QObject):
-    __slots__ = ["row", "table", "right_text", "left_text"]
+    __slots__ = ["row", "table", "right_text", "left_text", "line_num"]
 
-    def __init__(self, row, table, right_text, left_text):
+    def __init__(self, row, table, right_text, left_text, line_num):
         super().__init__()
         self.row_num = row
         self.table = table
         self.right_text = right_text
         self.left_text = left_text
+        self.line_num = line_num
         self.right_background_color = None
         self.left_background_color = None
 
@@ -41,6 +45,18 @@ class Row(QtCore.QObject):
         else:
             self.table.item(self.row_num, 4).setBackground(gui_config.COLORS["DEFAULT"])
 
+        right_button = QtWidgets.QPushButton(self.table)
+        right_icon = QtGui.QIcon(gui_config.ICONS["MERGE_RIGHT"])
+        right_button.setIcon(right_icon)
+        right_button.clicked.connect(self.merge_right)
+        self.table.setCellWidget(self.line_num, 2, right_button)
+
+        left_button = QtWidgets.QPushButton(self.table)
+        left_icon = QtGui.QIcon(gui_config.ICONS["MERGE_LEFT"])
+        left_button.setIcon(left_icon)
+        left_button.clicked.connect(self.merge_left)
+        self.table.setCellWidget(line_num, 3, left_button)
+
         self.table.repaint()
 
     @pyqtSlot()
@@ -49,6 +65,7 @@ class Row(QtCore.QObject):
         self.table.item(self.row_num, 1).setText(self.left_text)
         self.right_text = self.left_text
         self.table.item(self.row_num, 1).setBackground(gui_config.COLORS["LINE_MERGE"])
+        undo_ctrlr.record_action(self)
         self.table.repaint()
 
     @pyqtSlot()
@@ -57,6 +74,7 @@ class Row(QtCore.QObject):
         self.table.item(self.row_num, 4).setText(self.right_text)
         self.left_text = self.right_text
         self.table.item(self.row_num, 4).setBackground(gui_config.COLORS["LINE_MERGE"])
+        undo_ctrlr.record_action(self)
         self.table.repaint()
 
 
@@ -73,8 +91,8 @@ class MainTable(QWidget):
 
         self.table.setHorizontalHeaderItem(0, QTableWidgetItem("Line"))
         self.table.setHorizontalHeaderItem(1, QTableWidgetItem(""))
-        self.table.setHorizontalHeaderItem(2, QTableWidgetItem("Merge Right"))
-        self.table.setHorizontalHeaderItem(3, QTableWidgetItem("Merge Left"))
+        self.table.setHorizontalHeaderItem(2, QTableWidgetItem("Merge\nRight"))
+        self.table.setHorizontalHeaderItem(3, QTableWidgetItem("Merge\nLeft"))
         self.table.setHorizontalHeaderItem(4, QTableWidgetItem(""))
 
         self.table.horizontalHeaderItem(0).setFont(QtGui.QFont('Open Sans Bold', weight=QtGui.QFont.Bold))
@@ -111,20 +129,20 @@ class MainTable(QWidget):
         self.table.item(line_num, 2).setTextAlignment(QtCore.Qt.AlignCenter)
         self.table.item(line_num, 3).setTextAlignment(QtCore.Qt.AlignCenter)
 
-        row_instance = Row(line_num, self.table, right_text, left_text)
+        row_instance = Row(line_num, self.table, right_text, left_text, line_num)
 
-        right_button = QtWidgets.QPushButton(self.table)
-        right_icon = QtGui.QIcon(gui_config.ICONS["MERGE_RIGHT"])
-        right_button.setIcon(right_icon)
-        right_button.clicked.connect(row_instance.merge_right)
-        self.table.setCellWidget(line_num, 2, right_button)
-        self.rows.append(row_instance)
-
-        left_button = QtWidgets.QPushButton(self.table)
-        left_icon = QtGui.QIcon(gui_config.ICONS["MERGE_LEFT"])
-        left_button.setIcon(left_icon)
-        left_button.clicked.connect(row_instance.merge_left)
-        self.table.setCellWidget(line_num, 3, left_button)
+        # right_button = QtWidgets.QPushButton(self.table)
+        # right_icon = QtGui.QIcon(gui_config.ICONS["MERGE_RIGHT"])
+        # right_button.setIcon(right_icon)
+        # right_button.clicked.connect(row_instance.merge_right)
+        # self.table.setCellWidget(line_num, 2, right_button)
+        # self.rows.append(row_instance)
+        #
+        # left_button = QtWidgets.QPushButton(self.table)
+        # left_icon = QtGui.QIcon(gui_config.ICONS["MERGE_LEFT"])
+        # left_button.setIcon(left_icon)
+        # left_button.clicked.connect(row_instance.merge_left)
+        # self.table.setCellWidget(line_num, 3, left_button)
         self.rows.append(row_instance)
 
     def load_table_contents(self, left_lines, right_lines):

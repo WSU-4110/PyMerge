@@ -1,5 +1,5 @@
 """
-Main Window
+Widget to contain the buttons/control panel for the merge tool. 
 """
 
 import sys

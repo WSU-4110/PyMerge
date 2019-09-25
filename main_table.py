@@ -1,13 +1,8 @@
-import sys
+
+# PyQt imports
 from PyQt5.QtWidgets import *
 from PyQt5 import QtGui
-from PyQt5.QtWidgets import (
-    QTableView,
-    QHeaderView,
-    QLineEdit,
-    QAbstractItemView
-)
-
+from PyQt5.QtWidgets import QTableView, QHeaderView, QLineEdit, QAbstractItemView
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableWidget, QTableWidgetItem, QVBoxLayout
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
@@ -15,8 +10,12 @@ from PyQt5 import QtGui
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot
 
+# Standard imports
 from copy import deepcopy
+import os
+import sys
 
+# Project imports
 import gui_config
 import undo_redo
 
@@ -40,6 +39,7 @@ class Row(QtCore.QObject):
             self.table.item(self.row_num, 1).setBackground(gui_config.COLORS["PAD_SPACE"])
         else:
             self.table.item(self.row_num, 1).setBackground(gui_config.COLORS["DEFAULT"])
+
         if left_text is None:
             self.table.item(self.row_num, 4).setBackground(gui_config.COLORS["PAD_SPACE"])
         else:
@@ -50,6 +50,7 @@ class Row(QtCore.QObject):
         right_button.setIcon(right_icon)
         right_button.clicked.connect(self.merge_right)
         self.table.setCellWidget(self.line_num, 2, right_button)
+
 
         left_button = QtWidgets.QPushButton(self.table)
         left_icon = QtGui.QIcon(gui_config.ICONS["MERGE_LEFT"])
@@ -91,15 +92,17 @@ class MainTable(QWidget):
 
         self.table.setHorizontalHeaderItem(0, QTableWidgetItem("Line"))
         self.table.setHorizontalHeaderItem(1, QTableWidgetItem(""))
-        self.table.setHorizontalHeaderItem(2, QTableWidgetItem("Merge\nRight"))
-        self.table.setHorizontalHeaderItem(3, QTableWidgetItem("Merge\nLeft"))
+        self.table.setHorizontalHeaderItem(2, QTableWidgetItem("Merge Right"))
+        self.table.setHorizontalHeaderItem(3, QTableWidgetItem("Merge Left"))
         self.table.setHorizontalHeaderItem(4, QTableWidgetItem(""))
 
-        self.table.horizontalHeaderItem(0).setFont(QtGui.QFont('Open Sans Bold', weight=QtGui.QFont.Bold))
-        self.table.horizontalHeaderItem(1).setFont(QtGui.QFont('Open Sans Bold', weight=QtGui.QFont.Bold))
-        self.table.horizontalHeaderItem(2).setFont(QtGui.QFont('Open Sans Bold', weight=QtGui.QFont.Bold))
-        self.table.horizontalHeaderItem(3).setFont(QtGui.QFont('Open Sans Bold', weight=QtGui.QFont.Bold))
-        self.table.horizontalHeaderItem(4).setFont(QtGui.QFont('Open Sans Bold', weight=QtGui.QFont.Bold))
+        self.table.horizontalHeaderItem(0).setFont(gui_config.FONTS["TBL_HEADER_DEFAULT"])
+        self.table.horizontalHeaderItem(1).setFont(gui_config.FONTS["TBL_HEADER_DEFAULT"])
+        self.table.horizontalHeaderItem(2).setFont(gui_config.FONTS["TBL_HEADER_DEFAULT"])
+        self.table.horizontalHeaderItem(3).setFont(gui_config.FONTS["TBL_HEADER_DEFAULT"])
+        self.table.horizontalHeaderItem(4).setFont(gui_config.FONTS["TBL_HEADER_DEFAULT"])
+
+        self.table.horizontalHeaderItem(0).setForeground(gui_config.COLORS["TBL_HEADER_DEFAULT_FOREGROUND"])
 
         self.table.horizontalHeaderItem(0).setTextAlignment(QtCore.Qt.AlignCenter)
         self.table.horizontalHeaderItem(1).setTextAlignment(QtCore.Qt.AlignCenter)
@@ -107,6 +110,11 @@ class MainTable(QWidget):
         self.table.horizontalHeaderItem(3).setTextAlignment(QtCore.Qt.AlignCenter)
         self.table.horizontalHeaderItem(4).setTextAlignment(QtCore.Qt.AlignCenter)
 
+        self.table.horizontalHeaderItem(0).setBackground(gui_config.COLORS["TBL_HEADER_DEFAULT_BACKGROUND"])
+        self.table.horizontalHeaderItem(1).setBackground(gui_config.COLORS["TBL_HEADER_DEFAULT_BACKGROUND"])
+        self.table.horizontalHeaderItem(2).setBackground(gui_config.COLORS["TBL_HEADER_DEFAULT_BACKGROUND"])
+        self.table.horizontalHeaderItem(3).setBackground(gui_config.COLORS["TBL_HEADER_DEFAULT_BACKGROUND"])
+        self.table.horizontalHeaderItem(4).setBackground(gui_config.COLORS["TBL_HEADER_DEFAULT_BACKGROUND"])
         self.table.verticalHeader().setVisible(False)
 
         # Set column resize modes
@@ -115,6 +123,8 @@ class MainTable(QWidget):
         self.table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeToContents)
         self.table.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeToContents)
         self.table.horizontalHeader().setSectionResizeMode(4, QHeaderView.Stretch)
+
+        self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
         grid.addWidget(self.table)
 
     def add_line(self, right_text, left_text, line_num):
@@ -130,25 +140,13 @@ class MainTable(QWidget):
         self.table.item(line_num, 3).setTextAlignment(QtCore.Qt.AlignCenter)
 
         row_instance = Row(line_num, self.table, right_text, left_text, line_num)
-
-        # right_button = QtWidgets.QPushButton(self.table)
-        # right_icon = QtGui.QIcon(gui_config.ICONS["MERGE_RIGHT"])
-        # right_button.setIcon(right_icon)
-        # right_button.clicked.connect(row_instance.merge_right)
-        # self.table.setCellWidget(line_num, 2, right_button)
-        # self.rows.append(row_instance)
-        #
-        # left_button = QtWidgets.QPushButton(self.table)
-        # left_icon = QtGui.QIcon(gui_config.ICONS["MERGE_LEFT"])
-        # left_button.setIcon(left_icon)
-        # left_button.clicked.connect(row_instance.merge_left)
-        # self.table.setCellWidget(line_num, 3, left_button)
         self.rows.append(row_instance)
 
     def load_table_contents(self, left_lines, right_lines):
         left_text_lines = deepcopy(left_lines)
         right_text_lines = deepcopy(right_lines)
 
+        # Pad arrays. Remove this later
         if len(left_text_lines) > len(right_text_lines):
             for n in range(len(left_text_lines)):
                 right_text_lines.append("")
@@ -160,8 +158,8 @@ class MainTable(QWidget):
             self.add_line(left_text_lines[n], right_text_lines[n], n)
 
     def load_test_files(self, file1, file2):
-        self.table.setHorizontalHeaderItem(1, QTableWidgetItem(file1))
-        self.table.setHorizontalHeaderItem(4, QTableWidgetItem(file2))
+        self.table.horizontalHeaderItem(1).setText(os.path.abspath(file1))
+        self.table.horizontalHeaderItem(4).setText(os.path.abspath(file2))
 
         with open(file1, 'r') as file:
             file1_contents = file.read().splitlines()

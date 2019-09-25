@@ -9,21 +9,27 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5 import QtGui
 import controlButtons
+import main_table
+
 
 class mainWindow(QMainWindow):    
     def __init__(self, fileA=0, fileB=0):
         super().__init__()
         self.setWindowTitle("PyMerge")
+        self.setGeometry(1000, 1000, 2000, 1000)
 
         layout = QGridLayout()
-
         layout.addWidget(controlButtons.controlButtons(), 0, 0)
-        #layout.addWidget(controlButtons.controlButtons(), 1, 0)
+
+        table_widget = main_table.MainTable()
+        layout.addWidget(table_widget, 1, 0)
 
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
-        
+
+        table_widget.load_test_files("file1.c", "file2.c")
+
         self.initUI()
         
     def initUI(self):

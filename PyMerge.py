@@ -7,8 +7,8 @@ algorithms in this file. It will only call the main GUI and application function
 
 import sys
 import os
-import FileCompareTable
-
+#import FileCompareTable
+import mainWindow
 
 class PyMergeCLI(object):
 
@@ -82,10 +82,12 @@ class PyMergeCLI(object):
 
     def invoke_application(self, file1, file2):
         """Invoke the main application here"""
-        #should simply start the GUI, and if there are files
-        #supplied in the arguments, the GUI will have a constructor with
-        #args that will autocall the merge algorithm with the said files
-        return
+        
+        if len(sys.argv) == 3:
+            mainWindow.startMain( file1, file2 )
+        else:
+            mainWindow.startMain()
+        
 
 
 if __name__ == '__main__':

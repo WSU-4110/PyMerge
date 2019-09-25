@@ -19,6 +19,7 @@ from copy import deepcopy
 
 import gui_config
 
+
 class Row(QtCore.QObject):
     __slots__ = ["row", "table", "right_text", "left_text"]
 
@@ -28,20 +29,35 @@ class Row(QtCore.QObject):
         self.table = table
         self.right_text = right_text
         self.left_text = left_text
+        self.right_background_color = None
+        self.left_background_color = None
+
+        if right_text is None:
+            self.table.item(self.row_num, 1).setBackground(gui_config.COLORS["PAD_SPACE"])
+        else:
+            self.table.item(self.row_num, 1).setBackground(gui_config.COLORS["DEFAULT"])
+        if left_text is None:
+            self.table.item(self.row_num, 4).setBackground(gui_config.COLORS["PAD_SPACE"])
+        else:
+            self.table.item(self.row_num, 4).setBackground(gui_config.COLORS["DEFAULT"])
+
+        self.table.repaint()
 
     @pyqtSlot()
     def merge_right(self):
         self.table.setItem(self.row_num, 1, QTableWidgetItem(self.left_text))
         self.table.item(self.row_num, 1).setText(self.left_text)
-        self.table.repaint()
         self.right_text = self.left_text
+        self.table.item(self.row_num, 1).setBackground(gui_config.COLORS["LINE_MERGE"])
+        self.table.repaint()
 
     @pyqtSlot()
     def merge_left(self):
         self.table.setItem(self.row_num, 4, QTableWidgetItem(self.right_text))
         self.table.item(self.row_num, 4).setText(self.right_text)
-        self.table.repaint()
         self.left_text = self.right_text
+        self.table.item(self.row_num, 4).setBackground(gui_config.COLORS["LINE_MERGE"])
+        self.table.repaint()
 
 
 class MainTable(QWidget):
@@ -67,6 +83,12 @@ class MainTable(QWidget):
         self.table.horizontalHeaderItem(3).setFont(QtGui.QFont('Open Sans Bold', weight=QtGui.QFont.Bold))
         self.table.horizontalHeaderItem(4).setFont(QtGui.QFont('Open Sans Bold', weight=QtGui.QFont.Bold))
 
+        self.table.horizontalHeaderItem(0).setTextAlignment(QtCore.Qt.AlignCenter)
+        self.table.horizontalHeaderItem(1).setTextAlignment(QtCore.Qt.AlignCenter)
+        self.table.horizontalHeaderItem(2).setTextAlignment(QtCore.Qt.AlignCenter)
+        self.table.horizontalHeaderItem(3).setTextAlignment(QtCore.Qt.AlignCenter)
+        self.table.horizontalHeaderItem(4).setTextAlignment(QtCore.Qt.AlignCenter)
+
         self.table.verticalHeader().setVisible(False)
 
         # Set column resize modes
@@ -84,6 +106,10 @@ class MainTable(QWidget):
         self.table.setItem(line_num, 2, QTableWidgetItem(""))
         self.table.setItem(line_num, 3, QTableWidgetItem(""))
         self.table.setItem(line_num, 4, QTableWidgetItem(str(left_text)))
+
+        self.table.item(line_num, 0).setTextAlignment(QtCore.Qt.AlignCenter)
+        self.table.item(line_num, 2).setTextAlignment(QtCore.Qt.AlignCenter)
+        self.table.item(line_num, 3).setTextAlignment(QtCore.Qt.AlignCenter)
 
         row_instance = Row(line_num, self.table, right_text, left_text)
 

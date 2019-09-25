@@ -44,6 +44,7 @@ class mainWindow(QMainWindow):
         layout = QGridLayout()
 
         layout.addWidget(controlButtons(), 0, 0)
+        layout.addWidget(controlButtons(), 1, 0)
 
         widget = QWidget()
         widget.setLayout(layout)

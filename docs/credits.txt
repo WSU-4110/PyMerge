@@ -1,0 +1,7 @@
+Icon credits:
+    add.png:
+    left-arrow.png
+    right-arrow.png
+    redo-arrow.png
+    undo-arrow.png
+

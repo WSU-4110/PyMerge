@@ -1,19 +1,17 @@
 
 # PyQt imports
 from PyQt5.QtWidgets import *
-from PyQt5 import QtGui
-from PyQt5.QtWidgets import QTableView, QHeaderView, QLineEdit, QAbstractItemView
+from PyQt5.QtWidgets import QTableView, QHeaderView, QLineEdit, QAbstractItemView, QPushButton
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableWidget, QTableWidgetItem, QVBoxLayout
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import pyqtSlot, Qt
 
 # Standard imports
 from copy import deepcopy
 import os
-import sys
 
 # Project imports
 import gui_config
@@ -53,14 +51,14 @@ class Row(QtCore.QObject):
         else:
             self.table.item(self.row_num, 4).setBackground(gui_config.COLORS["DEFAULT"])
 
-        right_button = QtWidgets.QPushButton(self.table)
-        right_icon = QtGui.QIcon(gui_config.ICONS["MERGE_RIGHT"])
+        right_button = QPushButton(self.table)
+        right_icon = QIcon(gui_config.ICONS["MERGE_RIGHT"])
         right_button.setIcon(right_icon)
         right_button.clicked.connect(self.merge_right)
         self.table.setCellWidget(self.line_num, 2, right_button)
 
-        left_button = QtWidgets.QPushButton(self.table)
-        left_icon = QtGui.QIcon(gui_config.ICONS["MERGE_LEFT"])
+        left_button = QPushButton(self.table)
+        left_icon = QIcon(gui_config.ICONS["MERGE_LEFT"])
         left_button.setIcon(left_icon)
         left_button.clicked.connect(self.merge_left)
         self.table.setCellWidget(line_num, 3, left_button)
@@ -131,11 +129,11 @@ class MainTable(QWidget):
         self.table.horizontalHeader().setFont(gui_config.FONTS["TBL_HEADER_DEFAULT"])
 
         # Set the header text alignment
-        self.table.horizontalHeaderItem(0).setTextAlignment(QtCore.Qt.AlignCenter)
-        self.table.horizontalHeaderItem(1).setTextAlignment(QtCore.Qt.AlignCenter)
-        self.table.horizontalHeaderItem(2).setTextAlignment(QtCore.Qt.AlignCenter)
-        self.table.horizontalHeaderItem(3).setTextAlignment(QtCore.Qt.AlignCenter)
-        self.table.horizontalHeaderItem(4).setTextAlignment(QtCore.Qt.AlignCenter)
+        self.table.horizontalHeaderItem(0).setTextAlignment(Qt.AlignCenter)
+        self.table.horizontalHeaderItem(1).setTextAlignment(Qt.AlignCenter)
+        self.table.horizontalHeaderItem(2).setTextAlignment(Qt.AlignCenter)
+        self.table.horizontalHeaderItem(3).setTextAlignment(Qt.AlignCenter)
+        self.table.horizontalHeaderItem(4).setTextAlignment(Qt.AlignCenter)
 
         # Set the header background colors
         self.table.horizontalHeaderItem(0).setBackground(gui_config.COLORS["TBL_HEADER_DEFAULT_BACKGROUND"])
@@ -153,7 +151,7 @@ class MainTable(QWidget):
         self.table.horizontalHeader().setSectionResizeMode(4, QHeaderView.Stretch)
 
         # Make the table read only for the user
-        self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
+        self.table.setEditTriggers(QTableWidget.NoEditTriggers)
         grid.addWidget(self.table)
 
     def add_line(self, right_text: str, left_text: str, line_num: int or str):
@@ -171,9 +169,9 @@ class MainTable(QWidget):
         self.table.setItem(line_num, 3, QTableWidgetItem(""))
         self.table.setItem(line_num, 4, QTableWidgetItem(str(left_text)))
 
-        self.table.item(line_num, 0).setTextAlignment(QtCore.Qt.AlignCenter)
-        self.table.item(line_num, 2).setTextAlignment(QtCore.Qt.AlignCenter)
-        self.table.item(line_num, 3).setTextAlignment(QtCore.Qt.AlignCenter)
+        self.table.item(line_num, 0).setTextAlignment(Qt.AlignCenter)
+        self.table.item(line_num, 2).setTextAlignment(Qt.AlignCenter)
+        self.table.item(line_num, 3).setTextAlignment(Qt.AlignCenter)
 
         row_instance = Row(line_num, self.table, right_text, left_text, line_num)
         self.rows.append(row_instance)

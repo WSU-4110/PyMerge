@@ -8,10 +8,11 @@ import changeSet
 class algorithm:
     def __init__( ):
         pass
-
+    
     def generateChangeSets( iFileA, iFileB, ochangeSetA, ochangeSetB ):
+        return pmEnums.RESULT.NOTIMPL
         #file line 1 = stringA
         # ioFileA.attributeStorageVariable = stringA
-        return pmEnums.RESULT.NOTIMPL
+        
 
     

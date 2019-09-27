@@ -5,8 +5,9 @@ Widget to contain the buttons/control panel for the merge tool.
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5 import QtGui
-#from PyQt5.QtWidgets import QMainWindow, QApplication, QAction, QGridLayout, QPushButton, QGroupBox, QDialog, QVBoxLayout
-
+import os.path
+sys.path.append('icons/')
+import iconStrings
 
 
 class controlButtons(QWidget):
@@ -18,13 +19,26 @@ class controlButtons(QWidget):
     def buttonLayout(self):        
         grid = QGridLayout()
         self.setLayout(grid)
+                
+        mergeLBut = QPushButton()
+        mergeLBut.resize( 100, 40)        
+        icon = QtGui.QIcon( os.path.join( "icons/", iconStrings.MERGERICON ))
+        mergeLBut.setIcon(icon)
         
-        mergeLBut = QPushButton("Merge Left")
         grid.addWidget(mergeLBut, 0, 0)
-        mergeRBut = QPushButton("Merge Right")
-        grid.addWidget(mergeRBut, 0, 3)
-        nextDBut =  QPushButton("Next Difference")
+
+        mergeRBut = QPushButton()
+        icon = QtGui.QIcon( os.path.join( "icons/", iconStrings.MERGELICON ))
+        mergeRBut.setIcon(icon)
+        grid.addWidget(mergeRBut, 0, 2)
+        
+        nextDBut =  QPushButton()
+        icon = QtGui.QIcon( os.path.join( "icons/", iconStrings.NEXTDIFFICON ))
+        nextDBut.setIcon(icon)
         grid.addWidget(nextDBut, 0, 1)
-        prevDBut =  QPushButton("Previous Difference")
-        grid.addWidget(prevDBut, 0, 2)
+        
+        prevDBut =  QPushButton()
+        icon = QtGui.QIcon( os.path.join( "icons/", iconStrings.PREVDIFFICON ))
+        prevDBut.setIcon(icon)
+        grid.addWidget(prevDBut, 1, 1)
         

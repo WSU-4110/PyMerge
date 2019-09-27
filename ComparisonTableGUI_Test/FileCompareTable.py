@@ -120,4 +120,4 @@ def run_app(file1, file2):
     ex = App(file1, file2)
     sys.exit(app.exec_())
 
-#run_app("file1.c", "file2.c")
+run_app("file1.c", "file2.c")

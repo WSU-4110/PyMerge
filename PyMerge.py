@@ -7,15 +7,15 @@ algorithms in this file. It will only call the main GUI and application function
 
 import sys
 import os
-import FileCompareTable
-
+#import FileCompareTable
+import mainWindow
 
 class PyMergeCLI(object):
 
     help_values = {
-        "-file": "File to compare.\n\tUsage: '-file <file_name>'",
-        "-help": "Show command line options.\n\tUsage: '-help'",
-        "-about": "Credits and information about PyMerge.",
+        "-file": "File to compare.\n\tUsage: '--file <file1_name> <file2_name>'",
+        "-help": "Show command line options.\n\tUsage: '--help'",
+        "-about": "https://github.com/WSU-4110/PyMerge/blob/master/README.md",
     }
 
     error_msgs = {
@@ -34,18 +34,11 @@ class PyMergeCLI(object):
         if len(options) == 0:
             self.invoke_application("", "")
 
-        for idx, opt in enumerate(options):
-            if self.resolve_option(opt) == "--file" and len(options) == 4:
-                if left_file is None:
-                    if os.path.exists(options[idx + 1]) and os.path.isfile(options[idx + 1]):
+        for idx, opt in enumerate(options):            
+            if self.resolve_option(opt) == "--file" and len(options) == 3:
+                if left_file is None:                    
+                    if os.path.exists(options[idx + 1]) and os.path.isfile(options[idx + 1]):                        
                         left_file = options[idx + 1]
-                    else:
-                        print(self.error_msgs["FILE_DNE"] + options[idx + 1])
-                        return
-
-                elif left_file is not None and right_file is None:
-                    if os.path.exists(options[idx + 1]) and os.path.isfile(options[idx + 1]):
-                        right_file = options[idx + 1]
                     else:
                         print(self.error_msgs["FILE_DNE"] + options[idx + 1])
                         return
@@ -53,21 +46,37 @@ class PyMergeCLI(object):
                     print(self.error_msgs["FILE_CNT"])
                     return
 
+                if left_file is not None and right_file is None:                    
+                    if os.path.exists(options[idx + 2]) and os.path.isfile(options[idx + 2]):
+                        right_file = options[idx + 2]
+                        break
+                    else:
+                        print(self.error_msgs["FILE_DNE"] + options[idx + 2])
+                        return
+                    
+                else:
+                    print(self.error_msgs["FILE_CNT"])
+                    return
+            
             elif self.resolve_option(opt) == "--help" and len(options) == 1:
                 for key in self.help_values:
                     print(key + " : " + self.help_values[key])
 
+            elif self.resolve_option(opt) == "--about" and len(options) == 1:
+                print("https://github.com/WSU-4110/PyMerge/blob/master/README.md")
+                                
             else:
                 print("Invalid options. Enter '--help' for more information.")
                 return
+           
 
-        if len(options) == 4 and left_file is not None and right_file is not None:
+        if len(options) == 3 and left_file is not None and right_file is not None:
             self.invoke_application(left_file, right_file)
 
 
     @staticmethod
     def resolve_option(option):
-        file_options = {"--f", "-file"}
+        file_options = {"--f", "-file", "-f"}
         help_options = {"--h", "-h", "--he", "-he", "--hel", "-hel", "--help", "-help"}
         about_options = {"--about", "-about", "--abot", "-abot", "--abut", "-abut", "--abt", "-abt", "--info", "-info"}
 
@@ -81,8 +90,12 @@ class PyMergeCLI(object):
             return option
 
     def invoke_application(self, file1, file2):
-        """Invoke the main application here"""
-        return
+        """Invoke the main application here"""        
+        if len(sys.argv) == 4:
+            mainWindow.startMain( file1, file2 )
+        else:
+            mainWindow.startMain()
+        
 
 
 if __name__ == '__main__':

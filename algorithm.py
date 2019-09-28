@@ -16,14 +16,16 @@ class algorithm:
         f1 = iFileA.readlines()
         f2 = iFileB.readlines()
 
+        file1Changes.setChange(1, pmEnums.CHANGEDENUM.CHANGED, f1[1])
+
         # return pmEnums.RESULT.NOTIMPL
 
 
 file1 = open("test_file1.txt", "r")
 file2 = open("test_file2.txt", "r")
 
-file1Changes = ChangeSet()
-file2Changes = ChangeSet()
+file1Changes = changeSet.ChangeSet()
+file2Changes = changeSet.ChangeSet()
 
 alg = algorithm()
 alg.generateChangeSets(file1, file2, file1Changes, file2Changes)

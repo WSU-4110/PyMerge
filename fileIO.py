@@ -5,27 +5,32 @@ own untill it is time to write changes.
 """
 import pmEnums
 import changeSet
+import algorithm
 
-class fileIO:
-    def __init__():
-        pass
-    
+class fileIO:    
+    @staticmethod
     def diffFiles( iFileA, iFileB ):
-        #in here diff the files and populate two change sets
-        #result = algorithmObj = algorithmClass()
-        #result = algorithmObj.generateChangeSets( changesA, changesB )
+        changesA = changeSet.changeSet
+        changesB = changeSet.changeSet
+        
+        fileA = open(iFileA, 'r')
+        fileB = open(iFileB, 'r')
 
+        alg = algorithm.algorithm
+        result = alg.generateChangeSets(fileA, fileB, changesA, changesB)
+
+        fileA.close()
+        fileB.close()
+        
         if result == pmEnums.RESULT.GOOD:        
             return pmEnums.RESULT.GOOD
         return pmEnums.RESULT.NOTIMPL
 
+    @staticmethod
     def getChangeSets( oFileA, oFileB):
         oFileA = changesA
         oFileB = changesB 
-        return pmEnums.RESULT.NOTIMPL
-
-    #private
-    __changesA = changeSet.changeSet()
-    __changesB = changeSet.changeSet()
-
-
+        if changesA != 0 or changesB != 0:
+            return changeSet.GOOD
+        return changeSet.ERROR
+    

@@ -1,4 +1,3 @@
-
 from copy import deepcopy
 
 """
@@ -10,11 +9,11 @@ is then copied to a redo buffer.
 
 
 class Stack(object):
-    def __init__(self, stack_size):
-        self.max_size = stack_size
-        self.stack = []
+    def __init__(self, stack_size: int):
+        self.max_size: int = stack_size
+        self.stack = [None] * self.max_size
 
-    def push(self, item):
+    def stack_push(self, item):
         # Check if stack is full, then append the object onto the end
         if len(self.stack) < self.max_size:
             self.stack.append(item)
@@ -24,11 +23,10 @@ class Stack(object):
                 self.stack[n - 1] = self.stack[n]
             self.stack[-1] = item
 
-    def pop(self):
+    def stack_pop(self):
         # Check if stack is empty, then pop the top object
         if len(self.stack) > 0:
-            obj = self.stack.pop()
-            return obj
+            return self.stack.pop()
         return None
 
     def _size(self):
@@ -36,7 +34,15 @@ class Stack(object):
 
 
 class UndoRedoAction(object):
-    __slots__ = ["row_num", "table", "left_text", "right_text", "line_num", "right_background_color", "left_background_color"]
+    __slots__ = [
+        "row_num",
+        "table",
+        "left_text",
+        "right_text",
+        "line_num",
+        "right_background_color",
+        "left_background_color",
+    ]
 
     def __init__(self, row_obj):
         self.row_num = row_obj.row_num
@@ -62,37 +68,33 @@ class Undo(object):
         self.redo_buf = Stack(buf_size)
         self.undo_buf = Stack(buf_size)
 
-        for n in range(buf_size):
-            self.redo_buf.push(None)
-            self.undo_buf.push(None)
-
     def record_action(self, row_obj):
         record_obj = UndoRedoAction(row_obj)
-        self.undo_buf.push(record_obj)
+        self.undo_buf.stack_push(record_obj)
         print(self.undo_buf.stack[-1])
 
     def undo(self, row_obj):
-        undo_obj = self.undo_buf.pop()  # Get the state we want to set
+        undo_obj = self.undo_buf.stack_pop()  # Get the state we want to set
         redo_obj = UndoRedoAction(row_obj)  # Record the current state
 
         # Check if object is None, then push the recorded current state.
         if undo_obj is not None:
-            self.redo_buf.push(deepcopy(redo_obj))
+            self.redo_buf.stack_push(deepcopy(redo_obj))
 
-            # Set the state to what was popped
+            # Restore the state to what was popped
             undo_obj.set_state()
             return True
         return False
 
     def redo(self, row_obj):
-        redo_obj = self.undo_buf.pop()
+        redo_obj = self.undo_buf.stack_pop()
         undo_obj = UndoRedoAction(row_obj)
 
         # Check if object is None, then push the recorded current state.
         if redo_obj is not None:
-            self.undo_buf.push(deepcopy(undo_obj))
+            self.undo_buf.stack_push(deepcopy(undo_obj))
 
-            # Set the state to what was popped
+            # Restore the state to what was popped
             redo_obj.set_state()
             return True
         return False

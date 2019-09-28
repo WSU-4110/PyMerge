@@ -1,8 +1,21 @@
-
 # PyQt imports
 from PyQt5.QtWidgets import *
-from PyQt5.QtWidgets import QTableView, QHeaderView, QLineEdit, QAbstractItemView, QPushButton
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableWidget, QTableWidgetItem, QVBoxLayout
+from PyQt5.QtWidgets import (
+    QTableView,
+    QHeaderView,
+    QLineEdit,
+    QAbstractItemView,
+    QPushButton,
+)
+from PyQt5.QtWidgets import (
+    QMainWindow,
+    QApplication,
+    QWidget,
+    QAction,
+    QTableWidget,
+    QTableWidgetItem,
+    QVBoxLayout,
+)
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
@@ -23,7 +36,14 @@ undo_ctrlr = undo_redo.Undo(10)
 class Row(QtCore.QObject):
     __slots__ = ["row", "table", "right_text", "left_text", "line_num"]
 
-    def __init__(self, row: int, table, right_text: str or None, left_text: str or None, line_num: int):
+    def __init__(
+        self,
+        row: int,
+        table,
+        right_text: str or None,
+        left_text: str or None,
+        line_num: int,
+    ):
         """
         Initialize the Row class instance
         :param row: row number
@@ -42,12 +62,16 @@ class Row(QtCore.QObject):
         self.left_background_color = None
 
         if right_text is None:
-            self.table.item(self.row_num, 1).setBackground(gui_config.COLORS["PAD_SPACE"])
+            self.table.item(self.row_num, 1).setBackground(
+                gui_config.COLORS["PAD_SPACE"]
+            )
         else:
             self.table.item(self.row_num, 1).setBackground(gui_config.COLORS["DEFAULT"])
 
         if left_text is None:
-            self.table.item(self.row_num, 4).setBackground(gui_config.COLORS["PAD_SPACE"])
+            self.table.item(self.row_num, 4).setBackground(
+                gui_config.COLORS["PAD_SPACE"]
+            )
         else:
             self.table.item(self.row_num, 4).setBackground(gui_config.COLORS["DEFAULT"])
 
@@ -115,8 +139,9 @@ class MainTable(QWidget):
         grid = QGridLayout()
         self.setLayout(grid)
         self.table = QTableWidget()
-        self.table.setRowCount(0)   # Set the initial row count to 0
-        self.table.setColumnCount(5)    # Set the column count to 5
+        self.table.setRowCount(0)  # Set the initial row count to 0
+        self.table.setColumnCount(5)  # Set the column count to 5
+        self.setAcceptDrops(True)
 
         # Set the head text
         self.table.setHorizontalHeaderItem(0, QTableWidgetItem("Line"))
@@ -136,23 +161,76 @@ class MainTable(QWidget):
         self.table.horizontalHeaderItem(4).setTextAlignment(Qt.AlignCenter)
 
         # Set the header background colors
-        self.table.horizontalHeaderItem(0).setBackground(gui_config.COLORS["TBL_HEADER_DEFAULT_BACKGROUND"])
-        self.table.horizontalHeaderItem(1).setBackground(gui_config.COLORS["TBL_HEADER_DEFAULT_BACKGROUND"])
-        self.table.horizontalHeaderItem(2).setBackground(gui_config.COLORS["TBL_HEADER_DEFAULT_BACKGROUND"])
-        self.table.horizontalHeaderItem(3).setBackground(gui_config.COLORS["TBL_HEADER_DEFAULT_BACKGROUND"])
-        self.table.horizontalHeaderItem(4).setBackground(gui_config.COLORS["TBL_HEADER_DEFAULT_BACKGROUND"])
+        self.table.horizontalHeaderItem(0).setBackground(
+            gui_config.COLORS["TBL_HEADER_DEFAULT_BACKGROUND"]
+        )
+        self.table.horizontalHeaderItem(1).setBackground(
+            gui_config.COLORS["TBL_HEADER_DEFAULT_BACKGROUND"]
+        )
+        self.table.horizontalHeaderItem(2).setBackground(
+            gui_config.COLORS["TBL_HEADER_DEFAULT_BACKGROUND"]
+        )
+        self.table.horizontalHeaderItem(3).setBackground(
+            gui_config.COLORS["TBL_HEADER_DEFAULT_BACKGROUND"]
+        )
+        self.table.horizontalHeaderItem(4).setBackground(
+            gui_config.COLORS["TBL_HEADER_DEFAULT_BACKGROUND"]
+        )
         self.table.verticalHeader().setVisible(False)
 
         # Set column resize modes
-        self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
+        self.table.horizontalHeader().setSectionResizeMode(
+            0, QHeaderView.ResizeToContents
+        )
         self.table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
-        self.table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeToContents)
-        self.table.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeToContents)
+        self.table.horizontalHeader().setSectionResizeMode(
+            2, QHeaderView.ResizeToContents
+        )
+        self.table.horizontalHeader().setSectionResizeMode(
+            3, QHeaderView.ResizeToContents
+        )
         self.table.horizontalHeader().setSectionResizeMode(4, QHeaderView.Stretch)
 
         # Make the table read only for the user
         self.table.setEditTriggers(QTableWidget.NoEditTriggers)
         grid.addWidget(self.table)
+
+    def dragEnterEvent(self, event):
+        """
+        Override the dragEnterEvent method from PyQt
+        :param event:
+        :return:
+        """
+        if event.mimeData().hasUrls:
+            event.accept()
+        else:
+            event.ignore()
+
+    def dragMoveEvent(self, event):
+        """
+        Override the dragMoveEvent method from PyQt
+        :param event:
+        :return:
+        """
+        if event.mimeData().hasUrls:
+            event.setDropAction(Qt.CopyAction)
+            event.accept()
+        else:
+            event.ignore()
+
+    def dropEvent(self, event):
+        """
+        Override the dropEvent method
+        :param event:
+        :return:
+        """
+        if event.mimeData().hasUrls:
+            event.setDropAction(Qt.CopyAction)
+            event.accept()
+            links = event.mimeData().urls()[0]
+            print(links)
+        else:
+            event.ignore()
 
     def add_line(self, right_text: str, left_text: str, line_num: int or str):
         """
@@ -208,10 +286,10 @@ class MainTable(QWidget):
         self.table.horizontalHeaderItem(1).setText(os.path.abspath(file1))
         self.table.horizontalHeaderItem(4).setText(os.path.abspath(file2))
 
-        with open(file1, 'r') as file:
+        with open(file1, "r") as file:
             file1_contents = file.read().splitlines()
 
-        with open(file2, 'r') as file:
+        with open(file2, "r") as file:
             file2_contents = file.read().splitlines()
 
         self.load_table_contents(file1_contents, file2_contents)

@@ -2,7 +2,7 @@
 algorithm class. Must be provided with two files, and two changeSet objects. It will compare
 the files and populate the ChangeSet Objects
 """
-import pmEnums
+from pmEnums import CHANGEDENUM
 import changeSet
 
 class algorithm:
@@ -16,9 +16,13 @@ class algorithm:
         f1 = iFileA.readlines()
         f2 = iFileB.readlines()
 
-        file1Changes.setChange(1, pmEnums.CHANGEDENUM.CHANGED, f1[1])
+        for line in range(len(f1)):
+        	if f1[line] == f2[line]:
+        		file1Changes.setChange(line, CHANGEDENUM.SAME, f1[line])
+        	else:
+        		file1Changes.setChange(line, CHANGEDENUM.CHANGED, f1[line])
 
-        # return pmEnums.RESULT.NOTIMPL
+        return RESULT.NOTIMPL
 
 
 file1 = open("test_file1.txt", "r")

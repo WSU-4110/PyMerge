@@ -30,7 +30,7 @@ import os
 import gui_config
 import undo_redo
 
-undo_ctrlr = undo_redo.Undo(10)
+undo_ctrlr = undo_redo.UndoRedo(10)
 
 
 class Row(QtCore.QObject):
@@ -201,10 +201,7 @@ class MainTable(QWidget):
         :param event:
         :return:
         """
-        if event.mimeData().hasUrls:
-            event.accept()
-        else:
-            event.ignore()
+        event.accept() if event.mimeData().hasUrls else event.ignore()
 
     def dragMoveEvent(self, event):
         """
@@ -254,7 +251,12 @@ class MainTable(QWidget):
         row_instance = Row(line_num, self.table, right_text, left_text, line_num)
         self.rows.append(row_instance)
 
-    def load_table_contents(self, left_lines, right_lines):
+    def get_lines_from_tbl(self):
+        right_file_lines = [row.right_text for row in self.rows]
+        left_file_lines = [row.left_text for row in self.rows]
+
+
+    def load_table_contents(self, left_lines: list or dict, right_lines: list or dict):
         # TODO: Add type hints
         """
         Load the contents of two data structures containing the lines to be displayed, into the tables

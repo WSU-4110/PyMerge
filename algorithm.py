@@ -2,7 +2,8 @@
 algorithm class. Must be provided with two files, and two changeSet objects. It will compare
 the files and populate the ChangeSet Objects
 """
-from pmEnums import CHANGEDENUM
+import pmEnums
+#from pmEnums import CHANGEDENUM
 import changeSet
 
 class algorithm:
@@ -18,11 +19,11 @@ class algorithm:
 
         for line in range(len(f1)):
         	if f1[line] == f2[line]:
-        		file1Changes.setChange(line, CHANGEDENUM.SAME, f1[line])
+        		file1Changes.setChange(line, pmEnums.CHANGEDENUM.SAME, f1[line])
         	else:
-        		file1Changes.setChange(line, CHANGEDENUM.CHANGED, f1[line])
+        		file1Changes.setChange(line, pmEnums.CHANGEDENUM.CHANGED, f1[line])
 
-        return RESULT.NOTIMPL
+        return pmEnums.RESULT.NOTIMPL
 
 
 file1 = open("test_file1.txt", "r")

@@ -18,7 +18,7 @@ class Stack(object):
         if len(self.stack) < self.max_size:
             self.stack.append(item)
         else:
-            # Rotate the stack, "forgetting" the oldest undo or redo move
+            # Move the stack up, "forgetting" the oldest undo or redo move
             for n in range(1, len(self.stack)):
                 self.stack[n - 1] = self.stack[n]
             self.stack[-1] = item
@@ -35,6 +35,7 @@ class Stack(object):
 
 class UndoRedoAction(object):
     __slots__ = [
+        "row_obj",
         "row_num",
         "table",
         "left_text",
@@ -45,6 +46,7 @@ class UndoRedoAction(object):
     ]
 
     def __init__(self, row_obj):
+        self.row_obj = row_obj  # Shallow copy
         self.row_num = row_obj.row_num
         self.table = row_obj.table
         self.right_text = row_obj.right_text
@@ -63,7 +65,7 @@ class UndoRedoAction(object):
         self.table.item(self.row_num, 4).setText(self.left_text)
 
 
-class Undo(object):
+class UndoRedo(object):
     def __init__(self, buf_size):
         self.redo_buf = Stack(buf_size)
         self.undo_buf = Stack(buf_size)
@@ -73,9 +75,9 @@ class Undo(object):
         self.undo_buf.stack_push(record_obj)
         print(self.undo_buf.stack[-1])
 
-    def undo(self, row_obj):
-        undo_obj = self.undo_buf.stack_pop()  # Get the state we want to set
-        redo_obj = UndoRedoAction(row_obj)  # Record the current state
+    def undo(self):
+        undo_obj = self.undo_buf.stack_pop(-1)  # Get the state we want to set
+        redo_obj = UndoRedoAction(undo_obj.row_obj)  # Record the current state
 
         # Check if object is None, then push the recorded current state.
         if undo_obj is not None:
@@ -86,9 +88,9 @@ class Undo(object):
             return True
         return False
 
-    def redo(self, row_obj):
-        redo_obj = self.undo_buf.stack_pop()
-        undo_obj = UndoRedoAction(row_obj)
+    def redo(self):
+        redo_obj = self.undo_buf.stack_pop(-1)
+        undo_obj = UndoRedoAction(redo_obj.row_obj)
 
         # Check if object is None, then push the recorded current state.
         if redo_obj is not None:

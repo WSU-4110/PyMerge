@@ -28,21 +28,22 @@ import os
 
 # Project imports
 import gui_config
+import utilities as util
 import undo_redo
 
-undo_ctrlr = undo_redo.Undo(10)
+undo_ctrlr = undo_redo.UndoRedo(10)
 
 
 class Row(QtCore.QObject):
     __slots__ = ["row", "table", "right_text", "left_text", "line_num"]
 
     def __init__(
-        self,
-        row: int,
-        table,
-        right_text: str or None,
-        left_text: str or None,
-        line_num: int,
+            self,
+            row: int,
+            table,
+            right_text: str or None,
+            left_text: str or None,
+            line_num: int,
     ):
         """
         Initialize the Row class instance
@@ -142,12 +143,14 @@ class MainTable(QWidget):
         self.table.setRowCount(0)  # Set the initial row count to 0
         self.table.setColumnCount(5)  # Set the column count to 5
         self.setAcceptDrops(True)
+        self.diff_indices = []  # List containing indices of all diff rows. This is used for jump to diff functions
+        self.curr_diff_idx = 0  # Contains the index of the current diff that has been jumped to
 
         # Set the head text
         self.table.setHorizontalHeaderItem(0, QTableWidgetItem("Line"))
         self.table.setHorizontalHeaderItem(1, QTableWidgetItem(""))
         self.table.setHorizontalHeaderItem(2, QTableWidgetItem("Merge Right"))
-        self.table.setHorizontalHeaderItem(3, QTableWidgetItem("Merge Left"))
+        self.table.setHorizontalHeaderItem(3, QTableWidgetItem("Merge Left "))
         self.table.setHorizontalHeaderItem(4, QTableWidgetItem(""))
 
         # Set the header font
@@ -176,6 +179,7 @@ class MainTable(QWidget):
         self.table.horizontalHeaderItem(4).setBackground(
             gui_config.COLORS["TBL_HEADER_DEFAULT_BACKGROUND"]
         )
+        self.table.setGridStyle(Qt.PenStyle(Qt.DotLine))
         self.table.verticalHeader().setVisible(False)
 
         # Set column resize modes
@@ -201,10 +205,7 @@ class MainTable(QWidget):
         :param event:
         :return:
         """
-        if event.mimeData().hasUrls:
-            event.accept()
-        else:
-            event.ignore()
+        event.accept() if event.mimeData().hasUrls else event.ignore()
 
     def dragMoveEvent(self, event):
         """
@@ -232,12 +233,32 @@ class MainTable(QWidget):
         else:
             event.ignore()
 
+    def goto_next_diff(self):
+        """
+        Scrolls the table window to the next difference incrementally (starts at the first diff)
+        :return: No return value
+        """
+        #TODO: Implement goto_next_diff function
+        return
+
+    def goto_prev_diff(self):
+        """
+        Scrolls the table window to the previous difference incrementally
+        :return: No return value
+        """
+        #TODO: Implement goto_prev_diff function
+        return
+
+    def jump_to_line(self, line_num, col=0):
+        #self.table.scrollToItem(self.table.item(line_num, col), QtWidgets.QAbstractItemView.PositionAtTop)
+        self.table.scrollToItem(self.table.selectRow(line_num), QtWidgets.QAbstractItemView.PositionAtTop)
+
     def add_line(self, right_text: str, left_text: str, line_num: int or str):
         """
         Add a row into the table using the right and left text provided as parameters.
         :param right_text: Right text to display
         :param left_text: Left text to display
-        :param line_num: Line mumber to display. This isn't exactly where it's inserted, just a display value
+        :param line_num: Line number to display. This isn't exactly where it's inserted, just a display value
         :return: No return value
         """
         self.table.insertRow(line_num)
@@ -251,10 +272,21 @@ class MainTable(QWidget):
         self.table.item(line_num, 2).setTextAlignment(Qt.AlignCenter)
         self.table.item(line_num, 3).setTextAlignment(Qt.AlignCenter)
 
+        self.table.item(line_num, 0).setBackground(gui_config.COLORS["TBL_LINE_COL_DEFAULT_BACKGROUND"])
+        self.table.item(line_num, 2).setBackground(gui_config.COLORS["TBL_LINE_COL_DEFAULT_BACKGROUND"])
+        self.table.item(line_num, 3).setBackground(gui_config.COLORS["TBL_LINE_COL_DEFAULT_BACKGROUND"])
+
         row_instance = Row(line_num, self.table, right_text, left_text, line_num)
         self.rows.append(row_instance)
 
-    def load_table_contents(self, left_lines, right_lines):
+    def get_lines_from_tbl(self) -> list:
+        """
+        Gets the data from the table and returns it as a 2D list. 
+        :return: list containing right and left hand file data
+        """
+        return [[row.right_text, row.left_text] for row in self.rows]
+
+    def load_table_contents(self, left_lines: list or dict, right_lines: list or dict):
         # TODO: Add type hints
         """
         Load the contents of two data structures containing the lines to be displayed, into the tables
@@ -273,7 +305,7 @@ class MainTable(QWidget):
             for n in range(len(right_text_lines)):
                 left_text_lines.append("")
 
-        for n in range(max(len(left_text_lines), len(right_text_lines))):
+        for n in range(min(len(left_text_lines), len(right_text_lines))):
             self.add_line(left_text_lines[n], right_text_lines[n], n)
 
     def load_test_files(self, file1: str, file2: str):
@@ -293,3 +325,4 @@ class MainTable(QWidget):
             file2_contents = file.read().splitlines()
 
         self.load_table_contents(file1_contents, file2_contents)
+        #self.jump_to_line(77)

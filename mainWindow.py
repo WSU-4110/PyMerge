@@ -26,10 +26,12 @@ class mainWindow(QMainWindow):
         layout.addWidget(controlButtons.controlButtons(), 0, 0)
 
         #load files and generate changesets
+        result = pmEnums.RESULT.ERROR
         if fileA != 0 and fileB != 0:
-            result = fileIO.fileIO().diffFiles(fileA, fileB)
+            fIO = fileIO.fileIO()
+            result = fIO.diffFiles(fileA, fileB)
             if result == pmEnums.RESULT.GOOD:
-                result = fileIO.fileIO.getChangeSets( changeSetA, changeSetB )
+                result = fIO.getChangeSets( changeSetA, changeSetB )
 
         if result == pmEnums.RESULT.GOOD:
             pass #pass the changesets to window class or whatever to be loaded into the table

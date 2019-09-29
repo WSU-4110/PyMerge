@@ -28,6 +28,7 @@ import os
 
 # Project imports
 import gui_config
+import utilities as util
 import undo_redo
 
 undo_ctrlr = undo_redo.UndoRedo(10)
@@ -37,12 +38,12 @@ class Row(QtCore.QObject):
     __slots__ = ["row", "table", "right_text", "left_text", "line_num"]
 
     def __init__(
-        self,
-        row: int,
-        table,
-        right_text: str or None,
-        left_text: str or None,
-        line_num: int,
+            self,
+            row: int,
+            table,
+            right_text: str or None,
+            left_text: str or None,
+            line_num: int,
     ):
         """
         Initialize the Row class instance
@@ -147,7 +148,7 @@ class MainTable(QWidget):
         self.table.setHorizontalHeaderItem(0, QTableWidgetItem("Line"))
         self.table.setHorizontalHeaderItem(1, QTableWidgetItem(""))
         self.table.setHorizontalHeaderItem(2, QTableWidgetItem("Merge Right"))
-        self.table.setHorizontalHeaderItem(3, QTableWidgetItem("Merge Left"))
+        self.table.setHorizontalHeaderItem(3, QTableWidgetItem("Merge Left "))
         self.table.setHorizontalHeaderItem(4, QTableWidgetItem(""))
 
         # Set the header font
@@ -176,6 +177,7 @@ class MainTable(QWidget):
         self.table.horizontalHeaderItem(4).setBackground(
             gui_config.COLORS["TBL_HEADER_DEFAULT_BACKGROUND"]
         )
+        self.table.setGridStyle(Qt.PenStyle(Qt.DotLine))
         self.table.verticalHeader().setVisible(False)
 
         # Set column resize modes
@@ -234,7 +236,7 @@ class MainTable(QWidget):
         Add a row into the table using the right and left text provided as parameters.
         :param right_text: Right text to display
         :param left_text: Left text to display
-        :param line_num: Line mumber to display. This isn't exactly where it's inserted, just a display value
+        :param line_num: Line number to display. This isn't exactly where it's inserted, just a display value
         :return: No return value
         """
         self.table.insertRow(line_num)
@@ -248,13 +250,15 @@ class MainTable(QWidget):
         self.table.item(line_num, 2).setTextAlignment(Qt.AlignCenter)
         self.table.item(line_num, 3).setTextAlignment(Qt.AlignCenter)
 
+        self.table.item(line_num, 0).setBackground(gui_config.COLORS["TBL_LINE_COL_DEFAULT_BACKGROUND"])
+        self.table.item(line_num, 2).setBackground(gui_config.COLORS["TBL_LINE_COL_DEFAULT_BACKGROUND"])
+        self.table.item(line_num, 3).setBackground(gui_config.COLORS["TBL_LINE_COL_DEFAULT_BACKGROUND"])
+
         row_instance = Row(line_num, self.table, right_text, left_text, line_num)
         self.rows.append(row_instance)
 
     def get_lines_from_tbl(self):
-        right_file_lines = [row.right_text for row in self.rows]
-        left_file_lines = [row.left_text for row in self.rows]
-
+        return [[row.right_text, row.left_text] for row in self.rows]
 
     def load_table_contents(self, left_lines: list or dict, right_lines: list or dict):
         # TODO: Add type hints
@@ -275,7 +279,7 @@ class MainTable(QWidget):
             for n in range(len(right_text_lines)):
                 left_text_lines.append("")
 
-        for n in range(max(len(left_text_lines), len(right_text_lines))):
+        for n in range(min(len(left_text_lines), len(right_text_lines))):
             self.add_line(left_text_lines[n], right_text_lines[n], n)
 
     def load_test_files(self, file1: str, file2: str):

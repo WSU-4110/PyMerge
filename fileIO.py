@@ -7,17 +7,17 @@ import pmEnums
 import changeSet
 import algorithm
 
-class fileIO:    
-    @staticmethod
-    def diffFiles( iFileA, iFileB ):
-        changesA = changeSet.changeSet
-        changesB = changeSet.changeSet
-        
+class fileIO:
+    def __init__(self):
+        self.changesB = changeSet.ChangeSet
+        self.changesA = changeSet.ChangeSet
+    
+    def diffFiles( self, iFileA, iFileB ):        
         fileA = open(iFileA, 'r')
         fileB = open(iFileB, 'r')
 
         alg = algorithm.algorithm
-        result = alg.generateChangeSets(fileA, fileB, changesA, changesB)
+        result = alg.generateChangeSets(self, fileA, fileB, self.changesA, self.changesB)
 
         fileA.close()
         fileB.close()
@@ -26,11 +26,11 @@ class fileIO:
             return pmEnums.RESULT.GOOD
         return pmEnums.RESULT.NOTIMPL
 
-    @staticmethod
+    
     def getChangeSets( oFileA, oFileB):
         oFileA = changesA
         oFileB = changesB 
-        if changesA != 0 or changesB != 0:
+        if changesA != 0 and changesB != 0:
             return changeSet.GOOD
         return changeSet.ERROR
     

@@ -9,7 +9,7 @@ class algorithm:
     def __init__(self):
         pass
     
-    def generateChangeSets( self, iFileA, iFileB, ochangeSetA, ochangeSetB ):
+    def getChangeSets( self, iFileA, iFileB, ochangeSetA, ochangeSetB ):
         # file line 1 = stringA
         # ioFileA.attributeStorageVariable = stringA
         
@@ -32,7 +32,10 @@ file1Changes = changeSet.ChangeSet()
 file2Changes = changeSet.ChangeSet()
 
 alg = algorithm()
-alg.generateChangeSets(file1, file2, file1Changes, file2Changes)
+alg.getChangeSets(file1, file2, file1Changes, file2Changes)
+
+
+
 
 
 

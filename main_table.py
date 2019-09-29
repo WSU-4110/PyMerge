@@ -143,6 +143,8 @@ class MainTable(QWidget):
         self.table.setRowCount(0)  # Set the initial row count to 0
         self.table.setColumnCount(5)  # Set the column count to 5
         self.setAcceptDrops(True)
+        self.diff_indices = []  # List containing indices of all diff rows. This is used for jump to diff functions
+        self.curr_diff_idx = 0  # Contains the index of the current diff that has been jumped to
 
         # Set the head text
         self.table.setHorizontalHeaderItem(0, QTableWidgetItem("Line"))
@@ -231,6 +233,26 @@ class MainTable(QWidget):
         else:
             event.ignore()
 
+    def goto_next_diff(self):
+        """
+        Scrolls the table window to the next difference incrementally (starts at the first diff)
+        :return: No return value
+        """
+        #TODO: Implement goto_next_diff function
+        return
+
+    def goto_prev_diff(self):
+        """
+        Scrolls the table window to the previous difference incrementally
+        :return: No return value
+        """
+        #TODO: Implement goto_prev_diff function
+        return
+
+    def jump_to_line(self, line_num, col=0):
+        #self.table.scrollToItem(self.table.item(line_num, col), QtWidgets.QAbstractItemView.PositionAtTop)
+        self.table.scrollToItem(self.table.selectRow(line_num), QtWidgets.QAbstractItemView.PositionAtTop)
+
     def add_line(self, right_text: str, left_text: str, line_num: int or str):
         """
         Add a row into the table using the right and left text provided as parameters.
@@ -257,7 +279,11 @@ class MainTable(QWidget):
         row_instance = Row(line_num, self.table, right_text, left_text, line_num)
         self.rows.append(row_instance)
 
-    def get_lines_from_tbl(self):
+    def get_lines_from_tbl(self) -> list:
+        """
+        Gets the data from the table and returns it as a 2D list. 
+        :return: list containing right and left hand file data
+        """
         return [[row.right_text, row.left_text] for row in self.rows]
 
     def load_table_contents(self, left_lines: list or dict, right_lines: list or dict):
@@ -299,3 +325,4 @@ class MainTable(QWidget):
             file2_contents = file.read().splitlines()
 
         self.load_table_contents(file1_contents, file2_contents)
+        #self.jump_to_line(77)

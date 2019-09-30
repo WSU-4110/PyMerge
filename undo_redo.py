@@ -46,7 +46,7 @@ class UndoRedoAction(object):
     ]
 
     def __init__(self, row_obj):
-        self.row_obj = row_obj  # Shallow copy
+        self.row_obj = row_obj
         self.row_num = row_obj.row_num
         self.table = row_obj.table
         self.right_text = row_obj.right_text

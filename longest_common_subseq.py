@@ -17,16 +17,10 @@ For two files that each have 1000 lines with an average of 10 words per line the
 
 
 def longest_common_subsequence(right_set, left_set):
-    lcs_matrix = []  # Declare the subsequence matrix
     idx_matches = [[], []]  # Index matches
     right_size = len(right_set)  # Calculate the size only once
     left_size = len(left_set)
-
-    for i in range(right_size + 1):
-        row = []
-        for j in range(left_size + 1):
-            row.append(0)
-        lcs_matrix.append(row)
+    lcs_matrix = [[0 for x in range(left_size + 1)] for y in range(right_size + 1)]
 
     # Convert subsequence matrix to numpy array to make larger comparisons more efficient
     lcs_matrix = np.array(lcs_matrix)
@@ -42,7 +36,7 @@ def longest_common_subsequence(right_set, left_set):
 
     idx = lcs_matrix[right_size][left_size]
 
-    lcs = ["" for x in range(idx + 1)]
+    lcs = [""] * (idx + 1)
 
     i = right_size
     j = left_size

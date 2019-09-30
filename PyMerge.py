@@ -110,7 +110,7 @@ PyMerge
         illegal_exts = {"zip", "bzip", "mp3", "wav", "jpg", "png", "mp4", "ppt", "ods", "tar", "wma", "aif", "m4a",
                         "mpg", "vob", "wmv", "obj", "gif", "tiff", "3dm", "3ds", "svg", "xls", "xlsx", "7z", "",
                         "gz", "iso", "bin", "msi", "docx"}
-        file_ext = file.split('.')
+        file_ext = file.split('.')[-1]
 
         if file_ext in illegal_exts:
             print(f"Error: {file} is not an accepted format.")

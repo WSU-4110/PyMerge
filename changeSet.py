@@ -21,10 +21,7 @@ class ChangeSet:
 		oreturnObj[0] = pmEnums.CHANGEDENUM.CHANGED
 		return pmEnums.RESULT.NOTIMPL
 
-	def setChange(self, lineNum, changeType, data):
+	def addChange(self, lineNum, changeType, data):
 		self.changeList.append((lineNum, changeType, data))
-
-    #some private list to store all the strings at easy line numbers
-    
 
     

@@ -8,18 +8,20 @@ algorithms in this file. It will only call the main GUI and application function
 import sys
 import os
 # import FileCompareTable
+import stat
 import mainWindow
 
 
 class PyMergeCLI(object):
     def __init__(self, *args):
-        self.options = self.sanitize(args[0][1:])
+        self.options: list = self.sanitize(args[0][1:])
         self.cli()
+        self.file_size_lim: int = 200000000
 
     def cli(self):
         left_file: str = ""
         right_file: str = ""
-        opt_length = len(self.options)
+        opt_length: int = len(self.options)
 
         if opt_length == 0:
             self.invoke_application(left_file, right_file)
@@ -97,11 +99,37 @@ PyMerge
     def invoke_application(self, file1: str, file2: str):
         """Invoke the main application here"""
         if file1 != "" or file2 != "":
-            if self.check_paths(file1, file2):
+            if self.validate_files(file1, file2, path_check=False):
                 mainWindow.startMain(file1, file2)
         else:
             mainWindow.startMain()
         print(file1, file2)
+
+    @staticmethod
+    def validate_file_ext(file: str) -> bool:
+        illegal_exts = {"zip", "bzip", "mp3", "wav", "jpg", "png", "mp4", "ppt", "ods", "tar", "wma", "aif", "m4a",
+                        "mpg", "vob", "wmv", "obj", "gif", "tiff", "3dm", "3ds", "svg", "xls", "xlsx", "7z", "",
+                        "gz", "iso", "bin", "msi", "docx"}
+        file_ext = file.split('.')
+
+        if file_ext in illegal_exts:
+            print(f"Error: {file} is not an accepted format.")
+            return False
+        else:
+            return True
+
+    def validate_file_size(self, file: str) -> bool:
+        """
+        Validate the size of a file according to a limit parameter
+        :param file: File to be checked
+        :param size_lim: size limit in bytes
+        :return: boolean indicating whether file is below size limit
+        """
+        if os.stat(file).st_size > self.file_size_lim:
+            print(f"Error: {file} is greater than limit of {self.file_size_lim} bytes")
+            return False
+        else:
+            return True
 
     @staticmethod
     def check_paths(*args):
@@ -113,6 +141,14 @@ PyMerge
             except (FileNotFoundError, FileExistsError):
                 return False
         return True
+
+    def validate_files(self, file1, file2, path_check=False):
+        size_valid = self.validate_file_size(file2) and self.validate_file_size(file2)
+        ext_valid = self.validate_file_ext(file1) and self.validate_file_ext(file2)
+        paths_valid = self.check_paths(file1, file2) if path_check else True
+
+        if size_valid and ext_valid and paths_valid:
+            return True
 
 
 if __name__ == '__main__':

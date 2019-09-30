@@ -12,6 +12,7 @@ import controlButtons
 import main_table
 import fileIO
 import pmEnums
+import buttonActions
 
 
 class mainWindow(QMainWindow):    
@@ -59,29 +60,31 @@ class mainWindow(QMainWindow):
         fileMenu = mainMenu.addMenu('File')
         editMenu = mainMenu.addMenu('Edit')
 
+        bAction = buttonActions.buttonActions
+        
         openFileButton = QAction("Open File", self)
         openFileButton.setShortcut('Ctrl+o')
-        openFileButton.triggered.connect(self.close)
+        openFileButton.triggered.connect(bAction.openFile)
         fileMenu.addAction(openFileButton)
 
         mergeLeftButton = QAction("Merge Left", self)
         mergeLeftButton.setShortcut('Ctrl+l')        
-        mergeLeftButton.triggered.connect(self.close)
+        mergeLeftButton.triggered.connect(bAction.mergeLeft)
         editMenu.addAction(mergeLeftButton)
 
         mergeRightButton = QAction("Merge Right", self)
         mergeRightButton.setShortcut('Ctrl+r')        
-        mergeRightButton.triggered.connect(self.close)
+        mergeRightButton.triggered.connect(bAction.mergeRight)
         editMenu.addAction(mergeRightButton)
 
         previousDiffButn = QAction("Previous Difference", self)
         previousDiffButn.setShortcut('Ctrl+p')     
-        previousDiffButn.triggered.connect(self.close)
+        previousDiffButn.triggered.connect(bAction.previousDiff)
         editMenu.addAction(previousDiffButn)
         
         nextDiffButn = QAction("Next Difference", self)
         nextDiffButn.setShortcut('Ctrl+n')   
-        nextDiffButn.triggered.connect(self.close)
+        nextDiffButn.triggered.connect(bAction.nextDiff)
         editMenu.addAction(nextDiffButn)
 
 

@@ -1,6 +1,0 @@
-MERGELICON = 'left-arrow.png'
-MERGERICON = 'right-arrow.png'
-REDOICON = 'redo-arrow.png'
-UNDOICON = 'undo-arrow.png'
-NEXTDIFFICON = ''
-PREVDIFFICON = ''

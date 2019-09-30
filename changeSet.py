@@ -23,6 +23,5 @@ class ChangeSet:
 
 	def addChange(self, lineNum, changeType, data):
 		self.changeList.append((lineNum, changeType, data))
-    
 
     

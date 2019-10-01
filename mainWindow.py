@@ -8,51 +8,47 @@ Main Window
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5 import QtGui
-#from PyQt5.QtWidgets import QMainWindow, QApplication, QAction, QGridLayout, QPushButton, QGroupBox, QDialog, QVBoxLayout
-
-
-
-class controlButtons(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.setGeometry(200, 200, 200, 200)
-        self.buttonLayout()
-                
-    def buttonLayout(self):        
-        grid = QGridLayout()
-        self.setLayout(grid)
-        
-        mergeLBut = QPushButton("Merge Left")
-        grid.addWidget(mergeLBut, 0, 0)
-        mergeRBut = QPushButton("Merge Right")
-        grid.addWidget(mergeRBut, 0, 3)
-        nextDBut =  QPushButton("Next Difference")
-        grid.addWidget(nextDBut, 0, 1)
-        prevDBut =  QPushButton("Previous Difference")
-        grid.addWidget(prevDBut, 0, 2)
-        
-        
-        
-        
+import controlButtons
+import main_table
+import fileIO
+import pmEnums
+import buttonActions
 
 
 class mainWindow(QMainWindow):    
     def __init__(self, fileA=0, fileB=0):
-        super().__init__()
+        super().__init__()        
         self.setWindowTitle("PyMerge")
-
+        self.setGeometry(1000, 1000, 2000, 1000)
+        
         layout = QGridLayout()
+        
+        #add buttons
+        layout.addWidget(controlButtons.controlButtons(), 0, 0)
 
-        layout.addWidget(controlButtons(), 0, 0)
-        layout.addWidget(controlButtons(), 1, 0)
+        #load files and generate changesets
+        result = pmEnums.RESULT.ERROR
+        if fileA != 0 and fileB != 0:
+            fIO = fileIO.fileIO()
+            result = fIO.diffFiles(fileA, fileB)
+            if result == pmEnums.RESULT.GOOD:
+                result = fIO.getChangeSets( changeSetA, changeSetB )
 
+        if result == pmEnums.RESULT.GOOD:
+            pass #pass the changesets to window class or whatever to be loaded into the table
+        
+        #load table
+        table_widget = main_table.MainTable()
+        layout.addWidget(table_widget, 1, 0)
+        table_widget.load_test_files("file1.c", "file2.c")
+        
         widget = QWidget()
         widget.setLayout(layout)
-        self.setCentralWidget(widget)
-        
+        self.setCentralWidget(widget)        
         self.initUI()
         
-    def initUI(self):
+    def initUI(self, fileA=0, fileB=0):
+        #start GUI
         self.menuItems()
         self.show()
 
@@ -64,30 +60,44 @@ class mainWindow(QMainWindow):
         fileMenu = mainMenu.addMenu('File')
         editMenu = mainMenu.addMenu('Edit')
 
+        bAction = buttonActions.buttonActions
+        
         openFileButton = QAction("Open File", self)
         openFileButton.setShortcut('Ctrl+o')
-        openFileButton.triggered.connect(self.close)
+        openFileButton.triggered.connect(bAction.openFile)
         fileMenu.addAction(openFileButton)
 
         mergeLeftButton = QAction("Merge Left", self)
-        #mergeLeftButton.setShortcut()        
-        mergeLeftButton.triggered.connect(self.close)
+        mergeLeftButton.setShortcut('Ctrl+l')        
+        mergeLeftButton.triggered.connect(bAction.mergeLeft)
         editMenu.addAction(mergeLeftButton)
 
         mergeRightButton = QAction("Merge Right", self)
-        #mergeRightButton.setShortcut()        
-        mergeRightButton.triggered.connect(self.close)
+        mergeRightButton.setShortcut('Ctrl+r')        
+        mergeRightButton.triggered.connect(bAction.mergeRight)
         editMenu.addAction(mergeRightButton)
 
         previousDiffButn = QAction("Previous Difference", self)
-        #previousDiffButn.setShortcut()        
-        previousDiffButn.triggered.connect(self.close)
+        previousDiffButn.setShortcut('Ctrl+p')     
+        previousDiffButn.triggered.connect(bAction.previousDiff)
         editMenu.addAction(previousDiffButn)
         
         nextDiffButn = QAction("Next Difference", self)
-        #nextDiffButn.setShortcut()        
-        nextDiffButn.triggered.connect(self.close)
+        nextDiffButn.setShortcut('Ctrl+n')   
+        nextDiffButn.triggered.connect(bAction.nextDiff)
         editMenu.addAction(nextDiffButn)
+
+        undoChangeButn = QAction("Undo", self)
+        undoChangeButn.setShortcut('Ctrl+z')   
+        undoChangeButn.triggered.connect(bAction.undoChange)
+        editMenu.addAction(undoChangeButn)
+
+        redoChangeButn = QAction("Redo", self)
+        redoChangeButn.setShortcut('Ctrl+y')   
+        redoChangeButn.triggered.connect(bAction.redoChange)
+        editMenu.addAction(redoChangeButn)
+
+        
 
 
 def startMain(fileA=0, fileB=0):    

@@ -1,0 +1,6 @@
+MERGELICON = 'left-arrow.png'
+MERGERICON = 'right-arrow.png'
+REDOICON = 'redo-arrow.png'
+UNDOICON = 'undo-arrow.png'
+NEXTDIFFICON = 'down-arrow.png'
+PREVDIFFICON = 'up-arrow.png'

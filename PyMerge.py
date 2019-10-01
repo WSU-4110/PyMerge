@@ -7,95 +7,157 @@ algorithms in this file. It will only call the main GUI and application function
 
 import sys
 import os
-#import FileCompareTable
+# import FileCompareTable
+import stat
 import mainWindow
 
+
 class PyMergeCLI(object):
-
-    help_values = {
-        "-file": "File to compare.\n\tUsage: '--file <file1_name> <file2_name>'",
-        "-help": "Show command line options.\n\tUsage: '--help'",
-        "-about": "https://github.com/WSU-4110/PyMerge/blob/master/README.md",
-    }
-
-    error_msgs = {
-        "FILE_CNT": "Exactly two files must be specified to compare/merge.",
-        "FILE_DNE": "File does not exist: ",
-    }
-
     def __init__(self, *args):
-        self.options = args[0][1:]
-        self.cli(self.options)
+        self.options: list = self.sanitize(args[0][1:])
+        self.cli()
+        self.file_size_lim: int = 2000000
 
-    def cli(self, options):
-        left_file = None
-        right_file = None
+    def cli(self):
+        """
+        Main command-line interface function.
+        :return: No return value
+        """
+        left_file: str = ""
+        right_file: str = ""
+        opt_length: int = len(self.options)
 
-        if len(options) == 0:
-            self.invoke_application("", "")
-
-        for idx, opt in enumerate(options):            
-            if self.resolve_option(opt) == "--file" and len(options) == 3:
-                if left_file is None:                    
-                    if os.path.exists(options[idx + 1]) and os.path.isfile(options[idx + 1]):                        
-                        left_file = options[idx + 1]
-                    else:
-                        print(self.error_msgs["FILE_DNE"] + options[idx + 1])
-                        return
-                else:
-                    print(self.error_msgs["FILE_CNT"])
-                    return
-
-                if left_file is not None and right_file is None:                    
-                    if os.path.exists(options[idx + 2]) and os.path.isfile(options[idx + 2]):
-                        right_file = options[idx + 2]
-                        break
-                    else:
-                        print(self.error_msgs["FILE_DNE"] + options[idx + 2])
-                        return
-                    
-                else:
-                    print(self.error_msgs["FILE_CNT"])
-                    return
-            
-            elif self.resolve_option(opt) == "--help" and len(options) == 1:
-                for key in self.help_values:
-                    print(key + " : " + self.help_values[key])
-
-            elif self.resolve_option(opt) == "--about" and len(options) == 1:
-                print("https://github.com/WSU-4110/PyMerge/blob/master/README.md")
-                                
-            else:
-                print("Invalid options. Enter '--help' for more information.")
-                return
-           
-
-        if len(options) == 3 and left_file is not None and right_file is not None:
+        if opt_length == 0:
             self.invoke_application(left_file, right_file)
+            return
+        elif opt_length == 1 and self.options[0] == "--help":
+            if self.options[0] == "--help":
+                self.help_func()
+            elif self.options[0] == "--about":
+                self.about_func()
+        elif opt_length == 2:
+            if self.check_paths(self.options[0], self.options[1]):
+                left_file = self.options[0]
+                right_file = self.options[1]
+            elif self.options[0] == "--file":
+                print("Error: 2 files required for comparison.")
+        elif opt_length == 3 and self.options[0] == "--file" and self.check_paths(self.options[1], self.options[2]):
+            left_file = self.options[1]
+            right_file = self.options[2]
+        elif opt_length == 4 and \
+                self.options[0] == "--file" and \
+                self.options[2] == "--file" and \
+                self.check_paths(self.options[1], self.options[3]):
+            left_file = self.options[1]
+            right_file = self.options[3]
+        else:
+            print("Error: Invalid options. Type '--help' for information.")
+            return
 
+        self.invoke_application(left_file, right_file)
 
     @staticmethod
-    def resolve_option(option):
-        file_options = {"--f", "-file", "-f"}
-        help_options = {"--h", "-h", "--he", "-he", "--hel", "-hel", "--help", "-help"}
-        about_options = {"--about", "-about", "--abot", "-abot", "--abut", "-abut", "--abt", "-abt", "--info", "-info"}
+    def help_func():
+        print(
+            """
+------------------------------------------------------------
+PyMerge
+------------------------------------------------------------
+    --file: File to compare.\n\tUsage: '[--file] <left_file> <right_file>'
+    --help: Show command line options.\n\tUsage: '[--help]'
+    --about: Link to the PyMerge project README. \n\n
+            """
+        )
 
-        if option.lower() in file_options:
-            return "--file"
-        elif option.lower() in help_options:
-            return "--help"
-        elif option.lower() in about_options:
-            return "--about"
-        else:
-            return option
+    @staticmethod
+    def about_func():
+        print(
+            "The PyMerge project page can be found here: https://github.com/WSU-4110/PyMerge/blob/master/README.md\n"
+        )
 
-    def invoke_application(self, file1, file2):
-        """Invoke the main application here"""        
-        if len(sys.argv) == 4:
-            mainWindow.startMain( file1, file2 )
+    @staticmethod
+    def sanitize(options: list or set) -> list or set:
+        """
+        Santizes raw user input to something that can be used without error.
+        :param options: list of options provided by user.
+        :return:
+        """
+        sanitized: list = []
+        file_options: set = {"--f", "-file", "-f"}
+        help_options: set = {"--h", "-h", "--he", "-he", "--hel", "-hel", "--help", "-help"}
+        about_options: set = {"--about", "-about", "--abot", "-abot", "--abut", "-abut", "--abt", "-abt", "--info",
+                              "-info"}
+
+        for n in range(len(options)):
+            options[n] = str(options[n].replace(" ", ""))
+            option_lower: str = options[n].lower()
+
+            if option_lower == " " or options[n] == "":
+                continue
+            elif option_lower in file_options:
+                sanitized.append("--file")
+            elif option_lower in help_options:
+                sanitized.append("--help")
+            elif option_lower in about_options:
+                sanitized.append("--about")
+            else:
+                sanitized.append(options[n])
+
+        return sanitized
+
+    def invoke_application(self, file1: str, file2: str):
+        """Invoke the main application here"""
+        if file1 != "" or file2 != "":
+            if self.validate_files(file1, file2, path_check=False):
+                mainWindow.startMain(file1, file2)
         else:
             mainWindow.startMain()
-        
+        print(file1, file2)
+
+    @staticmethod
+    def validate_file_ext(file: str) -> bool:
+        illegal_exts = {"zip", "bzip", "mp3", "wav", "jpg", "png", "mp4", "ppt", "ods", "tar", "wma", "aif", "m4a",
+                        "mpg", "vob", "wmv", "obj", "gif", "tiff", "3dm", "3ds", "svg", "xls", "xlsx", "7z", "",
+                        "gz", "iso", "bin", "msi", "docx"}
+        file_ext = file.split('.')[-1]
+
+        if file_ext in illegal_exts:
+            print(f"Error: {file} is not an accepted format.")
+            return False
+        else:
+            return True
+
+    def validate_file_size(self, file: str) -> bool:
+        """
+        Validate the size of a file according to a limit parameter
+        :param file: File to be checked
+        :param size_lim: size limit in bytes
+        :return: boolean indicating whether file is below size limit
+        """
+        if os.stat(file).st_size > self.file_size_lim:
+            print(f"Error: {file} is greater than limit of {self.file_size_lim} bytes")
+            return False
+        else:
+            return True
+
+    @staticmethod
+    def check_paths(*args):
+        for arg in args:
+            try:
+                if not os.path.exists(arg) or not os.path.isfile(arg):
+                    print("Invalid file path: ", arg)
+                    return False
+            except (FileNotFoundError, FileExistsError):
+                return False
+        return True
+
+    def validate_files(self, file1, file2, path_check=False):
+        size_valid = self.validate_file_size(file2) and self.validate_file_size(file2)
+        ext_valid = self.validate_file_ext(file1) and self.validate_file_ext(file2)
+        paths_valid = self.check_paths(file1, file2) if path_check else True
+
+        if size_valid and ext_valid and paths_valid:
+            return True
 
 
 if __name__ == '__main__':

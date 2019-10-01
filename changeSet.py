@@ -3,16 +3,25 @@ changeSet class, provides a data structure to make working with file differences
 easier by abstracting the data storage, and providing a single accessor function.
 """
 import pmEnums
+
+# class Change:
+# 	def __init__(self, lineNum, changeType, data):
+# 		self.lineNum = lineNum
+# 		self.changeType = changeType
+# 		self.data = data	
     
-class changeSet:
+class ChangeSet:
 
-    def __init__():
-        pass
-        
-    def access( ilineNum, oChangeType, oData ):
-        oreturnObj[0] = pmEnums.CHANGEDENUM.CHANGED
-        return pmEnums.RESULT.NOTIMPL
+	changeList = []
 
-    #some private list to store all the strings at easy line numbers
-    #__dataListA = []
-    #__dataListB = []
+	def __init__(self):
+		pass
+    
+	def getChange( self, ilineNum, oChangeType, oData ):
+		oreturnObj[0] = pmEnums.CHANGEDENUM.CHANGED
+		return pmEnums.RESULT.NOTIMPL
+
+	def addChange(self, lineNum, changeType, data):
+		self.changeList.append((lineNum, changeType, data))
+
+    

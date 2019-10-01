@@ -87,6 +87,18 @@ class mainWindow(QMainWindow):
         nextDiffButn.triggered.connect(bAction.nextDiff)
         editMenu.addAction(nextDiffButn)
 
+        undoChangeButn = QAction("Undo", self)
+        undoChangeButn.setShortcut('Ctrl+u')   
+        undoChangeButn.triggered.connect(bAction.undoChange)
+        editMenu.addAction(undoChangeButn)
+
+        redoChangeButn = QAction("Redo", self)
+        redoChangeButn.setShortcut('Ctrl+d')   
+        redoChangeButn.triggered.connect(bAction.redoChange)
+        editMenu.addAction(redoChangeButn)
+
+        
+
 
 def startMain(fileA=0, fileB=0):    
     app = QApplication(sys.argv)

@@ -88,12 +88,12 @@ class mainWindow(QMainWindow):
         editMenu.addAction(nextDiffButn)
 
         undoChangeButn = QAction("Undo", self)
-        undoChangeButn.setShortcut('Ctrl+u')   
+        undoChangeButn.setShortcut('Ctrl+z')   
         undoChangeButn.triggered.connect(bAction.undoChange)
         editMenu.addAction(undoChangeButn)
 
         redoChangeButn = QAction("Redo", self)
-        redoChangeButn.setShortcut('Ctrl+d')   
+        redoChangeButn.setShortcut('Ctrl+y')   
         redoChangeButn.triggered.connect(bAction.redoChange)
         editMenu.addAction(redoChangeButn)
 

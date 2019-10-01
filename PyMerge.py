@@ -7,16 +7,14 @@ algorithms in this file. It will only call the main GUI and application function
 
 import sys
 import os
-# import FileCompareTable
-import stat
 import mainWindow
 
 
 class PyMergeCLI(object):
     def __init__(self, *args):
         self.options: list = self.sanitize(args[0][1:])
-        self.cli()
         self.file_size_lim: int = 200000000
+        self.cli()
 
     def cli(self):
         left_file: str = ""

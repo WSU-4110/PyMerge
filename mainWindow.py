@@ -98,7 +98,7 @@ class mainWindow(QMainWindow):
         editMenu.addAction(redoChangeButn)
 
         
-
+#
 
 def startMain(fileA=0, fileB=0):    
     app = QApplication(sys.argv)

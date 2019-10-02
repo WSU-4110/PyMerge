@@ -1,13 +1,10 @@
 # PyQt imports
-from PyQt5.QtWidgets import *
 from PyQt5.QtWidgets import (
     QTableView,
     QHeaderView,
     QLineEdit,
     QAbstractItemView,
     QPushButton,
-)
-from PyQt5.QtWidgets import (
     QMainWindow,
     QApplication,
     QWidget,
@@ -15,6 +12,7 @@ from PyQt5.QtWidgets import (
     QTableWidget,
     QTableWidgetItem,
     QVBoxLayout,
+    QGridLayout
 )
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
@@ -250,6 +248,7 @@ class MainTable(QWidget):
         else:
             event.ignore()
 
+    @pyqtSlot()
     def goto_next_diff(self):
         """
         Scrolls the table window to the next difference incrementally (starts at the first diff)
@@ -258,6 +257,7 @@ class MainTable(QWidget):
         #TODO: Implement goto_next_diff function
         return
 
+    @pyqtSlot()
     def goto_prev_diff(self):
         """
         Scrolls the table window to the previous difference incrementally
@@ -267,7 +267,7 @@ class MainTable(QWidget):
         return
 
     def jump_to_line(self, line_num, col=0):
-        # self.table.scrollToItem(self.table.item(line_num, col), QtWidgets.QAbstractItemView.PositionAtTop)
+        self.table.scrollToItem(self.table.item(line_num, col), QtWidgets.QAbstractItemView.PositionAtTop)
         self.table.scrollToItem(self.table.selectRow(line_num), QtWidgets.QAbstractItemView.PositionAtTop)
 
     def add_line(self, right_text: str, left_text: str, line_num: int or str):

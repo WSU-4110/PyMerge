@@ -13,10 +13,14 @@ import mainWindow
 class PyMergeCLI(object):
     def __init__(self, *args):
         self.options: list = self.sanitize(args[0][1:])
-        self.file_size_lim: int = 200000000
-        self.cli()
+        self.file_size_lim: int = 2000000
+        self.cli()        
 
     def cli(self):
+        """
+        Main command-line interface function.
+        :return: No return value
+        """
         left_file: str = ""
         right_file: str = ""
         opt_length: int = len(self.options)
@@ -71,6 +75,11 @@ PyMerge
 
     @staticmethod
     def sanitize(options: list or set) -> list or set:
+        """
+        Santizes raw user input to something that can be used without error.
+        :param options: list of options provided by user.
+        :return:
+        """
         sanitized: list = []
         file_options: set = {"--f", "-file", "-f"}
         help_options: set = {"--h", "-h", "--he", "-he", "--hel", "-hel", "--help", "-help"}

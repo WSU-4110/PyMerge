@@ -36,7 +36,7 @@ def file_readable(file: str) -> bool:
     :return: boolean indicating if file has read permissions or not
     """
     return os.access(file, os.R_OK)
-
+  
 
 def hamming_dist(string1: str, string2: str) -> int or None:
     """
@@ -73,3 +73,4 @@ def line_bit_vector(string1, string2) -> list:
         except IndexError:
             bit_vec[n] = 1
     return bit_vec
+

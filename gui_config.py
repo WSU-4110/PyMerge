@@ -39,3 +39,5 @@ FONTS = {
     "TBL_HEADER_DEFAULT": QFont("Open Sans Bold", weight=QFont.Bold, pointSize=12),
     "TOOLBAR_DEFAULT": QFont("Open Sans Bold", weight=QFont.Bold),
 }
+
+

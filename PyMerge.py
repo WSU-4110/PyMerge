@@ -7,8 +7,6 @@ algorithms in this file. It will only call the main GUI and application function
 
 import sys
 import os
-# import FileCompareTable
-import stat
 import mainWindow
 
 

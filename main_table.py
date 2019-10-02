@@ -28,6 +28,8 @@ import os
 import gui_config
 import utilities as util
 import undo_redo
+import pmEnums
+
 
 undo_ctrlr = undo_redo.UndoRedo(10)
 
@@ -59,19 +61,34 @@ class Row(QtCore.QObject):
         self.line_num: int = line_num
         self.right_background_color = None
         self.left_background_color = None
+        self.change_state_flag = pmEnums.CHANGEDENUM.SAME
 
-        if right_text is None:
+        if self.change_state_flag == pmEnums.CHANGEDENUM.CHANGED:
             self.table.item(self.row_num, 1).setBackground(
                 gui_config.COLORS["PAD_SPACE"]
             )
-        else:
-            self.table.item(self.row_num, 1).setBackground(gui_config.COLORS["DEFAULT"])
+        elif self.change_state_flag == pmEnums.CHANGEDENUM.ADDED:
+            if right_text is None:
+                self.table.item(self.row_num, 1).setBackground(
+                    gui_config.COLORS["PAD_SPACE"]
+                )
+                self.table.item(self.row_num, 4).setBackground(
+                    gui_config.COLORS["LINE_DIFF"]
+                )
 
-        if left_text is None:
-            self.table.item(self.row_num, 4).setBackground(
-                gui_config.COLORS["PAD_SPACE"]
-            )
-        else:
+            elif left_text is None:
+                self.table.item(self.row_num, 1).setBackground(
+                    gui_config.COLORS["LINE_DIFF"]
+                )
+                self.table.item(self.row_num, 4).setBackground(
+                    gui_config.COLORS["PAD_SPACE"]
+                )
+            else:
+                self.table.item(self.row_num, 1).setBackground(gui_config.COLORS["DEFAULT"])
+                self.table.item(self.row_num, 4).setBackground(gui_config.COLORS["DEFAULT"])
+
+        elif self.change_state_flag == pmEnums.CHANGEDENUM.SAME:
+            self.table.item(self.row_num, 1).setBackground(gui_config.COLORS["DEFAULT"])
             self.table.item(self.row_num, 4).setBackground(gui_config.COLORS["DEFAULT"])
 
         right_button = QPushButton(self.table)

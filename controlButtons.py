@@ -3,7 +3,7 @@ Widget to contain the buttons/control panel for the merge tool.
 """
 from PyQt5.QtWidgets import *
 from PyQt5 import QtGui
-
+from PyQt5 import QtCore
 import gui_config
 import buttonActions
 
@@ -13,8 +13,10 @@ class controlButtons(QWidget):
         super().__init__()
         self.setGeometry(200, 200, 200, 200)
         self.buttonLayout()
-                
-    def buttonLayout(self):        
+
+
+
+    def buttonLayout(self):
         grid = QGridLayout()
         self.setLayout(grid)
                 
@@ -63,6 +65,3 @@ class controlButtons(QWidget):
         merge_right_button.setIcon(icon)
         merge_right_button.clicked.connect(bActions.mergeRight)
         grid.addWidget(merge_right_button, 0, 4)
-        
-
-        

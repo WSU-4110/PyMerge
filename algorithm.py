@@ -106,17 +106,20 @@ class algorithm:
         # return pmEnums.RESULT.GOOD
 
 
-file1Changes = changeSet.ChangeSet()
-file2Changes = changeSet.ChangeSet()
 
 
-file1 = open("test_file1.txt","r")
-file2 = open("test_file2.txt","r")
 
-diff = algorithm()
-diff.generateChangeSets(file1, file2, file1Changes, file2Changes)
+# file1Changes = changeSet.ChangeSet()
+# file2Changes = changeSet.ChangeSet()
 
-print(changeSet.ChangeSet.changeList)
+
+# file1 = open("test_file1.txt","r")
+# file2 = open("test_file2.txt","r")
+
+# diff = algorithm()
+# diff.generateChangeSets(file1, file2, file1Changes, file2Changes)
+
+# print(changeSet.ChangeSet.changeList)
 
 
 

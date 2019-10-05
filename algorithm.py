@@ -38,6 +38,21 @@ class algorithm:
 
         return inclusiveLines
 
+    def readLines(self, file):
+
+        string = ""
+        file_line_array = []
+
+        for i in file:
+            if i == '\n':
+                file_line_array.append(string)
+                string = ""
+            else:
+                string = string + i
+        file_line_array.append(string)
+
+        return file_line_array
+
     
     def generateChangeSets( self, iFileA, iFileB, ochangeSetA, ochangeSetB ):
         #NO DONT REMOVE THIS RETURN STATEMENT
@@ -46,9 +61,9 @@ class algorithm:
         fileA = iFileA.read()
         fileB = iFileB.read()
 
-        fileA_line_array = iFileA.readlines()
-        fileB_line_array = iFileB.readlines()
-
+        fileA_line_array = self.readLines(fileA)
+        fileB_line_array = self.readLines(fileA)
+        
         self.strip_end_lines(fileA_line_array)
         self.strip_end_lines(fileB_line_array)
 
@@ -63,16 +78,13 @@ class algorithm:
         fileA_same_lines = []
         fileB_same_lines = []
 
-
         for line in range(len(fileA_line_array)):
-            fileA_same_lines.append(self.similar(fileA_line_array[line], fileA_lines_inclusive[line]))
+            fileA_same_lines.append(self.similar(fileA_line_array[line], fileA_inclusive_lines[line]))
 
         for line in range(len(fileB_line_array)):
-            fileB_same_lines.append(self.similar(fileB_line_array[line], fileB_lines_inclusive[line]))
-
+            fileB_same_lines.append(self.similar(fileB_line_array[line], fileB_inclusive_lines[line]))
 
         print(fileA_same_lines)
-
 
         return pmEnums.RESULT.NOTIMPL
 

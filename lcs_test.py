@@ -15,7 +15,6 @@ file1_line_array = open("test_file1.txt","r").readlines()
 file2_line_array = open("test_file2.txt","r").readlines()
 
 
-
 for line in range(len(file1_line_array)):
 	file1_line_array[line] = file1_line_array[line].strip('\n')
 
@@ -31,10 +30,10 @@ file2_diff = diff[1]
 
 
 
-print("")
-for i in range(len(file1_diff)):
-	print('{:10s} {:20s}'.format(str(file1_diff[i]), str(file2_diff[i])))
-print("\n")
+# print("")
+# for i in range(len(file1_diff)):
+# 	print('{:10s} {:20s}'.format(str(file1_diff[i]), str(file2_diff[i])))
+# print("\n")
 
 
 
@@ -70,8 +69,25 @@ for line in range(len(file1_line_array)):
 	f1_same_lines.append(similar(file1_line_array[line], f1_lines_inclusive[line]))
 
 
-print(f1_same_lines)
+fileA = open("test_file1.txt","r")
+fileB = open("test_file2.txt","r").readlines()
 
+
+
+lines = []
+string = ""
+
+for i in fileA.read():
+	if i == '\n':
+		lines.append(string)
+		string = ""
+	else:
+		string = string + i
+lines.append(string)
+
+print(lines)
+
+# print(fileA.readlines())
 
 
 print("\n")

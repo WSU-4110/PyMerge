@@ -10,6 +10,8 @@ import pickle
 
 
 class Backup(object):
+    __slots__ = ["BLOCK_SIZE", "hash_type", "hash_func"]
+
     def __init__(self, hash_type="SHA256", block_size=65535):
         """
         Initialize the Backup class

@@ -1,13 +1,10 @@
 # PyQt imports
-from PyQt5.QtWidgets import *
 from PyQt5.QtWidgets import (
     QTableView,
     QHeaderView,
     QLineEdit,
     QAbstractItemView,
     QPushButton,
-)
-from PyQt5.QtWidgets import (
     QMainWindow,
     QApplication,
     QWidget,
@@ -15,6 +12,7 @@ from PyQt5.QtWidgets import (
     QTableWidget,
     QTableWidgetItem,
     QVBoxLayout,
+    QGridLayout
 )
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
@@ -30,6 +28,8 @@ import os
 import gui_config
 import utilities as util
 import undo_redo
+import pmEnums
+
 
 undo_ctrlr = undo_redo.UndoRedo(10)
 
@@ -61,19 +61,34 @@ class Row(QtCore.QObject):
         self.line_num: int = line_num
         self.right_background_color = None
         self.left_background_color = None
+        self.change_state_flag = pmEnums.CHANGEDENUM.SAME
 
-        if right_text is None:
+        if self.change_state_flag == pmEnums.CHANGEDENUM.CHANGED:
             self.table.item(self.row_num, 1).setBackground(
                 gui_config.COLORS["PAD_SPACE"]
             )
-        else:
-            self.table.item(self.row_num, 1).setBackground(gui_config.COLORS["DEFAULT"])
+        elif self.change_state_flag == pmEnums.CHANGEDENUM.ADDED:
+            if right_text is None:
+                self.table.item(self.row_num, 1).setBackground(
+                    gui_config.COLORS["PAD_SPACE"]
+                )
+                self.table.item(self.row_num, 4).setBackground(
+                    gui_config.COLORS["LINE_DIFF"]
+                )
 
-        if left_text is None:
-            self.table.item(self.row_num, 4).setBackground(
-                gui_config.COLORS["PAD_SPACE"]
-            )
-        else:
+            elif left_text is None:
+                self.table.item(self.row_num, 1).setBackground(
+                    gui_config.COLORS["LINE_DIFF"]
+                )
+                self.table.item(self.row_num, 4).setBackground(
+                    gui_config.COLORS["PAD_SPACE"]
+                )
+            else:
+                self.table.item(self.row_num, 1).setBackground(gui_config.COLORS["DEFAULT"])
+                self.table.item(self.row_num, 4).setBackground(gui_config.COLORS["DEFAULT"])
+
+        elif self.change_state_flag == pmEnums.CHANGEDENUM.SAME:
+            self.table.item(self.row_num, 1).setBackground(gui_config.COLORS["DEFAULT"])
             self.table.item(self.row_num, 4).setBackground(gui_config.COLORS["DEFAULT"])
 
         right_button = QPushButton(self.table)
@@ -233,6 +248,7 @@ class MainTable(QWidget):
         else:
             event.ignore()
 
+    @pyqtSlot()
     def goto_next_diff(self):
         """
         Scrolls the table window to the next difference incrementally (starts at the first diff)
@@ -241,6 +257,7 @@ class MainTable(QWidget):
         #TODO: Implement goto_next_diff function
         return
 
+    @pyqtSlot()
     def goto_prev_diff(self):
         """
         Scrolls the table window to the previous difference incrementally
@@ -250,7 +267,7 @@ class MainTable(QWidget):
         return
 
     def jump_to_line(self, line_num, col=0):
-        #self.table.scrollToItem(self.table.item(line_num, col), QtWidgets.QAbstractItemView.PositionAtTop)
+        self.table.scrollToItem(self.table.item(line_num, col), QtWidgets.QAbstractItemView.PositionAtTop)
         self.table.scrollToItem(self.table.selectRow(line_num), QtWidgets.QAbstractItemView.PositionAtTop)
 
     def add_line(self, right_text: str, left_text: str, line_num: int or str):
@@ -325,4 +342,4 @@ class MainTable(QWidget):
             file2_contents = file.read().splitlines()
 
         self.load_table_contents(file1_contents, file2_contents)
-        #self.jump_to_line(77)
+        self.jump_to_line(77)

@@ -3,8 +3,9 @@ Widget to contain the buttons/control panel for the merge tool.
 """
 from PyQt5.QtWidgets import *
 from PyQt5 import QtGui
-
+from PyQt5 import QtCore
 import gui_config
+import buttonActions
 
 
 class controlButtons(QWidget):
@@ -12,30 +13,55 @@ class controlButtons(QWidget):
         super().__init__()
         self.setGeometry(200, 200, 200, 200)
         self.buttonLayout()
-                
-    def buttonLayout(self):        
+
+
+
+    def buttonLayout(self):
         grid = QGridLayout()
         self.setLayout(grid)
                 
-        merge_left_button = QPushButton()
-        merge_left_button.resize( 100, 40)
+        bActions = buttonActions.buttonActions
+        
+        merge_left_button = QToolButton()
+        merge_left_button.setFixedSize( 80, 50)
         icon = QtGui.QIcon(gui_config.ICONS["MERGE_LEFT"])
         merge_left_button.setIcon(icon)
-        
+        merge_left_button.clicked.connect(bActions.mergeLeft)
         grid.addWidget(merge_left_button, 0, 0)
 
-        merge_right_button = QPushButton()
-        icon = QtGui.QIcon(gui_config.ICONS["MERGE_RIGHT"])
-        merge_right_button.setIcon(icon)
-        grid.addWidget(merge_right_button, 0, 2)
+
+        undo_change_button = QToolButton()
+        undo_change_button.setFixedSize( 80, 50)
+        icon = QtGui.QIcon(gui_config.ICONS["UNDO"])
+        undo_change_button.setIcon(icon)
+        undo_change_button.clicked.connect(bActions.undoChange)
+        grid.addWidget(undo_change_button, 0, 1)
         
-        next_diff_button = QPushButton()
+        next_diff_button = QToolButton()
+        next_diff_button.setFixedSize( 80, 50)
         icon = QtGui.QIcon(gui_config.ICONS["NEXT_DIFF"])
         next_diff_button.setIcon(icon)
-        grid.addWidget(next_diff_button, 0, 1)
+        next_diff_button.clicked.connect(bActions.nextDiff)
+        grid.addWidget(next_diff_button, 1, 2)
         
-        prev_diff_button = QPushButton()
+        prev_diff_button = QToolButton()
+        prev_diff_button.setFixedSize( 80, 50)
         icon = QtGui.QIcon(gui_config.ICONS["PREV_DIFF"])
         prev_diff_button.setIcon(icon)
-        grid.addWidget(prev_diff_button, 1, 1)
+        prev_diff_button.clicked.connect(bActions.previousDiff)
+        grid.addWidget(prev_diff_button, 0, 2)
+
+        redo_change_button = QToolButton()
+        redo_change_button.setFixedSize( 80, 50)
+        icon = QtGui.QIcon(gui_config.ICONS["REDO"])
+        redo_change_button.setIcon(icon)
+        redo_change_button.clicked.connect(bActions.redoChange)
+        grid.addWidget(redo_change_button, 0, 3)
+
         
+        merge_right_button = QToolButton()
+        merge_right_button.setFixedSize( 80, 50)
+        icon = QtGui.QIcon(gui_config.ICONS["MERGE_RIGHT"])
+        merge_right_button.setIcon(icon)
+        merge_right_button.clicked.connect(bActions.mergeRight)
+        grid.addWidget(merge_right_button, 0, 4)

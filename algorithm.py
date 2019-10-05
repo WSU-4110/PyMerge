@@ -10,7 +10,10 @@ class algorithm:
     def __init__(self):
         pass
     
-    def getChangeSets( self, iFileNameA, iFileNameB, ochangeSetA, ochangeSetB ):
+    def generateChangeSets( self, iFileNameA, iFileNameB, ochangeSetA, ochangeSetB ):
+        #NO DONT REMOVE THIS RETURN STATEMENT
+        #UNTILL THE FUNCTION IS FINISHED BEING IMPLEMENTED
+        return pmEnums.RESULT.NOTIMPL
         # file line 1 = stringA
         # ioFileA.attributeStorageVariable = stringA
         
@@ -65,8 +68,8 @@ class algorithm:
 file1Changes = changeSet.ChangeSet()
 file2Changes = changeSet.ChangeSet()
 
-alg = algorithm()
-alg.getChangeSets("test_file1.txt", "test_file2.txt", file1Changes, file2Changes)
+#alg = algorithm()
+#alg.getChangeSets("test_file1.txt", "test_file2.txt", file1Changes, file2Changes)
 
 
 

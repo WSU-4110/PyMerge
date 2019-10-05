@@ -17,11 +17,11 @@ class ChangeSet:
 	def __init__(self):
 		pass
     
-	def getChange( self, ilineNum, oChangeType, oData ):
+	def generateChangeSets( self, ilineNum, oChangeType, oData ):
 		oreturnObj[0] = pmEnums.CHANGEDENUM.CHANGED
 		return pmEnums.RESULT.NOTIMPL
 
 	def addChange(self, lineNum, changeType, data):
-		self.changeList.append((lineNum, changeType, data))
+		self.changeList.append([lineNum, changeType, data])
 
     

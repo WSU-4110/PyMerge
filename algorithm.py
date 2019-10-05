@@ -9,7 +9,6 @@ import changeSet
 import os
 
 
-
 class algorithm:
     def __init__(self):
         pass
@@ -53,6 +52,16 @@ class algorithm:
 
         return file_line_array
 
+    def addChanges(self, thresh, length, same_lines_list, data, ochangeSet):
+        for i in range(length):
+            if same_lines_list[i] == 1.0:
+                changeType = pmEnums.CHANGEDENUM.SAME
+            elif same_lines_list[i] >= 0.7:
+                changeType = pmEnums.CHANGEDENUM.CHANGED
+            else:
+                changeType = pmEnums.CHANGEDENUM.ADDED
+            ochangeSet.addChange(i+1, changeType, data[i])
+
     
     def generateChangeSets( self, iFileA, iFileB, ochangeSetA, ochangeSetB ):
         #NO DONT REMOVE THIS RETURN STATEMENT
@@ -84,7 +93,12 @@ class algorithm:
         for line in range(len(fileB_line_array)):
             fileB_same_lines.append(self.similar(fileB_line_array[line], fileB_inclusive_lines[line]))
 
-        print(fileA_same_lines)
+
+        change_thresh = 0.7
+
+        self.addChanges(change_thresh, len(fileA_line_array), fileA_same_lines, fileA_line_array, ochangeSetA)
+        self.addChanges(change_thresh, len(fileB_line_array), fileB_same_lines, fileB_line_array, ochangeSetB)
+
 
         return pmEnums.RESULT.NOTIMPL
 
@@ -95,15 +109,17 @@ class algorithm:
 file1Changes = changeSet.ChangeSet()
 file2Changes = changeSet.ChangeSet()
 
-#alg = algorithm()
-#alg.getChangeSets("test_file1.txt", "test_file2.txt", file1Changes, file2Changes)
-
 
 file1 = open("test_file1.txt","r")
 file2 = open("test_file2.txt","r")
 
 diff = algorithm()
 diff.generateChangeSets(file1, file2, file1Changes, file2Changes)
+
+print(changeSet.ChangeSet.changeList)
+
+
+
 
 
 

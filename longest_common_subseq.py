@@ -48,6 +48,7 @@ def longest_common_subsequence(right_set, left_set):
     j = left_size
     while i > 0 and j > 0:
         if right_set[i - 1] == left_set[j - 1]:
+            # print(str(right_set[i-1]), "==", str(left_set[j-1]))
             lcs[idx - 1] = right_set[i - 1]
             idx_matches[0].append(i - 1)
             idx_matches[1].append(j - 1)
@@ -56,10 +57,12 @@ def longest_common_subsequence(right_set, left_set):
             idx = idx - 1
 
         elif lcs_matrix[i - 1][j] > lcs_matrix[i][j - 1]:
+            # print(str(lcs_matrix[i - 1][j]), ">", str(lcs_matrix[i][j - 1]))
             i = i - 1
             idx_matches[0].append(None)
             idx_matches[1].append(None)
         else:
+            # print(str(lcs_matrix[i - 1][j]), "<=", str(lcs_matrix[i][j - 1]))
             j = j - 1
             idx_matches[0].append(None)
             idx_matches[1].append(None)

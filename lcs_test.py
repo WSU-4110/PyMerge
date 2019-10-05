@@ -66,7 +66,7 @@ f2_lines_inclusive.append(line)
 
 f1_same_lines = []
 
-for line in range(len(file2_line_array)):
+for line in range(len(file1_line_array)):
 	f1_same_lines.append(similar(file1_line_array[line], f1_lines_inclusive[line]))
 
 

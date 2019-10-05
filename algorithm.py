@@ -107,8 +107,6 @@ class algorithm:
 
 
 
-
-
 # file1Changes = changeSet.ChangeSet()
 # file2Changes = changeSet.ChangeSet()
 

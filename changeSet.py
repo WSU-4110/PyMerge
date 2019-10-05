@@ -18,7 +18,7 @@ class ChangeSet:
 		pass
     
 	def generateChangeSets( self, ilineNum, oChangeType, oData ):
-		oreturnObj[0] = pmEnums.CHANGEDENUM.CHANGED
+		# oreturnObj[0] = pmEnums.CHANGEDENUM.CHANGED
 		return pmEnums.RESULT.NOTIMPL
 
 	def addChange(self, lineNum, changeType, data):

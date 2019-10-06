@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import (
     QTableWidget,
     QTableWidgetItem,
     QVBoxLayout,
-    QGridLayout
+    QGridLayout,
 )
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
@@ -29,7 +29,7 @@ import gui_config
 import utilities as util
 import undo_redo
 import pmEnums
-
+import changeset
 
 undo_ctrlr = undo_redo.UndoRedo(10)
 
@@ -38,12 +38,12 @@ class Row(QtCore.QObject):
     __slots__ = ["row", "table", "right_text", "left_text", "line_num"]
 
     def __init__(
-            self,
-            row: int,
-            table,
-            right_text: str or None,
-            left_text: str or None,
-            line_num: int,
+        self,
+        row: int,
+        table,
+        right_text: str or None,
+        left_text: str or None,
+        line_num: int,
     ):
         """
         Initialize the Row class instance
@@ -84,8 +84,12 @@ class Row(QtCore.QObject):
                     gui_config.COLORS["PAD_SPACE"]
                 )
             else:
-                self.table.item(self.row_num, 1).setBackground(gui_config.COLORS["DEFAULT"])
-                self.table.item(self.row_num, 4).setBackground(gui_config.COLORS["DEFAULT"])
+                self.table.item(self.row_num, 1).setBackground(
+                    gui_config.COLORS["DEFAULT"]
+                )
+                self.table.item(self.row_num, 4).setBackground(
+                    gui_config.COLORS["DEFAULT"]
+                )
 
         elif self.change_state_flag == pmEnums.CHANGEDENUM.SAME:
             self.table.item(self.row_num, 1).setBackground(gui_config.COLORS["DEFAULT"])
@@ -158,8 +162,12 @@ class MainTable(QWidget):
         self.table.setRowCount(0)  # Set the initial row count to 0
         self.table.setColumnCount(5)  # Set the column count to 5
         self.setAcceptDrops(True)
-        self.diff_indices = []  # List containing indices of all diff rows. This is used for jump to diff functions
-        self.curr_diff_idx = 0  # Contains the index of the current diff that has been jumped to
+
+        # List containing indices of all diff rows. This is used for jump to diff functions
+        self.diff_indices: list = []
+
+        # Contains the index of the current diff that has been jumped to
+        self.curr_diff_idx: int = 0
 
         # Set the head text
         self.table.setHorizontalHeaderItem(0, QTableWidgetItem("Line"))
@@ -254,7 +262,7 @@ class MainTable(QWidget):
         Scrolls the table window to the next difference incrementally (starts at the first diff)
         :return: No return value
         """
-        #TODO: Implement goto_next_diff function
+        # TODO: Implement goto_next_diff function
         return
 
     @pyqtSlot()
@@ -263,12 +271,16 @@ class MainTable(QWidget):
         Scrolls the table window to the previous difference incrementally
         :return: No return value
         """
-        #TODO: Implement goto_prev_diff function
+        # TODO: Implement goto_prev_diff function
         return
 
     def jump_to_line(self, line_num, col=0):
-        self.table.scrollToItem(self.table.item(line_num, col), QtWidgets.QAbstractItemView.PositionAtTop)
-        self.table.scrollToItem(self.table.selectRow(line_num), QtWidgets.QAbstractItemView.PositionAtTop)
+        self.table.scrollToItem(
+            self.table.item(line_num, col), QtWidgets.QAbstractItemView.PositionAtTop
+        )
+        self.table.scrollToItem(
+            self.table.selectRow(line_num), QtWidgets.QAbstractItemView.PositionAtTop
+        )
 
     def add_line(self, right_text: str, left_text: str, line_num: int or str):
         """
@@ -289,9 +301,15 @@ class MainTable(QWidget):
         self.table.item(line_num, 2).setTextAlignment(Qt.AlignCenter)
         self.table.item(line_num, 3).setTextAlignment(Qt.AlignCenter)
 
-        self.table.item(line_num, 0).setBackground(gui_config.COLORS["TBL_LINE_COL_DEFAULT_BACKGROUND"])
-        self.table.item(line_num, 2).setBackground(gui_config.COLORS["TBL_LINE_COL_DEFAULT_BACKGROUND"])
-        self.table.item(line_num, 3).setBackground(gui_config.COLORS["TBL_LINE_COL_DEFAULT_BACKGROUND"])
+        self.table.item(line_num, 0).setBackground(
+            gui_config.COLORS["TBL_LINE_COL_DEFAULT_BACKGROUND"]
+        )
+        self.table.item(line_num, 2).setBackground(
+            gui_config.COLORS["TBL_LINE_COL_DEFAULT_BACKGROUND"]
+        )
+        self.table.item(line_num, 3).setBackground(
+            gui_config.COLORS["TBL_LINE_COL_DEFAULT_BACKGROUND"]
+        )
 
         row_instance = Row(line_num, self.table, right_text, left_text, line_num)
         self.rows.append(row_instance)
@@ -311,19 +329,25 @@ class MainTable(QWidget):
         :param right_lines: right hand data to show
         :return: No return value
         """
-        left_text_lines = deepcopy(left_lines)
-        right_text_lines = deepcopy(right_lines)
+        # left_text_lines = deepcopy(left_lines)
+        # right_text_lines = deepcopy(right_lines)
+        #
+        # # Pad arrays. Remove this later
+        # if len(left_text_lines) > len(right_text_lines):
+        #     for n in range(len(left_text_lines)):
+        #         right_text_lines.append("")
+        # elif len(right_text_lines) > len(left_text_lines):
+        #     for n in range(len(right_text_lines)):
+        #         left_text_lines.append("")
+        #
+        # for n in range(min(len(left_text_lines), len(right_text_lines))):
+        #     self.add_line(left_text_lines[n], right_text_lines[n], n)
 
-        # Pad arrays. Remove this later
-        if len(left_text_lines) > len(right_text_lines):
-            for n in range(len(left_text_lines)):
-                right_text_lines.append("")
-        elif len(right_text_lines) > len(left_text_lines):
-            for n in range(len(right_text_lines)):
-                left_text_lines.append("")
-
-        for n in range(min(len(left_text_lines), len(right_text_lines))):
-            self.add_line(left_text_lines[n], right_text_lines[n], n)
+        for n in range(len(changeset.changeList)):
+            text = []
+            change_type = 0
+            changeset.getChange(n + 1, change_type, text)
+            self.add_line(text[0], text[1], n + 1)
 
     def load_test_files(self, file1: str, file2: str):
         """

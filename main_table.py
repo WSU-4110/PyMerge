@@ -29,13 +29,12 @@ import gui_config
 import utilities as util
 import undo_redo
 import pmEnums
-import changeset
-
+from changeSet import ChangeSet
 undo_ctrlr = undo_redo.UndoRedo(10)
 
 
 class Row(QtCore.QObject):
-    __slots__ = ["row", "table", "right_text", "left_text", "line_num"]
+    __slots__ = ["row", "table", "right_text", "left_text", "line_num", "change_state_flags"]
 
     def __init__(
         self,
@@ -44,6 +43,7 @@ class Row(QtCore.QObject):
         right_text: str or None,
         left_text: str or None,
         line_num: int,
+        change_flags: list
     ):
         """
         Initialize the Row class instance
@@ -61,51 +61,84 @@ class Row(QtCore.QObject):
         self.line_num: int = line_num
         self.right_background_color = None
         self.left_background_color = None
-        self.change_state_flag = pmEnums.CHANGEDENUM.SAME
+        self.change_state_flags = deepcopy(change_flags)
 
-        if self.change_state_flag == pmEnums.CHANGEDENUM.CHANGED:
+        # Set the left side background colors
+        if self.change_state_flags[0] == pmEnums.CHANGEDENUM.CHANGED:
+            self.table.item(self.row_num, 1).setBackground(
+                gui_config.COLORS["LINE_DIFF"]
+            )
+            right_button = QPushButton(self.table)
+            right_icon = QIcon(gui_config.ICONS["MERGE_RIGHT"])
+            right_button.setIcon(right_icon)
+            right_button.clicked.connect(self.merge_right)
+            self.table.setCellWidget(self.line_num, 2, right_button)
+
+            left_button = QPushButton(self.table)
+            left_icon = QIcon(gui_config.ICONS["MERGE_LEFT"])
+            left_button.setIcon(left_icon)
+            left_button.clicked.connect(self.merge_left)
+            self.table.setCellWidget(line_num, 3, left_button)
+
+        elif self.change_state_flags[0] == pmEnums.CHANGEDENUM.ADDED:
             self.table.item(self.row_num, 1).setBackground(
                 gui_config.COLORS["PAD_SPACE"]
             )
-        elif self.change_state_flag == pmEnums.CHANGEDENUM.ADDED:
-            if right_text is None:
-                self.table.item(self.row_num, 1).setBackground(
-                    gui_config.COLORS["PAD_SPACE"]
-                )
-                self.table.item(self.row_num, 4).setBackground(
-                    gui_config.COLORS["LINE_DIFF"]
-                )
+            right_button = QPushButton(self.table)
+            right_icon = QIcon(gui_config.ICONS["MERGE_RIGHT"])
+            right_button.setIcon(right_icon)
+            right_button.clicked.connect(self.merge_right)
+            self.table.setCellWidget(self.line_num, 2, right_button)
 
-            elif left_text is None:
-                self.table.item(self.row_num, 1).setBackground(
-                    gui_config.COLORS["LINE_DIFF"]
-                )
-                self.table.item(self.row_num, 4).setBackground(
-                    gui_config.COLORS["PAD_SPACE"]
-                )
-            else:
-                self.table.item(self.row_num, 1).setBackground(
-                    gui_config.COLORS["DEFAULT"]
-                )
-                self.table.item(self.row_num, 4).setBackground(
-                    gui_config.COLORS["DEFAULT"]
-                )
+            left_button = QPushButton(self.table)
+            left_icon = QIcon(gui_config.ICONS["MERGE_LEFT"])
+            left_button.setIcon(left_icon)
+            left_button.clicked.connect(self.merge_left)
+            self.table.setCellWidget(line_num, 3, left_button)
 
-        elif self.change_state_flag == pmEnums.CHANGEDENUM.SAME:
-            self.table.item(self.row_num, 1).setBackground(gui_config.COLORS["DEFAULT"])
-            self.table.item(self.row_num, 4).setBackground(gui_config.COLORS["DEFAULT"])
+        elif self.change_state_flags[0] == pmEnums.CHANGEDENUM.SAME:
+            self.table.item(self.row_num, 1).setBackground(
+                gui_config.COLORS["DEFAULT"]
+            )
 
-        right_button = QPushButton(self.table)
-        right_icon = QIcon(gui_config.ICONS["MERGE_RIGHT"])
-        right_button.setIcon(right_icon)
-        right_button.clicked.connect(self.merge_right)
-        self.table.setCellWidget(self.line_num, 2, right_button)
+        # Set the right side background colors
+        if self.change_state_flags[1] == pmEnums.CHANGEDENUM.CHANGED:
+            self.table.item(self.row_num, 4).setBackground(
+                gui_config.COLORS["LINE_DIFF"]
+            )
+            right_button = QPushButton(self.table)
+            right_icon = QIcon(gui_config.ICONS["MERGE_RIGHT"])
+            right_button.setIcon(right_icon)
+            right_button.clicked.connect(self.merge_right)
+            self.table.setCellWidget(self.line_num, 2, right_button)
 
-        left_button = QPushButton(self.table)
-        left_icon = QIcon(gui_config.ICONS["MERGE_LEFT"])
-        left_button.setIcon(left_icon)
-        left_button.clicked.connect(self.merge_left)
-        self.table.setCellWidget(line_num, 3, left_button)
+            left_button = QPushButton(self.table)
+            left_icon = QIcon(gui_config.ICONS["MERGE_LEFT"])
+            left_button.setIcon(left_icon)
+            left_button.clicked.connect(self.merge_left)
+            self.table.setCellWidget(line_num, 3, left_button)
+
+        elif self.change_state_flags[1] == pmEnums.CHANGEDENUM.ADDED:
+            self.table.item(self.row_num, 4).setBackground(
+                gui_config.COLORS["PAD_SPACE"]
+            )
+            right_button = QPushButton(self.table)
+            right_icon = QIcon(gui_config.ICONS["MERGE_RIGHT"])
+            right_button.setIcon(right_icon)
+            right_button.clicked.connect(self.merge_right)
+            self.table.setCellWidget(self.line_num, 2, right_button)
+
+            left_button = QPushButton(self.table)
+            left_icon = QIcon(gui_config.ICONS["MERGE_LEFT"])
+            left_button.setIcon(left_icon)
+            left_button.clicked.connect(self.merge_left)
+            self.table.setCellWidget(line_num, 3, left_button)
+
+        elif self.change_state_flags[1] == pmEnums.CHANGEDENUM.SAME:
+            self.table.item(self.row_num, 4).setBackground(
+                gui_config.COLORS["DEFAULT"]
+            )
+
         self.table.repaint()
 
     @pyqtSlot()
@@ -282,13 +315,15 @@ class MainTable(QWidget):
             self.table.selectRow(line_num), QtWidgets.QAbstractItemView.PositionAtTop
         )
 
-    def add_line(self, right_text: str, left_text: str, line_num: int or str):
+    def add_line(self, right_text: str, left_text: str, line_num: int or str, change_flags):
         """
         Add a row into the table using the right and left text provided as parameters.
         :param right_text: Right text to display
         :param left_text: Left text to display
         :param line_num: Line number to display. This isn't exactly where it's inserted, just a display value
+        :param change_flags:
         :return: No return value
+
         """
         self.table.insertRow(line_num)
         self.table.setItem(line_num, 0, QTableWidgetItem(str(line_num)))
@@ -311,7 +346,7 @@ class MainTable(QWidget):
             gui_config.COLORS["TBL_LINE_COL_DEFAULT_BACKGROUND"]
         )
 
-        row_instance = Row(line_num, self.table, right_text, left_text, line_num)
+        row_instance = Row(line_num, self.table, right_text, left_text, line_num, change_flags)
         self.rows.append(row_instance)
 
     def get_lines_from_tbl(self) -> list:
@@ -343,11 +378,11 @@ class MainTable(QWidget):
         # for n in range(min(len(left_text_lines), len(right_text_lines))):
         #     self.add_line(left_text_lines[n], right_text_lines[n], n)
 
-        for n in range(len(changeset.changeList)):
-            text = []
-            change_type = 0
-            changeset.getChange(n + 1, change_type, text)
-            self.add_line(text[0], text[1], n + 1)
+        for n in range(len(ChangeSet.changeList)):
+            data = ["", ""]
+            change_types = [[0][0]]
+            ChangeSet.getChange(ChangeSet, n, change_types, data)
+            self.add_line(data[0], data[1], n + 1, change_types)
 
     def load_test_files(self, file1: str, file2: str):
         """

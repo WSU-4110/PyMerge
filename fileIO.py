@@ -17,7 +17,7 @@ class fileIO:
         fileB = open(iFileB, 'r')
 
         alg = algorithm.algorithm
-        result = alg.generateChangeSets(self, fileA, fileB, self.changesA, self.changesB)
+        result = alg.generateChangeSets(alg, fileA, fileB, self.changesA, self.changesB)
 
         fileA.close()
         fileB.close()

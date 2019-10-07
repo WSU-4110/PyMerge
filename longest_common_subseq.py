@@ -12,7 +12,6 @@ For two files that each have 1000 lines with an average of 10 words per line the
     - 1000000 comparisons
     - tested with 32000 lines on my laptop used like 8GB of memory
 
-
 """
 
 
@@ -81,3 +80,5 @@ def pad_raw_line_matches(match_list):
         outp_list[1].append(match_list[1][idx] + 1)
         idx += 1
         cntr += 1
+
+    return outp_list

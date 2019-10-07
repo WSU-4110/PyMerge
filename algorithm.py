@@ -37,6 +37,8 @@ class algorithm:
 
         return inclusiveLines
 
+    # Use .splitlines instead --> file.read().splitlines()
+
     def readLines(self, file):
 
         string = ""
@@ -67,6 +69,9 @@ class algorithm:
         #NO DONT REMOVE THIS RETURN STATEMENT
         #UNTILL THE FUNCTION IS FINISHED BEING IMPLEMENTED
 
+        # read file and split lines in one line and set = to fileA_line_array and fileB_line_array
+        # then pass those 2 variables to LCS algorithm 
+
         fileA = iFileA.read()
         fileB = iFileB.read()
 
@@ -77,6 +82,8 @@ class algorithm:
         self.strip_end_lines(fileB_line_array)
 
         diff = longest_common_subsequence(fileA, fileB)
+
+        # Implement the pad_raw_line_matches function after invoking LCS algorithm --> pass it the diff variable
 
         fileA_diff = diff[0]
         fileB_diff = diff[1]
@@ -107,21 +114,22 @@ class algorithm:
 
 
 
-# file1Changes = changeSet.ChangeSet()
-# file2Changes = changeSet.ChangeSet()
+file1Changes = changeSet.ChangeSet()
+file2Changes = changeSet.ChangeSet()
 
 
-# file1 = open("test_file1.txt","r")
-# file2 = open("test_file2.txt","r")
+file1 = open("test_file1.txt","r")
+file2 = open("test_file2.txt","r")
 
-# diff = algorithm()
-# diff.generateChangeSets(file1, file2, file1Changes, file2Changes)
+diff = algorithm()
+diff.generateChangeSets(file1, file2, file1Changes, file2Changes)
 
-# print(changeSet.ChangeSet.changeList)
-
-
-
+for change in changeSet.ChangeSet.changeList:
+    print(change)
 
 
+
+
+# changeset passed to main_table.py 
 
     

@@ -22,6 +22,6 @@ class ChangeSet:
 		return pmEnums.RESULT.NOTIMPL
 
 	def addChange(self, lineNum, changeType, data):
-		self.changeList.append([lineNum, changeType, data])
+		self.changeList.append([changeType, data])
 
     

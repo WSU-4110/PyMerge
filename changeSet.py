@@ -16,12 +16,7 @@ class ChangeSet:
 
 	def __init__(self):
 		pass
-    
-	def getChange( self, ilineNum, oChangeType, oData ):                
-	        change = changeList[0]
-                oChangeType = change[0]
-                oData = change[1]
-		return pmEnums.RESULT.NOTIMPL
+
 
 	def addChange(self, lineNum, changeType, data):
 		self.changeList.append([changeType, data])

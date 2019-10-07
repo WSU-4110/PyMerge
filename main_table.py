@@ -68,33 +68,13 @@ class Row(QtCore.QObject):
             self.table.item(self.row_num, 1).setBackground(
                 gui_config.COLORS["LINE_DIFF"]
             )
-            right_button = QPushButton(self.table)
-            right_icon = QIcon(gui_config.ICONS["MERGE_RIGHT"])
-            right_button.setIcon(right_icon)
-            right_button.clicked.connect(self.merge_right)
-            self.table.setCellWidget(self.line_num, 2, right_button)
-
-            left_button = QPushButton(self.table)
-            left_icon = QIcon(gui_config.ICONS["MERGE_LEFT"])
-            left_button.setIcon(left_icon)
-            left_button.clicked.connect(self.merge_left)
-            self.table.setCellWidget(line_num, 3, left_button)
+            self.add_row_merge_buttons()
 
         elif self.change_state_flags[0] == pmEnums.CHANGEDENUM.ADDED:
             self.table.item(self.row_num, 1).setBackground(
                 gui_config.COLORS["PAD_SPACE"]
             )
-            right_button = QPushButton(self.table)
-            right_icon = QIcon(gui_config.ICONS["MERGE_RIGHT"])
-            right_button.setIcon(right_icon)
-            right_button.clicked.connect(self.merge_right)
-            self.table.setCellWidget(self.line_num, 2, right_button)
-
-            left_button = QPushButton(self.table)
-            left_icon = QIcon(gui_config.ICONS["MERGE_LEFT"])
-            left_button.setIcon(left_icon)
-            left_button.clicked.connect(self.merge_left)
-            self.table.setCellWidget(line_num, 3, left_button)
+            self.add_row_merge_buttons()
 
         elif self.change_state_flags[0] == pmEnums.CHANGEDENUM.SAME:
             self.table.item(self.row_num, 1).setBackground(
@@ -106,33 +86,13 @@ class Row(QtCore.QObject):
             self.table.item(self.row_num, 4).setBackground(
                 gui_config.COLORS["LINE_DIFF"]
             )
-            right_button = QPushButton(self.table)
-            right_icon = QIcon(gui_config.ICONS["MERGE_RIGHT"])
-            right_button.setIcon(right_icon)
-            right_button.clicked.connect(self.merge_right)
-            self.table.setCellWidget(self.line_num, 2, right_button)
-
-            left_button = QPushButton(self.table)
-            left_icon = QIcon(gui_config.ICONS["MERGE_LEFT"])
-            left_button.setIcon(left_icon)
-            left_button.clicked.connect(self.merge_left)
-            self.table.setCellWidget(line_num, 3, left_button)
+            self.add_row_merge_buttons()
 
         elif self.change_state_flags[1] == pmEnums.CHANGEDENUM.ADDED:
             self.table.item(self.row_num, 4).setBackground(
                 gui_config.COLORS["PAD_SPACE"]
             )
-            right_button = QPushButton(self.table)
-            right_icon = QIcon(gui_config.ICONS["MERGE_RIGHT"])
-            right_button.setIcon(right_icon)
-            right_button.clicked.connect(self.merge_right)
-            self.table.setCellWidget(self.line_num, 2, right_button)
-
-            left_button = QPushButton(self.table)
-            left_icon = QIcon(gui_config.ICONS["MERGE_LEFT"])
-            left_button.setIcon(left_icon)
-            left_button.clicked.connect(self.merge_left)
-            self.table.setCellWidget(line_num, 3, left_button)
+            self.add_row_merge_buttons()
 
         elif self.change_state_flags[1] == pmEnums.CHANGEDENUM.SAME:
             self.table.item(self.row_num, 4).setBackground(
@@ -140,6 +100,19 @@ class Row(QtCore.QObject):
             )
 
         self.table.repaint()
+
+    def add_row_merge_buttons(self):
+        right_button = QPushButton(self.table)
+        right_icon = QIcon(gui_config.ICONS["MERGE_RIGHT"])
+        right_button.setIcon(right_icon)
+        right_button.clicked.connect(self.merge_right)
+        self.table.setCellWidget(self.line_num, 2, right_button)
+
+        left_button = QPushButton(self.table)
+        left_icon = QIcon(gui_config.ICONS["MERGE_LEFT"])
+        left_button.setIcon(left_icon)
+        left_button.clicked.connect(self.merge_left)
+        self.table.setCellWidget(self.line_num, 3, left_button)
 
     @pyqtSlot()
     def merge_right(self):
@@ -380,7 +353,7 @@ class MainTable(QWidget):
 
         for n in range(len(ChangeSet.changeList)):
             data = ["", ""]
-            change_types = [[0][0]]
+            change_types = [0, 0]
             ChangeSet.getChange(ChangeSet, n, change_types, data)
             self.add_line(data[0], data[1], n + 1, change_types)
 

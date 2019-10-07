@@ -16,8 +16,8 @@ class ChangeSet:
 
 	def __init__(self):
 		pass
-    
-	def getChange( self, ilineNum, oChangeType, oData ):
+
+	def getChange(self, ilineNum, oChangeType, oData):
 		change = changeList[0]
 		oChangeType = change[0]
 		oData = change[1]

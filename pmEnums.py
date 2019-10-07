@@ -19,5 +19,7 @@ class CHANGEDENUM( Enum ):
     CHANGED = 1
     ADDED = 2
     MOVED = 3
+    PADDING = 4
+    ERROR = 5
 
     

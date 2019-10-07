@@ -3,6 +3,7 @@ utilities.py
 General, non-project-specific functions
 """
 import os
+import hashlib
 
 
 def pad_string(string: str, length: int, char=" ", append=True):
@@ -36,7 +37,7 @@ def file_readable(file: str) -> bool:
     :return: boolean indicating if file has read permissions or not
     """
     return os.access(file, os.R_OK)
-  
+
 
 def hamming_dist(string1: str, string2: str) -> int or None:
     """
@@ -74,3 +75,9 @@ def line_bit_vector(string1, string2) -> list:
             bit_vec[n] = 1
     return bit_vec
 
+
+def hash_list(inp_list):
+    for n in range(inp_list):
+        inp_list[n] = hashlib.md5(str(inp_list[n]).encode("utf-8"))
+
+    return

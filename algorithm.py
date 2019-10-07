@@ -72,12 +72,22 @@ class algorithm:
         # read file and split lines in one line and set = to fileA_line_array and fileB_line_array
         # then pass those 2 variables to LCS algorithm 
 
+
+
+
         fileA = iFileA.read()
         fileB = iFileB.read()
 
         fileA_line_array = self.readLines(fileA)
         fileB_line_array = self.readLines(fileA)
+
+
+        # fileA_line_array = iFileA.read().splitlines()
+        # fileB_line_array = iFileB.read().splitlines()
+
         
+        # consider remoing this 
+
         self.strip_end_lines(fileA_line_array)
         self.strip_end_lines(fileB_line_array)
 

@@ -25,7 +25,7 @@ Each dictionary object should be an instance of the QColor class
 COLORS = {
     "LINE_DIFF": QColor(255, 150, 150),
     "LINE_MERGE": QColor(219, 235, 255),
-    "PAD_SPACE": QColor(240, 240, 240),
+    "PAD_SPACE": QColor(153, 153, 153),
     "DEFAULT": QColor(255, 255, 255),
     "TBL_HEADER_DEFAULT_BACKGROUND": QColor(179, 179, 179),
     "TBL_HEADER_DEFAULT_FOREGROUND": QColor(0, 0, 0),

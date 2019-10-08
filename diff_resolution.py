@@ -41,7 +41,6 @@ def diff_set(iFileA, iFileB, ochangeSetA: changeSet.ChangeSet, ochangeSetB: chan
     raw_diff: list = longest_common_subseq.padded_lcs(file_a_lines, file_b_lines, max(len(file_a_lines), len(file_b_lines)))
 
     for n in range(len(raw_diff[0])):
-
         if raw_diff[0][n] != -1 and raw_diff[1][n] != -1:
             #print(f"{n}\t\t\t{raw_diff[0][n]}\t\t\t{raw_diff[1][n]}\t\t\t SAME")
             ochangeSetA.addChange(n, pmEnums.CHANGEDENUM.SAME, file_a_lines[raw_diff[0][n]])

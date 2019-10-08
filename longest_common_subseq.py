@@ -60,25 +60,36 @@ def longest_common_subsequence(right_set, left_set):
 
 
 # Pass your match list to this
-def pad_raw_line_matches(match_list):
+def pad_raw_line_matches(match_list, file_length_max):
     m = len(match_list[0])
     n = len(match_list[1])
-    idx = 1
+    idx = 0
     cntr = 0
     outp_list = [[], []]
 
-    print("Table #      Right #     Left #")
-    while cntr < min(m, n):
+    for r in range(
+            max(match_list[0][idx] - 0, match_list[1][idx] - 0) - 1):
+        outp_list[0].append(-1)
+        outp_list[1].append(-1)
+
+    while cntr < max(m, n):
         for r in range(
                 max(match_list[0][idx] - match_list[0][idx - 1], match_list[1][idx] - match_list[1][idx - 1]) - 1):
-            outp_list[0].append(None)
-            outp_list[1].append(None)
-            # print(cntr + 1, "\t\t\t", "")
+            outp_list[0].append(-1)
+            outp_list[1].append(-1)
             cntr += 1
-        # print(cntr + 1, "\t\t\t", match_list[0][idx] + 1, "\t\t\t", match_list[1][idx] + 1)
-        outp_list[0].append(match_list[0][idx] + 1)
-        outp_list[1].append(match_list[1][idx] + 1)
+        outp_list[0].append(match_list[0][idx])
+        outp_list[1].append(match_list[1][idx])
         idx += 1
         cntr += 1
 
+    # for n in range(20):
+    #     outp_list[0].append(-1)
+    #     outp_list[1].append(-1)
     return outp_list
+
+
+def padded_lcs(right_set, left_set, file_length_max):
+    raw_matches = longest_common_subsequence(right_set, left_set)
+    print(file_length_max)
+    return pad_raw_line_matches(raw_matches, file_length_max)

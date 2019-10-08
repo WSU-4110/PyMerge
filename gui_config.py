@@ -26,7 +26,7 @@ COLORS = {
     "LINE_DIFF": QColor(255, 150, 150),
     "LINE_MERGE": QColor(219, 235, 255),
     "PAD_SPACE": QColor(153, 153, 153),
-    "DEFAULT": QColor(255, 255, 255),
+    "DEFAULT": QColor(237, 255, 240),
     "TBL_HEADER_DEFAULT_BACKGROUND": QColor(179, 179, 179),
     "TBL_HEADER_DEFAULT_FOREGROUND": QColor(0, 0, 0),
     "TBL_LINE_COL_DEFAULT_BACKGROUND": QColor(242, 242, 242)
@@ -39,5 +39,8 @@ FONTS = {
     "TBL_HEADER_DEFAULT": QFont("Open Sans Bold", weight=QFont.Bold, pointSize=12),
     "TOOLBAR_DEFAULT": QFont("Open Sans Bold", weight=QFont.Bold),
 }
+
+LEFT_TXT_COL_IDX = 1
+RIGHT_TXT_COL_IDX = 4
 
 

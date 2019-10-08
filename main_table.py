@@ -334,7 +334,7 @@ class MainTable(QWidget):
         """
         return [[row.right_text, row.left_text] for row in self.rows]
 
-    def load_table_contents(self, left_lines: list or dict, right_lines: list or dict):
+    def load_table_contents(self, left_lines: list or dict, right_lines: list or dict, file1, file2):
         # TODO: Add type hints
         """
         Load the contents of two data structures containing the lines to be displayed, into the tables
@@ -355,6 +355,9 @@ class MainTable(QWidget):
         #
         # for n in range(min(len(left_text_lines), len(right_text_lines))):
         #     self.add_line(left_text_lines[n], right_text_lines[n], n)
+
+        self.table.horizontalHeaderItem(1).setText(os.path.abspath(file1))
+        self.table.horizontalHeaderItem(4).setText(os.path.abspath(file2))
 
         for n in range(len(self.change_set_a.changeList)):
             data_a = [""]

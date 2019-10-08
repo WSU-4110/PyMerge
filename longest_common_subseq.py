@@ -1,5 +1,3 @@
-import numpy as np
-
 
 def mat_print(mat):
     for row in mat:
@@ -20,9 +18,6 @@ def longest_common_subsequence(right_set, left_set):
     right_size = len(right_set)  # Calculate the size only once
     left_size = len(left_set)
     lcs_matrix = [[0 for x in range(left_size + 1)] for y in range(right_size + 1)]  # Declare the sub-sequence matrix
-
-    # Convert subsequence matrix to numpy array to make larger comparisons more efficient
-    lcs_matrix = np.array(lcs_matrix)
 
     for i in range(right_size + 1):
         for j in range(left_size + 1):
@@ -83,7 +78,7 @@ def pad_raw_line_matches(match_list, file_length_max):
         idx += 1
         cntr += 1
 
-    print(file_length_max - max(outp_list[0][-1], outp_list[1][-1]))
+    # print(file_length_max - max(outp_list[0][-1], outp_list[1][-1]))
     print(match_list)
 
     return outp_list

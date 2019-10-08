@@ -72,7 +72,7 @@ def pad_raw_line_matches(match_list, file_length_max):
         outp_list[0].append(-1)
         outp_list[1].append(-1)
 
-    while cntr < max(m, n):
+    for n in range(max(m, n)):
         for r in range(
                 max(match_list[0][idx] - match_list[0][idx - 1], match_list[1][idx] - match_list[1][idx - 1]) - 1):
             outp_list[0].append(-1)
@@ -83,13 +83,12 @@ def pad_raw_line_matches(match_list, file_length_max):
         idx += 1
         cntr += 1
 
-    # for n in range(20):
-    #     outp_list[0].append(-1)
-    #     outp_list[1].append(-1)
+    print(file_length_max - max(outp_list[0][-1], outp_list[1][-1]))
+    print(match_list)
+
     return outp_list
 
 
 def padded_lcs(right_set, left_set, file_length_max):
     raw_matches = longest_common_subsequence(right_set, left_set)
-    print(file_length_max)
     return pad_raw_line_matches(raw_matches, file_length_max)

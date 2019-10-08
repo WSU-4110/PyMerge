@@ -29,6 +29,7 @@ import gui_config
 import utilities as util
 import undo_redo
 import pmEnums
+import fileIO
 from changeSet import ChangeSet
 undo_ctrlr = undo_redo.UndoRedo(10)
 
@@ -127,6 +128,7 @@ class Row(QtCore.QObject):
 
         # Set the background colors accordingly. We need a change flag to determine the color to use
         self.table.item(self.row_num, 1).setBackground(gui_config.COLORS["LINE_MERGE"])
+        self.table.item(self.row_num, 4).setBackground(gui_config.COLORS["LINE_MERGE"])
 
         # This is a significant user action so we need to record the change in the undo stack
         undo_ctrlr.record_action(self)
@@ -146,6 +148,7 @@ class Row(QtCore.QObject):
         self.left_text = self.right_text
 
         # Set the background colors accordingly. We need a change flag to determine the color to use
+        self.table.item(self.row_num, 1).setBackground(gui_config.COLORS["LINE_MERGE"])
         self.table.item(self.row_num, 4).setBackground(gui_config.COLORS["LINE_MERGE"])
 
         # This is a significant user action so we need to record the change in the undo stack
@@ -156,7 +159,7 @@ class Row(QtCore.QObject):
 
 
 class MainTable(QWidget):
-    def __init__(self):
+    def __init__(self, change_set_a, change_set_b):
         """
         Initialize the MainTable class
         """
@@ -171,6 +174,8 @@ class MainTable(QWidget):
 
         # List containing indices of all diff rows. This is used for jump to diff functions
         self.diff_indices: list = []
+        self.change_set_a = change_set_a
+        self.change_set_b = change_set_b
 
         # Contains the index of the current diff that has been jumped to
         self.curr_diff_idx: int = 0
@@ -299,7 +304,7 @@ class MainTable(QWidget):
 
         """
         self.table.insertRow(line_num)
-        self.table.setItem(line_num, 0, QTableWidgetItem(str(line_num)))
+        self.table.setItem(line_num, 0, QTableWidgetItem(str(line_num + 1)))
         self.table.setItem(line_num, 1, QTableWidgetItem(str(right_text)))
         self.table.setItem(line_num, 2, QTableWidgetItem(""))
         self.table.setItem(line_num, 3, QTableWidgetItem(""))
@@ -351,11 +356,15 @@ class MainTable(QWidget):
         # for n in range(min(len(left_text_lines), len(right_text_lines))):
         #     self.add_line(left_text_lines[n], right_text_lines[n], n)
 
-        for n in range(len(ChangeSet.changeList)):
-            data = ["", ""]
-            change_types = [0, 0]
-            ChangeSet.getChange(ChangeSet, n, change_types, data)
-            self.add_line(data[0], data[1], n + 1, change_types)
+        for n in range(len(self.change_set_a.changeList)):
+            data_a = [""]
+            data_b = [""]
+            change_type_a = [pmEnums.CHANGEDENUM.SAME]
+            change_type_b = [pmEnums.CHANGEDENUM.SAME]
+            self.change_set_a.getChange(n, change_type_a, data_a)
+            self.change_set_b.getChange(n, change_type_b, data_b)
+
+            self.add_line(data_a[0], data_b[0], n, [change_type_a[0], change_type_b[0]])
 
     def load_test_files(self, file1: str, file2: str):
         """

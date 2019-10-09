@@ -13,6 +13,7 @@ import main_table
 import fileIO
 import pmEnums
 import buttonActions
+import diff_resolution
 
 
 class mainWindow(QMainWindow):    
@@ -32,15 +33,17 @@ class mainWindow(QMainWindow):
             fIO = fileIO.fileIO()
             result = fIO.diffFiles(fileA, fileB)
             if result == pmEnums.RESULT.GOOD:
-                result = fIO.getChangeSets( changeSetA, changeSetB )
+                result = fIO.getChangeSets(fIO.changesA, fIO.changesB)
+            #result =
 
         if result == pmEnums.RESULT.GOOD:
             pass #pass the changesets to window class or whatever to be loaded into the table
         
         #load table
-        table_widget = main_table.MainTable()
+        table_widget = main_table.MainTable(fIO.changesA, fIO.changesB)
         layout.addWidget(table_widget, 1, 0)
-        table_widget.load_test_files("file1.c", "file2.c")
+        #table_widget.load_test_files("file1.c", "file2.c")
+        table_widget.load_table_contents([], [], fileA, fileB)    # Left list arguments for now
         
         widget = QWidget()
         widget.setLayout(layout)

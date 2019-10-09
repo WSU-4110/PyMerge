@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import (
     QTableWidget,
     QTableWidgetItem,
     QVBoxLayout,
-    QGridLayout
+    QGridLayout,
 )
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
@@ -28,20 +28,23 @@ import os
 import gui_config
 import utilities as util
 import undo_redo
-
+import pmEnums
+import fileIO
+from changeSet import ChangeSet
 undo_ctrlr = undo_redo.UndoRedo(10)
 
 
 class Row(QtCore.QObject):
-    __slots__ = ["row", "table", "right_text", "left_text", "line_num"]
+    __slots__ = ["row", "table", "right_text", "left_text", "line_num", "change_state_flags"]
 
     def __init__(
-            self,
-            row: int,
-            table,
-            right_text: str or None,
-            left_text: str or None,
-            line_num: int,
+        self,
+        row: int,
+        table,
+        right_text: str or None,
+        left_text: str or None,
+        line_num: int,
+        change_flags: list,
     ):
         """
         Initialize the Row class instance
@@ -59,21 +62,47 @@ class Row(QtCore.QObject):
         self.line_num: int = line_num
         self.right_background_color = None
         self.left_background_color = None
+        self.change_state_flags = deepcopy(change_flags)
 
-        if right_text is None:
-            self.table.item(self.row_num, 1).setBackground(
+        # Set the left side background colors
+        if self.change_state_flags[0] == pmEnums.CHANGEDENUM.CHANGED:
+            self.table.item(self.row_num, gui_config.LEFT_TXT_COL_IDX).setBackground(
+                gui_config.COLORS["LINE_DIFF"]
+            )
+            self.add_row_merge_buttons()
+
+        elif self.change_state_flags[0] == pmEnums.CHANGEDENUM.ADDED:
+            self.table.item(self.row_num, gui_config.LEFT_TXT_COL_IDX).setBackground(
                 gui_config.COLORS["PAD_SPACE"]
             )
-        else:
-            self.table.item(self.row_num, 1).setBackground(gui_config.COLORS["DEFAULT"])
+            self.add_row_merge_buttons()
 
-        if left_text is None:
-            self.table.item(self.row_num, 4).setBackground(
+        elif self.change_state_flags[0] == pmEnums.CHANGEDENUM.SAME:
+            self.table.item(self.row_num, gui_config.LEFT_TXT_COL_IDX).setBackground(
+                gui_config.COLORS["DEFAULT"]
+            )
+
+        # Set the right side background colors
+        if self.change_state_flags[1] == pmEnums.CHANGEDENUM.CHANGED:
+            self.table.item(self.row_num, gui_config.RIGHT_TXT_COL_IDX).setBackground(
+                gui_config.COLORS["LINE_DIFF"]
+            )
+            self.add_row_merge_buttons()
+
+        elif self.change_state_flags[1] == pmEnums.CHANGEDENUM.ADDED:
+            self.table.item(self.row_num, gui_config.RIGHT_TXT_COL_IDX).setBackground(
                 gui_config.COLORS["PAD_SPACE"]
             )
-        else:
-            self.table.item(self.row_num, 4).setBackground(gui_config.COLORS["DEFAULT"])
+            self.add_row_merge_buttons()
 
+        elif self.change_state_flags[1] == pmEnums.CHANGEDENUM.SAME:
+            self.table.item(self.row_num, gui_config.RIGHT_TXT_COL_IDX).setBackground(
+                gui_config.COLORS["DEFAULT"]
+            )
+
+        self.table.repaint()
+
+    def add_row_merge_buttons(self):
         right_button = QPushButton(self.table)
         right_icon = QIcon(gui_config.ICONS["MERGE_RIGHT"])
         right_button.setIcon(right_icon)
@@ -84,8 +113,7 @@ class Row(QtCore.QObject):
         left_icon = QIcon(gui_config.ICONS["MERGE_LEFT"])
         left_button.setIcon(left_icon)
         left_button.clicked.connect(self.merge_left)
-        self.table.setCellWidget(line_num, 3, left_button)
-        self.table.repaint()
+        self.table.setCellWidget(self.line_num, 3, left_button)
 
     @pyqtSlot()
     def merge_right(self):
@@ -94,12 +122,13 @@ class Row(QtCore.QObject):
         :return: No return value
         """
         # Copy the left text to the right side
-        self.table.setItem(self.row_num, 1, QTableWidgetItem(self.left_text))
-        self.table.item(self.row_num, 1).setText(self.left_text)
+        self.table.setItem(self.row_num, gui_config.LEFT_TXT_COL_IDX, QTableWidgetItem(self.left_text))
+        self.table.item(self.row_num,gui_config.LEFT_TXT_COL_IDX).setText(self.left_text)
         self.right_text = self.left_text
 
         # Set the background colors accordingly. We need a change flag to determine the color to use
-        self.table.item(self.row_num, 1).setBackground(gui_config.COLORS["LINE_MERGE"])
+        self.table.item(self.row_num, gui_config.LEFT_TXT_COL_IDX).setBackground(gui_config.COLORS["LINE_MERGE"])
+        self.table.item(self.row_num, gui_config.RIGHT_TXT_COL_IDX).setBackground(gui_config.COLORS["LINE_MERGE"])
 
         # This is a significant user action so we need to record the change in the undo stack
         undo_ctrlr.record_action(self)
@@ -114,12 +143,13 @@ class Row(QtCore.QObject):
         :return: No return value
         """
         # Copy the right text to the right side
-        self.table.setItem(self.row_num, 4, QTableWidgetItem(self.right_text))
-        self.table.item(self.row_num, 4).setText(self.right_text)
+        self.table.setItem(self.row_num, gui_config.RIGHT_TXT_COL_IDX, QTableWidgetItem(self.right_text))
+        self.table.item(self.row_num, gui_config.RIGHT_TXT_COL_IDX).setText(self.right_text)
         self.left_text = self.right_text
 
         # Set the background colors accordingly. We need a change flag to determine the color to use
-        self.table.item(self.row_num, 4).setBackground(gui_config.COLORS["LINE_MERGE"])
+        self.table.item(self.row_num, gui_config.LEFT_TXT_COL_IDX).setBackground(gui_config.COLORS["LINE_MERGE"])
+        self.table.item(self.row_num, gui_config.RIGHT_TXT_COL_IDX).setBackground(gui_config.COLORS["LINE_MERGE"])
 
         # This is a significant user action so we need to record the change in the undo stack
         undo_ctrlr.record_action(self)
@@ -129,7 +159,7 @@ class Row(QtCore.QObject):
 
 
 class MainTable(QWidget):
-    def __init__(self):
+    def __init__(self, change_set_a, change_set_b):
         """
         Initialize the MainTable class
         """
@@ -141,14 +171,20 @@ class MainTable(QWidget):
         self.table.setRowCount(0)  # Set the initial row count to 0
         self.table.setColumnCount(5)  # Set the column count to 5
         self.setAcceptDrops(True)
-        self.diff_indices = []  # List containing indices of all diff rows. This is used for jump to diff functions
-        self.curr_diff_idx = 0  # Contains the index of the current diff that has been jumped to
+
+        # List containing indices of all diff rows. This is used for jump to diff functions
+        self.diff_indices: list = []
+        self.change_set_a = change_set_a
+        self.change_set_b = change_set_b
+
+        # Contains the index of the current diff that has been jumped to
+        self.curr_diff_idx: int = 0
 
         # Set the head text
         self.table.setHorizontalHeaderItem(0, QTableWidgetItem("Line"))
         self.table.setHorizontalHeaderItem(1, QTableWidgetItem(""))
-        self.table.setHorizontalHeaderItem(2, QTableWidgetItem("Merge Right"))
-        self.table.setHorizontalHeaderItem(3, QTableWidgetItem("Merge Left "))
+        self.table.setHorizontalHeaderItem(2, QTableWidgetItem("Merge\nRight"))
+        self.table.setHorizontalHeaderItem(3, QTableWidgetItem("Merge\nLeft "))
         self.table.setHorizontalHeaderItem(4, QTableWidgetItem(""))
 
         # Set the header font
@@ -181,16 +217,10 @@ class MainTable(QWidget):
         self.table.verticalHeader().setVisible(False)
 
         # Set column resize modes
-        self.table.horizontalHeader().setSectionResizeMode(
-            0, QHeaderView.ResizeToContents
-        )
+        self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
         self.table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
-        self.table.horizontalHeader().setSectionResizeMode(
-            2, QHeaderView.ResizeToContents
-        )
-        self.table.horizontalHeader().setSectionResizeMode(
-            3, QHeaderView.ResizeToContents
-        )
+        self.table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeToContents)
+        self.table.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeToContents)
         self.table.horizontalHeader().setSectionResizeMode(4, QHeaderView.Stretch)
 
         # Make the table read only for the user
@@ -237,7 +267,7 @@ class MainTable(QWidget):
         Scrolls the table window to the next difference incrementally (starts at the first diff)
         :return: No return value
         """
-        #TODO: Implement goto_next_diff function
+        # TODO: Implement goto_next_diff function
         return
 
     @pyqtSlot()
@@ -246,23 +276,30 @@ class MainTable(QWidget):
         Scrolls the table window to the previous difference incrementally
         :return: No return value
         """
-        #TODO: Implement goto_prev_diff function
+        # TODO: Implement goto_prev_diff function
         return
 
     def jump_to_line(self, line_num, col=0):
-        self.table.scrollToItem(self.table.item(line_num, col), QtWidgets.QAbstractItemView.PositionAtTop)
-        self.table.scrollToItem(self.table.selectRow(line_num), QtWidgets.QAbstractItemView.PositionAtTop)
+        self.table.scrollToItem(
+            self.table.item(line_num, col), QtWidgets.QAbstractItemView.PositionAtTop
+        )
+        self.table.scrollToItem(
+            self.table.selectRow(line_num), QtWidgets.QAbstractItemView.PositionAtTop
+        )
 
-    def add_line(self, right_text: str, left_text: str, line_num: int or str):
+    def add_line(self, right_text: str, left_text: str, line_num: int or str, change_flags, left_line_num=0, right_line_num=0):
         """
         Add a row into the table using the right and left text provided as parameters.
         :param right_text: Right text to display
         :param left_text: Left text to display
         :param line_num: Line number to display. This isn't exactly where it's inserted, just a display value
+        :param change_flags:
         :return: No return value
+
         """
         self.table.insertRow(line_num)
-        self.table.setItem(line_num, 0, QTableWidgetItem(str(line_num)))
+        #self.table.setItem(line_num, 0, QTableWidgetItem(str(line_num + 1)))
+        self.table.setItem(line_num, 0, QTableWidgetItem(str(line_num + 1)))
         self.table.setItem(line_num, 1, QTableWidgetItem(str(right_text)))
         self.table.setItem(line_num, 2, QTableWidgetItem(""))
         self.table.setItem(line_num, 3, QTableWidgetItem(""))
@@ -272,21 +309,30 @@ class MainTable(QWidget):
         self.table.item(line_num, 2).setTextAlignment(Qt.AlignCenter)
         self.table.item(line_num, 3).setTextAlignment(Qt.AlignCenter)
 
-        self.table.item(line_num, 0).setBackground(gui_config.COLORS["TBL_LINE_COL_DEFAULT_BACKGROUND"])
-        self.table.item(line_num, 2).setBackground(gui_config.COLORS["TBL_LINE_COL_DEFAULT_BACKGROUND"])
-        self.table.item(line_num, 3).setBackground(gui_config.COLORS["TBL_LINE_COL_DEFAULT_BACKGROUND"])
+        self.table.item(line_num, 0).setBackground(
+            gui_config.COLORS["TBL_LINE_COL_DEFAULT_BACKGROUND"]
+        )
+        self.table.item(line_num, 2).setBackground(
+            gui_config.COLORS["TBL_LINE_COL_DEFAULT_BACKGROUND"]
+        )
+        self.table.item(line_num, 3).setBackground(
+            gui_config.COLORS["TBL_LINE_COL_DEFAULT_BACKGROUND"]
+        )
+        self.table.item(line_num, 4).setBackground(
+            gui_config.COLORS["TBL_LINE_COL_DEFAULT_BACKGROUND"]
+        )
 
-        row_instance = Row(line_num, self.table, right_text, left_text, line_num)
+        row_instance = Row(line_num, self.table, right_text, left_text, line_num, change_flags)
         self.rows.append(row_instance)
 
     def get_lines_from_tbl(self) -> list:
         """
-        Gets the data from the table and returns it as a 2D list. 
+        Gets the data from the table and returns it as a 2D list.
         :return: list containing right and left hand file data
         """
         return [[row.right_text, row.left_text] for row in self.rows]
 
-    def load_table_contents(self, left_lines: list or dict, right_lines: list or dict):
+    def load_table_contents(self, left_lines: list or dict, right_lines: list or dict, file1, file2):
         # TODO: Add type hints
         """
         Load the contents of two data structures containing the lines to be displayed, into the tables
@@ -294,19 +340,22 @@ class MainTable(QWidget):
         :param right_lines: right hand data to show
         :return: No return value
         """
-        left_text_lines = deepcopy(left_lines)
-        right_text_lines = deepcopy(right_lines)
 
-        # Pad arrays. Remove this later
-        if len(left_text_lines) > len(right_text_lines):
-            for n in range(len(left_text_lines)):
-                right_text_lines.append("")
-        elif len(right_text_lines) > len(left_text_lines):
-            for n in range(len(right_text_lines)):
-                left_text_lines.append("")
+        self.table.horizontalHeaderItem(1).setText(os.path.abspath(file1))
+        self.table.horizontalHeaderItem(4).setText(os.path.abspath(file2))
 
-        for n in range(min(len(left_text_lines), len(right_text_lines))):
-            self.add_line(left_text_lines[n], right_text_lines[n], n)
+        # Get the change information for each line. Skip the last line, as that is the
+        # match token that has been appened on by diff_set in order to capture entire file
+        # contents.
+        for n in range(len(self.change_set_a.changeList) - 1):
+            data_a = [""]
+            data_b = [""]
+            change_type_a = [pmEnums.CHANGEDENUM.SAME]
+            change_type_b = [pmEnums.CHANGEDENUM.SAME]
+            self.change_set_a.getChange(n, change_type_a, data_a)
+            self.change_set_b.getChange(n, change_type_b, data_b)
+
+            self.add_line(data_a[0], data_b[0], n, [change_type_a[0], change_type_b[0]])
 
     def load_test_files(self, file1: str, file2: str):
         """

@@ -18,14 +18,9 @@ class fileIO:
         fileA = open(iFileA, 'r')
         fileB = open(iFileB, 'r')
 
-<<<<<<< HEAD
         #alg = algorithm.algorithm
         #result = alg.generateChangeSets(alg, fileA, fileB, self.changesA, self.changesB)
         result = diff_resolution.diff_set(fileA, fileB, self.changesA, self.changesB)
-=======
-        alg = algorithm.algorithm
-        result = alg.generateChangeSets(alg, fileA, fileB, self.changesA, self.changesB)
->>>>>>> 549edb1b1115f3e08eb68f85a32a501f039f331f
 
         fileA.close()
         fileB.close()

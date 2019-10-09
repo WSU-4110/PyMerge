@@ -2,144 +2,71 @@
 algorithm class. Must be provided with two files, and two changeSet objects. It will compare
 the files and populate the ChangeSet Objects
 """
-from longest_common_subseq import longest_common_subsequence
-from difflib import SequenceMatcher
 import pmEnums
 import changeSet
 import os
 
-
 class algorithm:
     def __init__(self):
         pass
-
-    def similar(self, fileA, fileB):
-        return SequenceMatcher(None, fileA, fileB).ratio()
-
-    def strip_end_lines(self, file_line_array):
-        for line in range(len(file_line_array)):
-            file_line_array[line] = file_line_array[line].strip('\n')
-        return file_line_array
-
-    def generateInclusiveList(self, origFile, diffFile):
-
-        inclusiveLines = []
-
-        line = ""
-
-        for i in diffFile:
-            if origFile[i] == "\n":
-                inclusiveLines.append(line)
-                line = ""
-            else:
-                line = line + origFile[i]
-        inclusiveLines.append(line)
-
-        return inclusiveLines
-
-    # Use .splitlines instead --> file.read().splitlines()
-
-    def readLines(self, file):
-
-        string = ""
-        file_line_array = []
-
-        for i in file:
-            if i == '\n':
-                file_line_array.append(string)
-                string = ""
-            else:
-                string = string + i
-        file_line_array.append(string)
-
-        return file_line_array
-
-    def addChanges(self, thresh, length, same_lines_list, data, ochangeSet):
-        for i in range(length):
-            if same_lines_list[i] == 1.0:
-                changeType = pmEnums.CHANGEDENUM.SAME
-            elif same_lines_list[i] >= 0.7:
-                changeType = pmEnums.CHANGEDENUM.CHANGED
-            else:
-                changeType = pmEnums.CHANGEDENUM.ADDED
-            ochangeSet.addChange(i+1, changeType, data[i])
-
     
-    def generateChangeSets( self, iFileA, iFileB, ochangeSetA, ochangeSetB ):
+    def generateChangeSets( self, iFileNameA, iFileNameB, ochangeSetA, ochangeSetB ):
         #NO DONT REMOVE THIS RETURN STATEMENT
         #UNTILL THE FUNCTION IS FINISHED BEING IMPLEMENTED
-
-        # read file and split lines in one line and set = to fileA_line_array and fileB_line_array
-        # then pass those 2 variables to LCS algorithm 
-
-
-
-
-        fileA = iFileA.read()
-        fileB = iFileB.read()
-
-        fileA_line_array = self.readLines(fileA)
-        fileB_line_array = self.readLines(fileA)
-
-
-        # fileA_line_array = iFileA.read().splitlines()
-        # fileB_line_array = iFileB.read().splitlines()
-
+        return pmEnums.RESULT.NOTIMPL
+        # file line 1 = stringA
+        # ioFileA.attributeStorageVariable = stringA
         
-        # consider remoing this 
+        f1 = open(iFileNameA).readlines()
+        f2 = open(iFileNameB).readlines()
 
-        self.strip_end_lines(fileA_line_array)
-        self.strip_end_lines(fileB_line_array)
+        f1_name, f1_ext = os.path.splitext(iFileNameA)
+        f2_name, f2_ext = os.path.splitext(iFileNameB)
 
-        diff = longest_common_subsequence(fileA, fileB)
+        # if inconsistent file types 
+        if f1_ext != f2_ext:
+            print("[-] Incompatible file types", f1_ext, "and", f2_ext)
+            return pmEnums.RESULT.FILEMISMAT
 
-        # Implement the pad_raw_line_matches function after invoking LCS algorithm --> pass it the diff variable
+        # stack to store lines that did not match up --> used for later comparison to determine
+        # if line was moved or added 
+        stack = []
 
-        fileA_diff = diff[0]
-        fileB_diff = diff[1]
+        for line in range(len(f1)):
 
-        fileA_inclusive_lines = self.generateInclusiveList(fileA, fileA_diff)
-        fileB_inclusive_lines = self.generateInclusiveList(fileB, fileB_diff)
+            # if both lines are the same 
+            if f1[line] == f2[line]:
+                file1Changes.addChange(line+1, pmEnums.CHANGEDENUM.SAME, f1[line])
 
-        fileA_same_lines = []
-        fileB_same_lines = []
+            else:
+                temp_list = [line+1, -1, f1[line]]
+                stack.append(temp_list)
 
-        for line in range(len(fileA_line_array)):
-            fileA_same_lines.append(self.similar(fileA_line_array[line], fileA_inclusive_lines[line]))
+                # *********** find way to determine if line was changed ***********
+                # file1Changes.addChange(line+1, pmEnums.CHANGEDENUM.CHANGED, f1[line])
 
-        for line in range(len(fileB_line_array)):
-            fileB_same_lines.append(self.similar(fileB_line_array[line], fileB_inclusive_lines[line]))
+            # if line in stack (from f1) matches up with current line being compared in f2, 
+            # then the line in f1 was moved 
+            for stack_item in stack:
+                if stack_item[2] == f2[line]:
+                    stack_item[1] = pmEnums.CHANGEDENUM.MOVED
+                    item = stack.pop(stack.index(stack_item))
+                    file1Changes.addChange(item[0], item[1], item[2])
 
-
-        change_thresh = 0.7
-
-        self.addChanges(change_thresh, len(fileA_line_array), fileA_same_lines, fileA_line_array, ochangeSetA)
-        self.addChanges(change_thresh, len(fileB_line_array), fileB_same_lines, fileB_line_array, ochangeSetB)
-
-
+        # items that remain in stack were never found in f2 and therefore were added 
+        for stack_item in stack:
+            stack_item[1] = pmEnums.CHANGEDENUM.ADDED
+            item = stack.pop(stack.index(stack_item))
+            file1Changes.addChange(item[0], item[1], item[2])
+    
         return pmEnums.RESULT.NOTIMPL
 
         # return pmEnums.RESULT.ERROR
         # return pmEnums.RESULT.GOOD
 
 
-
 file1Changes = changeSet.ChangeSet()
 file2Changes = changeSet.ChangeSet()
 
-
-file1 = open("test_file1.txt","r")
-file2 = open("test_file2.txt","r")
-
-diff = algorithm()
-diff.generateChangeSets(file1, file2, file1Changes, file2Changes)
-
-for change in changeSet.ChangeSet.changeList:
-    print(change)
-
-
-
-
-# changeset passed to main_table.py 
-
-    
+#alg = algorithm()
+#alg.getChangeSets("test_file1.txt", "test_file2.txt", file1Changes, file2Changes)

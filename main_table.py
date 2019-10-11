@@ -267,6 +267,7 @@ class MainTable(QWidget):
         Scrolls the table window to the next difference incrementally (starts at the first diff)
         :return: No return value
         """
+        print("next diffe slot")
         # TODO: Implement goto_next_diff function
         return
 

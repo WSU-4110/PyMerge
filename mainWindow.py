@@ -14,6 +14,7 @@ import fileIO
 import pmEnums
 import buttonActions
 import diff_resolution
+import fileOpenDialog
 
 
 class mainWindow(QMainWindow):    
@@ -29,26 +30,37 @@ class mainWindow(QMainWindow):
 
         #load files and generate changesets
         result = pmEnums.RESULT.ERROR
-        if fileA != 0 and fileB != 0:
-            fIO = fileIO.fileIO()
+        fIO = fileIO.fileIO()
+        if fileA != 0 and fileB != 0:            
             result = fIO.diffFiles(fileA, fileB)
             if result == pmEnums.RESULT.GOOD:
                 result = fIO.getChangeSets(fIO.changesA, fIO.changesB)
-            #result =
+            
 
         if result == pmEnums.RESULT.GOOD:
             pass #pass the changesets to window class or whatever to be loaded into the table
+
         
-        #load table
-        table_widget = main_table.MainTable(fIO.changesA, fIO.changesB)
-        layout.addWidget(table_widget, 1, 0)
-        #table_widget.load_test_files("file1.c", "file2.c")
-        table_widget.load_table_contents([], [], fileA, fileB)    # Left list arguments for now
         
+        if( fileA != 0 and fileB != 0 ):
+            #load table
+            table_widget = main_table.MainTable(fIO.changesA, fIO.changesB)
+            layout.addWidget(table_widget, 1, 0)
+            #table_widget.load_test_files("file1.c", "file2.c")
+            table_widget.load_table_contents([], [], fileA, fileB)    # Left list arguments for now
+
+        else:
+            fileDialog = fileOpenDialog.fileOpenDialog()
+            fileDialog.fileAc.connect(self.slotPrintFile)
+
+            
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)        
         self.initUI()
+
+    def slotPrintFile(self, file):
+        print("!!!!!" + file + "!!!!!!!")
         
     def initUI(self, fileA=0, fileB=0):
         #start GUI

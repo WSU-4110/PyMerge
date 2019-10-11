@@ -13,14 +13,9 @@ import mainWindow
 class PyMergeCLI(object):
     def __init__(self, *args):
         self.options: list = self.sanitize(args[0][1:])
-<<<<<<< HEAD
         self.file_size_lim: int = 2000000        
         self.cli()
-        
-=======
-        self.file_size_lim: int = 2000000
-        self.cli()        
->>>>>>> master
+    
 
     def cli(self):
         """

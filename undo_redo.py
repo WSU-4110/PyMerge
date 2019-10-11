@@ -100,3 +100,6 @@ class UndoRedo(object):
             redo_obj.set_state()
             return True
         return False
+
+
+undo_ctrlr = UndoRedo(10)

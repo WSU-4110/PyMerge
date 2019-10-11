@@ -31,7 +31,7 @@ import undo_redo
 import pmEnums
 import fileIO
 from changeSet import ChangeSet
-undo_ctrlr = undo_redo.UndoRedo(10)
+
 
 
 class Row(QtCore.QObject):
@@ -131,7 +131,7 @@ class Row(QtCore.QObject):
         self.table.item(self.row_num, gui_config.RIGHT_TXT_COL_IDX).setBackground(gui_config.COLORS["LINE_MERGE"])
 
         # This is a significant user action so we need to record the change in the undo stack
-        undo_ctrlr.record_action(self)
+        undo_redo.undo_ctrlr.record_action(self)
 
         # Table isn't gonna repaint itself. Gotta show users the changes we just made.
         self.table.repaint()
@@ -152,7 +152,7 @@ class Row(QtCore.QObject):
         self.table.item(self.row_num, gui_config.RIGHT_TXT_COL_IDX).setBackground(gui_config.COLORS["LINE_MERGE"])
 
         # This is a significant user action so we need to record the change in the undo stack
-        undo_ctrlr.record_action(self)
+        undo_redo.undo_ctrlr.record_action(self)
 
         # Table isn't gonna repaint itself. Gotta show users the changes we just made.
         self.table.repaint()

@@ -63,6 +63,4 @@ class algorithm:
         # return pmEnums.RESULT.GOOD
 
 
-
-
     

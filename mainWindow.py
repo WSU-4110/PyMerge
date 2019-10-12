@@ -69,6 +69,15 @@ class mainWindow(QMainWindow):
             self.menuItems(tableObj)
         self.show()
 
+    def openFile(self, tableObj):
+        fileOpener = fileOpenDialog.fileOpenDialog()
+        #fileA = fileOpener.fileAName
+        #fileB = fileOpener.fileBName
+        fileA = "file1.c"
+        fileB = "file2.c"
+        tableObj.load_table_contents([], [], fileA, fileB)
+        
+        
     def menuItems(self, tableObj):
         # ~~~~~~~~~~~~~~~~~~~~~~~~
         # MENUBAR
@@ -81,7 +90,7 @@ class mainWindow(QMainWindow):
         
         openFileButton = QAction("Open File", self)
         openFileButton.setShortcut('Ctrl+o')
-        #openFileButton.triggered.connect(tableObj.openFile)
+        openFileButton.triggered.connect(lambda:self.openFile(tableObj))
         fileMenu.addAction(openFileButton)
 
         mergeLeftButton = QAction("Merge Left", self)

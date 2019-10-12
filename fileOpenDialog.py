@@ -4,11 +4,7 @@ from PyQt5 import QtCore
 from PyQt5.QtGui import QIcon
 import pmEnums, fileIO
 
-class fileOpenDialog(QWidget):
-
-    fileAc = QtCore.pyqtSignal(str)
-    fileBc = QtCore.pyqtSignal(str)
-    
+class fileOpenDialog(QWidget):    
     def __init__(self):
         super().__init__()
         print("wtf")
@@ -23,13 +19,7 @@ class fileOpenDialog(QWidget):
         self.height = 480
         self.openFileNameDialog()
         self.openFileNameDialog()
-        
-    
-    def initUI(self):
-       
-        self.close()
-
-    
+      
     def openFileNameDialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog

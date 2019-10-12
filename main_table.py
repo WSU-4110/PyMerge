@@ -132,6 +132,7 @@ class Row(QtCore.QObject):
 
         # This is a significant user action so we need to record the change in the undo stack
         undo_ctrlr.record_action(self)
+        
 
         # Table isn't gonna repaint itself. Gotta show users the changes we just made.
         self.table.repaint()
@@ -162,8 +163,9 @@ class MainTable(QWidget):
     def __init__(self, change_set_a, change_set_b):
         """
         Initialize the MainTable class
-        """
+        """        
         super().__init__()
+                
         self.rows: list = []
         grid = QGridLayout()
         self.setLayout(grid)
@@ -267,10 +269,12 @@ class MainTable(QWidget):
         Scrolls the table window to the next difference incrementally (starts at the first diff)
         :return: No return value
         """
+        
         print("next diffe slot")
         # TODO: Implement goto_next_diff function
         return
 
+    
     @pyqtSlot()
     def goto_prev_diff(self):
         """
@@ -278,8 +282,27 @@ class MainTable(QWidget):
         :return: No return value
         """
         # TODO: Implement goto_prev_diff function
-        return
+        print("goto_prev_diff in main_table.py")
+    
+    @pyqtSlot()
+    def undo_last_change(self):
+        """
+        undoes last change or group of changes
+        :return: No return value
+        """
+        # TODO: Implement 
+        print("undo last")
 
+    @pyqtSlot()
+    def redo_last_undo(self):
+        """
+        redo last undo performed
+        :return: No return value
+        """
+        # TODO: Implement 
+        print("redo last")
+    
+    
     def jump_to_line(self, line_num, col=0):
         self.table.scrollToItem(
             self.table.item(line_num, col), QtWidgets.QAbstractItemView.PositionAtTop

@@ -8,14 +8,14 @@ the specifications listed below:
 
 * Minimum recommended machine specifications:
     * Dual core processor, 2.5GHz
-    * 2Gb Ram
+    * 2GB Ram
     * [Python 3.7+](https://www.python.org/downloads/)
     * OS:
         * Windows 7 or later
         * macOS 10.9 or later
         * Linux
 #### Option 1: Installer:
-Download the appropriate installer for PyMerge. \
+Download the appropriate installer for PyMerge.
 
 | OS            | Architecture| Installer     |
 | :---          |    :----:   |          :--- |

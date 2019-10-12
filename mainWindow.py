@@ -35,8 +35,8 @@ class mainWindow(QMainWindow):
         if result == pmEnums.RESULT.GOOD:
             pass #pass the changesets to window class or whatever to be loaded into the table
 
-        
-        
+    
+        table_widget = 0
         if( fileA != 0 and fileB != 0 ):
             #load table
             table_widget = main_table.MainTable(fIO.changesA, fIO.changesB)
@@ -46,20 +46,27 @@ class mainWindow(QMainWindow):
             layout.addWidget(table_widget, 1, 0)
             #table_widget.load_test_files("file1.c", "file2.c")
             table_widget.load_table_contents([], [], fileA, fileB)    # Left list arguments for now
-            
-
-
+        else:   
+            #load empty table
+            table_widget = main_table.MainTable(fIO.changesA, fIO.changesB)
+            #add buttons
+            layout.addWidget(controlButtons.controlButtons(table_widget), 0, 0)
+            #add table
+            layout.addWidget(table_widget, 1, 0)
+            #table_widget.load_test_files("file1.c", "file2.c")
+            table_widget.load_table_contents([], [])    # Left list arguments for now
             
             
         widget = QWidget()
         widget.setLayout(layout)
-        self.setCentralWidget(widget)        
+        self.setCentralWidget(widget)                
         self.initUI(table_widget)
-
+    
         
-    def initUI(self, tableObj):
+    def initUI(self, tableObj=0):
         #start GUI
-        self.menuItems(tableObj)
+        if(tableObj):
+            self.menuItems(tableObj)
         self.show()
 
     def menuItems(self, tableObj):

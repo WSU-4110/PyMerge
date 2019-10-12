@@ -356,8 +356,10 @@ class MainTable(QWidget):
         """
         return [[row.right_text, row.left_text] for row in self.rows]
 
-    def load_table_contents(self, left_lines: list or dict, right_lines: list or dict, file1, file2):
+    def load_table_contents(self, left_lines: list or dict, right_lines: list or dict, file1=0, file2=0):
         # TODO: Add type hints
+        if(file1 == 0 or file2 == 0):
+            return
         """
         Load the contents of two data structures containing the lines to be displayed, into the tables
         :param left_lines: left hand data to show

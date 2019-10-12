@@ -11,6 +11,7 @@ class fileOpenDialog(QWidget):
     
     def __init__(self):
         super().__init__()
+        print("wtf")
         self.fileAName = ""
         self.fileBName = ""
         self.title = 'Open FileA'
@@ -20,22 +21,12 @@ class fileOpenDialog(QWidget):
         self.top = 10
         self.width = 640
         self.height = 480
-        self.initUI()
-        
+        self.openFileNameDialog()
+        self.openFileNameDialog()
         
     
     def initUI(self):
-        self.setWindowTitle(self.title)
-        self.setGeometry(self.left, self.top, self.width, self.height)
-        
-        self.openFileNameDialog()
-        self.openFileNameDialog()
-
-        print( self.fileAName )
-        print( self.fileBName )
-
-        self.fileAc.emit(self.fileAName)
-        #exit dialog        
+       
         self.close()
 
     

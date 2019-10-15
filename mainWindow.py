@@ -85,7 +85,6 @@ class mainWindow(QMainWindow):
 
         prompt = QMessageBox.about(self, "Error", "Error Message")
 
-
         tableObj.load_table_contents([], [], fileA, fileB)
 
     def menuItems(self, tableObj):

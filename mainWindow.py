@@ -25,11 +25,11 @@ class mainWindow(QMainWindow):
 
         #load files and generate changesets
         result = pmEnums.RESULT.ERROR
-        fIO = fileIO.fileIO()
+        self.fIO = fileIO.fileIO()
         if fileA != 0 and fileB != 0:            
-            result = fIO.diffFiles(fileA, fileB)
+            result = self.fIO.diffFiles(fileA, fileB)
             if result == pmEnums.RESULT.GOOD:
-                result = fIO.getChangeSets(fIO.changesA, fIO.changesB)
+                result = self.fIO.getChangeSets(self.fIO.changesA, self.fIO.changesB)
             
         
         if result == pmEnums.RESULT.GOOD:
@@ -38,7 +38,7 @@ class mainWindow(QMainWindow):
     
         table_widget = 0   
         #load table
-        table_widget = main_table.MainTable(fIO.changesA, fIO.changesB)            
+        table_widget = main_table.MainTable(self.fIO.changesA, self.fIO.changesB)            
         #add table
         layout.addWidget(table_widget, 1, 0)
         #table_widget.load_test_files("file1.c", "file2.c")
@@ -65,8 +65,13 @@ class mainWindow(QMainWindow):
         fileOpener = fileOpenDialog.fileOpenDialog()
         #fileA = fileOpener.fileAName
         #fileB = fileOpener.fileBName
-        fileA = "file1.c"
-        fileB = "file2.c"
+        fileA = fileOpener.fileAName
+        fileB = fileOpener.fileBName
+
+        result = self.fIO.diffFiles(fileA, fileB)
+        if result == pmEnums.RESULT.GOOD:
+            result = self.fIO.getChangeSets(self.fIO.changesA, self.fIO.changesB)
+            
         tableObj.load_table_contents([], [], fileA, fileB)
         
         

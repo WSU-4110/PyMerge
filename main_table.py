@@ -286,6 +286,8 @@ class MainTable(QWidget):
         Scrolls the table window to the next difference incrementally (starts at the first diff)
         :return: No return value
         """
+        if len(self.diff_indices) == 0:
+            return
         print( str(len(self.diff_indices)))
         if self.curr_diff_idx == len(self.diff_indices)-1:
             self.curr_diff_idx = 0
@@ -293,7 +295,7 @@ class MainTable(QWidget):
         else:
             self.curr_diff_idx += 1
             self.jump_to_line(self.diff_indices[self.curr_diff_idx])
-        
+        self.table.repaint()
         return
 
     
@@ -303,6 +305,8 @@ class MainTable(QWidget):
         Scrolls the table window to the previous difference incrementally
         :return: No return value
         """
+        if len(self.diff_indices) == 0:
+            return
         print(self.curr_diff_idx)
         if self.curr_diff_idx == 0 or self.curr_diff_idx == -1:
             self.curr_diff_idx = len(self.diff_indices)-1
@@ -310,7 +314,7 @@ class MainTable(QWidget):
         else:
             self.curr_diff_idx -= 1
             self.jump_to_line(self.diff_indices[self.curr_diff_idx])
-        
+        self.table.repaint()
         return
     
     @pyqtSlot()

@@ -2,6 +2,7 @@ from enum import Enum, unique, auto
 
 import pmEnums
 import file_backup
+import utilities
 
 """
 Get data from table -> type checking -> deletions -> original file backup -> truncate file -> write data to file
@@ -23,6 +24,7 @@ class Status(Enum):
     TRUNC_ERROR = 9
     FILE_WRITE_SUCCESS = 10
     FILE_WRITE_ERROR = 11
+    FILE_PERMISSION_ERR = 12
 
 
 class MergeFinalizer(object):
@@ -92,32 +94,35 @@ class MergeFinalizer(object):
         outp_set_left: list = []
         outp_set_right: list = []
 
-        if (
-            self.type_checker(left_set, target_type=str) == Status.TYPE_CHK_SUCCESS
-            and self.type_checker(right_set, target_type=str) == Status.TYPE_CHK_SUCCESS
-        ):
+        if utilities.file_writable(self.outp_file_left) and utilities.file_writable(self.outp_file_right):
             if (
-                self.deletion(left_set, outp_set_left) == Status.DELETE_SUCCESS
-                and self.deletion(right_set, outp_set_right) == Status.DELETE_SUCCESS
+                self.type_checker(left_set, target_type=str) == Status.TYPE_CHK_SUCCESS
+                and self.type_checker(right_set, target_type=str) == Status.TYPE_CHK_SUCCESS
             ):
-                if self.backup_file() == Status.BACKUP_SUCCESS:
-                    try:
-                        with open(self.outp_file_left, "w") as file:
-                            file.truncate(0)
-                            for line in outp_set_left:
-                                file.write(line)
-                    except (FileExistsError, FileNotFoundError):
-                        return Status.FILE_WRITE_ERROR
-                    try:
-                        with open(self.outp_file_right, "w") as file:
-                            file.truncate(0)
-                            for line in outp_set_right:
-                                file.write(line)
-                    except (FileExistsError, FileNotFoundError):
-                        return Status.FILE_WRITE_ERROR
+                if (
+                    self.deletion(left_set, outp_set_left) == Status.DELETE_SUCCESS
+                    and self.deletion(right_set, outp_set_right) == Status.DELETE_SUCCESS
+                ):
+                    if self.backup_file() == Status.BACKUP_SUCCESS:
+                        try:
+                            with open(self.outp_file_left, "w") as file:
+                                file.truncate(0)
+                                for line in outp_set_left:
+                                    file.write(line)
+                        except (FileExistsError, FileNotFoundError):
+                            return Status.FILE_WRITE_ERROR
+                        try:
+                            with open(self.outp_file_right, "w") as file:
+                                file.truncate(0)
+                                for line in outp_set_right:
+                                    file.write(line)
+                        except (FileExistsError, FileNotFoundError):
+                            return Status.FILE_WRITE_ERROR
+                    else:
+                        return Status.BACKUP_ERROR
                 else:
-                    return Status.BACKUP_ERROR
+                    return Status.DELETE_ERROR
             else:
-                return Status.DELETE_ERROR
+                return Status.TYPE_CHK_ERROR
         else:
-            return Status.TYPE_CHK_ERROR
+            return Status.FILE_PERMISSION_ERR

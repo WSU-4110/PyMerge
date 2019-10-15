@@ -24,9 +24,9 @@ class fileOpenDialog(QWidget):
         options = QFileDialog.Options()
         #options |= QFileDialog.DontUseNativeDialog
         if( self.fileAName == "" ):
-            self.fileAName, _ = QFileDialog.getOpenFileName(self,"Open File A", "","All Files (*);;Python Files (*.py)", options=options)
+            self.fileAName, _ = QFileDialog.getOpenFileName(self,"Open File A", "","", options=options)
         else:
-            self.fileBName, _ = QFileDialog.getOpenFileName(self,"Open File B", "","All Files (*);;Python Files (*.py)", options=options)
+            self.fileBName, _ = QFileDialog.getOpenFileName(self,"Open File B", "","", options=options)
     
 
 if __name__ == '__main__':

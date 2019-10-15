@@ -176,12 +176,29 @@ class MainTable(QWidget):
 
         # List containing indices of all diff rows. This is used for jump to diff functions
         self.diff_indices: list = []
+        # Contains the index of the current diff that has been jumped to
+        self.curr_diff_idx: int = -1
+        
         self.change_set_a = change_set_a
         self.change_set_b = change_set_b
 
-        # Contains the index of the current diff that has been jumped to
-        self.curr_diff_idx: int = 0
-
+        n = 0
+        while n < len(self.change_set_a.changeList) - 1:
+            data_a = [""]
+            change_type_a = [pmEnums.CHANGEDENUM.SAME]
+            self.change_set_a.getChange(n, change_type_a, data_a)            
+            if change_type_a[0] != pmEnums.CHANGEDENUM.SAME:                
+                self.diff_indices.append(n)
+                while change_type_a[0] != pmEnums.CHANGEDENUM.SAME:
+                    n += 1
+                    self.change_set_a.getChange(n, change_type_a, data_a)
+            n += 1                
+                
+        print("now")
+        for n in range(len(self.diff_indices)):
+            print( str(self.diff_indices[n]) + "\n")
+                
+        
         # Set the head text
         self.table.setHorizontalHeaderItem(0, QTableWidgetItem("Line"))
         self.table.setHorizontalHeaderItem(1, QTableWidgetItem(""))
@@ -269,9 +286,14 @@ class MainTable(QWidget):
         Scrolls the table window to the next difference incrementally (starts at the first diff)
         :return: No return value
         """
+        print( str(len(self.diff_indices)))
+        if self.curr_diff_idx == len(self.diff_indices)-1:
+            self.curr_diff_idx = 0
+            self.jump_to_line(self.diff_indices[self.curr_diff_idx])
+        else:
+            self.curr_diff_idx += 1
+            self.jump_to_line(self.diff_indices[self.curr_diff_idx])
         
-        print("next diffe slot")
-        # TODO: Implement goto_next_diff function
         return
 
     
@@ -281,8 +303,15 @@ class MainTable(QWidget):
         Scrolls the table window to the previous difference incrementally
         :return: No return value
         """
-        # TODO: Implement goto_prev_diff function
-        print("goto_prev_diff in main_table.py")
+        print(self.curr_diff_idx)
+        if self.curr_diff_idx == 0 or self.curr_diff_idx == -1:
+            self.curr_diff_idx = len(self.diff_indices)-1
+            self.jump_to_line(self.diff_indices[self.curr_diff_idx])
+        else:
+            self.curr_diff_idx -= 1
+            self.jump_to_line(self.diff_indices[self.curr_diff_idx])
+        
+        return
     
     @pyqtSlot()
     def undo_last_change(self):

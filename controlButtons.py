@@ -12,14 +12,12 @@ class controlButtons(QWidget):
     def __init__(self, tableObj):
         super().__init__()
         self.setGeometry(200, 200, 200, 200)
-        self.tableObj = tableObj
-        self.buttonLayout()
-        
+        self.buttonLayout(tableObj)
 
-
-    def buttonLayout(self):
+    def buttonLayout(self, tableObj):
         grid = QGridLayout()
         self.setLayout(grid)
+        print(id(tableObj))
                 
         merge_left_button = QToolButton()
         merge_left_button.setFixedSize( 80, 50)
@@ -33,28 +31,28 @@ class controlButtons(QWidget):
         undo_change_button.setFixedSize( 80, 50)
         icon = QtGui.QIcon(gui_config.ICONS["UNDO"])
         undo_change_button.setIcon(icon)
-        undo_change_button.clicked.connect(self.tableObj.undo_last_change)
+        undo_change_button.clicked.connect(tableObj.undo_last_change)
         grid.addWidget(undo_change_button, 0, 1)
         
         next_diff_button = QToolButton()
         next_diff_button.setFixedSize( 80, 50)
         icon = QtGui.QIcon(gui_config.ICONS["NEXT_DIFF"])
         next_diff_button.setIcon(icon)
-        next_diff_button.clicked.connect(self.tableObj.goto_next_diff)
+        next_diff_button.clicked.connect(tableObj.goto_next_diff)
         grid.addWidget(next_diff_button, 1, 2)
         
         prev_diff_button = QToolButton()
         prev_diff_button.setFixedSize( 80, 50)
         icon = QtGui.QIcon(gui_config.ICONS["PREV_DIFF"])
         prev_diff_button.setIcon(icon)
-        prev_diff_button.clicked.connect(self.tableObj.goto_prev_diff)
+        prev_diff_button.clicked.connect(tableObj.goto_prev_diff)
         grid.addWidget(prev_diff_button, 0, 2)
 
         redo_change_button = QToolButton()
         redo_change_button.setFixedSize( 80, 50)
         icon = QtGui.QIcon(gui_config.ICONS["REDO"])
         redo_change_button.setIcon(icon)
-        redo_change_button.clicked.connect(self.tableObj.redo_last_undo)
+        redo_change_button.clicked.connect(tableObj.redo_last_undo)
         grid.addWidget(redo_change_button, 0, 3)
 
         

@@ -104,7 +104,3 @@ class UndoRedo(object):
 
 
 undo_ctrlr = UndoRedo(10)
-
-while(1):
-    if input(">> ") == "1":
-        undo_ctrlr.undo()

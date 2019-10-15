@@ -14,6 +14,7 @@ import fileIO
 import pmEnums
 import diff_resolution
 import fileOpenDialog
+import os.path
 
 
 class mainWindow(QMainWindow):    
@@ -61,14 +62,17 @@ class mainWindow(QMainWindow):
 
     def openFile(self, tableObj):
         fileOpener = fileOpenDialog.fileOpenDialog()
-        #fileA = fileOpener.fileAName
-        #fileB = fileOpener.fileBName
-        fileA = "file1.c"
-        fileB = "file2.c"
+        fileA = fileOpener.fileAName
+        fileB = fileOpener.fileBName
+
+        if not os.path.exists(fileA):
+            print(fileA, "Does not exist")
+
+        if not os.path.exists(fileB):
+            print(fileB, "Does not exist")
+
         tableObj.load_table_contents([], [], fileA, fileB)
-        
-        
-        
+
     def menuItems(self, tableObj):
         # ~~~~~~~~~~~~~~~~~~~~~~~~
         # MENUBAR
@@ -117,7 +121,8 @@ class mainWindow(QMainWindow):
         
 #
 
-def startMain(fileA=0, fileB=0):    
+def startMain(fileA=0, fileB=0):
     app = QApplication(sys.argv)
     ex = mainWindow(fileA, fileB)
     sys.exit(app.exec_())
+

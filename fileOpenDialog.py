@@ -22,7 +22,7 @@ class fileOpenDialog(QWidget):
       
     def openFileNameDialog(self):
         options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
+        #options |= QFileDialog.DontUseNativeDialog
         if( self.fileAName == "" ):
             self.fileAName, _ = QFileDialog.getOpenFileName(self,"Open File A", "","All Files (*);;Python Files (*.py)", options=options)
         else:

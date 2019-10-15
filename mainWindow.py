@@ -37,21 +37,14 @@ class mainWindow(QMainWindow):
 
     
         table_widget = 0
-        if( fileA != 0 and fileB != 0 ):
-            #load table
-            table_widget = main_table.MainTable(fIO.changesA, fIO.changesB)            
-            #add table
-            layout.addWidget(table_widget, 1, 0)
-            #table_widget.load_test_files("file1.c", "file2.c")
-            table_widget.load_table_contents([], [], fileA, fileB)    # Left list arguments for now            
-        else:   
-            #load empty table
-            table_widget = main_table.MainTable(fIO.changesA, fIO.changesB)            
-            #add table
-            layout.addWidget(table_widget, 1, 0)
-            #table_widget.load_test_files("file1.c", "file2.c")
-            table_widget.load_table_contents([], [])    # Left list arguments for now
-            
+   
+        #load table
+        table_widget = main_table.MainTable(fIO.changesA, fIO.changesB)            
+        #add table
+        layout.addWidget(table_widget, 1, 0)
+        #table_widget.load_test_files("file1.c", "file2.c")
+        table_widget.load_table_contents([], [])    # Left list arguments for now
+        
         print(id(table_widget))
         layout.addWidget(controlButtons.controlButtons(table_widget), 0, 0)
         widget = QWidget()
@@ -73,6 +66,7 @@ class mainWindow(QMainWindow):
         fileA = "file1.c"
         fileB = "file2.c"
         tableObj.load_table_contents([], [], fileA, fileB)
+        
         
         
     def menuItems(self, tableObj):

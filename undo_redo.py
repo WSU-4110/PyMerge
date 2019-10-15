@@ -1,4 +1,5 @@
 from copy import deepcopy
+import threading
 
 """
 Undo function can be implemented by keeping a buffer of each state change. That is, each time a change is made, 
@@ -100,3 +101,6 @@ class UndoRedo(object):
             redo_obj.set_state()
             return True
         return False
+
+
+undo_ctrlr = UndoRedo(10)

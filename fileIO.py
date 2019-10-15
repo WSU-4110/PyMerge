@@ -7,6 +7,7 @@ import pmEnums
 import changeSet
 import algorithm
 import diff_resolution
+import os.path
 
 
 class fileIO:
@@ -15,6 +16,16 @@ class fileIO:
         self.changesA = changeSet.ChangeSet()
     
     def diffFiles(self, iFileA, iFileB ):
+
+        fA_ext = os.path.splitext(iFileA)[-1].lower()
+        fB_ext = os.path.splitext(iFileB)[-1].lower()
+
+        bad_extensions = [".doc", ".docx", ".xls", ".xlsx", ".odt"]
+
+        if fA_ext in bad_extensions or fB_ext in bad_extensions:
+            print("Unacceptable file type")
+            return pmEnums.RESULT.BADFILE
+
         fileA = open(iFileA, 'r')
         fileB = open(iFileB, 'r')
 

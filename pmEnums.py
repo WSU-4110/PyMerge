@@ -8,7 +8,7 @@ class RESULT( Enum ):
     GOOD = 0
     ERROR = 1
     NOTIMPL = 2 #not implemented
-    FILEMISMAT = 3 #file mismatch
+    BADFILE = 3 #file mismatch
 
 class ATTRIB( Enum ):
     DATA = 0

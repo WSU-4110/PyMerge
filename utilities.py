@@ -74,3 +74,10 @@ def line_bit_vector(string1, string2) -> list:
             bit_vec[n] = 1
     return bit_vec
 
+def errorbox(ierrorflag):
+    msg = QMessageBox()
+    msg.setIcon(QmessageBox.Critical)
+    msg.setText("Error: ",ierrorflag)
+    msg.setStandardButtons(QmessageBox.Ok)
+    msg.buttonClicked.connect(okay)
+def okay()

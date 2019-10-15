@@ -38,7 +38,13 @@ Where \<file1\> is the file you would like to appear on the left-hand side of th
 \<file2\> is the file you would like to appear on the right-hand side.
 This will start the application and load the comparison table for the two files passed as arguments.
 
-Alternatively, you may start the application without any arguments and add them later:
+For example:
+~~~~~
+python3 PyMerge.py myFile1.txt myFile2.txt
+~~~~~
+
+
+Alternatively, you may start the application without any arguments and load the files: later:
 ~~~~~
 python3 PyMerge.py
 ~~~~~

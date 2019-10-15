@@ -27,7 +27,8 @@ void InitPID(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
 	pid->intgrtMax = iMax;
 }
 
-
+//here here
+//here
 float UpdatePID(SPid* pid, float error, float position)
 {
 	float pTerm, dTerm, iTerm;
@@ -42,5 +43,6 @@ float UpdatePID(SPid* pid, float error, float position)
 		pid->intgrtState = pid->intgrtMax;
 	}
 	else if (pid->intgrtState < pid->intgrtMin)
+
 
 }

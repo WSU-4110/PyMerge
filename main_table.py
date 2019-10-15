@@ -132,6 +132,7 @@ class Row(QtCore.QObject):
 
         # This is a significant user action so we need to record the change in the undo stack
         undo_ctrlr.record_action(self)
+        
 
         # Table isn't gonna repaint itself. Gotta show users the changes we just made.
         self.table.repaint()
@@ -162,8 +163,9 @@ class MainTable(QWidget):
     def __init__(self, change_set_a, change_set_b):
         """
         Initialize the MainTable class
-        """
+        """        
         super().__init__()
+                
         self.rows: list = []
         grid = QGridLayout()
         self.setLayout(grid)
@@ -174,12 +176,29 @@ class MainTable(QWidget):
 
         # List containing indices of all diff rows. This is used for jump to diff functions
         self.diff_indices: list = []
+        # Contains the index of the current diff that has been jumped to
+        self.curr_diff_idx: int = -1
+        
         self.change_set_a = change_set_a
         self.change_set_b = change_set_b
 
-        # Contains the index of the current diff that has been jumped to
-        self.curr_diff_idx: int = 0
-
+        n = 0
+        while n < len(self.change_set_a.changeList) - 1:
+            data_a = [""]
+            change_type_a = [pmEnums.CHANGEDENUM.SAME]
+            self.change_set_a.getChange(n, change_type_a, data_a)            
+            if change_type_a[0] != pmEnums.CHANGEDENUM.SAME:                
+                self.diff_indices.append(n)
+                while change_type_a[0] != pmEnums.CHANGEDENUM.SAME:
+                    n += 1
+                    self.change_set_a.getChange(n, change_type_a, data_a)
+            n += 1                
+                
+        print("now")
+        for n in range(len(self.diff_indices)):
+            print( str(self.diff_indices[n]) + "\n")
+                
+        
         # Set the head text
         self.table.setHorizontalHeaderItem(0, QTableWidgetItem("Line"))
         self.table.setHorizontalHeaderItem(1, QTableWidgetItem(""))
@@ -267,18 +286,52 @@ class MainTable(QWidget):
         Scrolls the table window to the next difference incrementally (starts at the first diff)
         :return: No return value
         """
-        # TODO: Implement goto_next_diff function
+        print( str(len(self.diff_indices)))
+        if self.curr_diff_idx == len(self.diff_indices)-1:
+            self.curr_diff_idx = 0
+            self.jump_to_line(self.diff_indices[self.curr_diff_idx])
+        else:
+            self.curr_diff_idx += 1
+            self.jump_to_line(self.diff_indices[self.curr_diff_idx])
+        
         return
 
+    
     @pyqtSlot()
     def goto_prev_diff(self):
         """
         Scrolls the table window to the previous difference incrementally
         :return: No return value
         """
-        # TODO: Implement goto_prev_diff function
+        print(self.curr_diff_idx)
+        if self.curr_diff_idx == 0 or self.curr_diff_idx == -1:
+            self.curr_diff_idx = len(self.diff_indices)-1
+            self.jump_to_line(self.diff_indices[self.curr_diff_idx])
+        else:
+            self.curr_diff_idx -= 1
+            self.jump_to_line(self.diff_indices[self.curr_diff_idx])
+        
         return
+    
+    @pyqtSlot()
+    def undo_last_change(self):
+        """
+        undoes last change or group of changes
+        :return: No return value
+        """
+        # TODO: Implement 
+        print("undo last")
 
+    @pyqtSlot()
+    def redo_last_undo(self):
+        """
+        redo last undo performed
+        :return: No return value
+        """
+        # TODO: Implement 
+        print("redo last")
+    
+    
     def jump_to_line(self, line_num, col=0):
         self.table.scrollToItem(
             self.table.item(line_num, col), QtWidgets.QAbstractItemView.PositionAtTop
@@ -332,8 +385,10 @@ class MainTable(QWidget):
         """
         return [[row.right_text, row.left_text] for row in self.rows]
 
-    def load_table_contents(self, left_lines: list or dict, right_lines: list or dict, file1, file2):
+    def load_table_contents(self, left_lines: list or dict, right_lines: list or dict, file1=0, file2=0):
         # TODO: Add type hints
+        if(file1 == 0 or file2 == 0):
+            return
         """
         Load the contents of two data structures containing the lines to be displayed, into the tables
         :param left_lines: left hand data to show

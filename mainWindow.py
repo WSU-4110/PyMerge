@@ -27,11 +27,11 @@ class mainWindow(QMainWindow):
 
         #load files and generate changesets
         result = pmEnums.RESULT.ERROR
-        fIO = fileIO.fileIO()
+        self.fIO = fileIO.fileIO()
         if fileA != 0 and fileB != 0:            
-            result = fIO.diffFiles(fileA, fileB)
+            result = self.fIO.diffFiles(fileA, fileB)
             if result == pmEnums.RESULT.GOOD:
-                result = fIO.getChangeSets(fIO.changesA, fIO.changesB)
+                result = self.fIO.getChangeSets(self.fIO.changesA, self.fIO.changesB)
             
         
         if result == pmEnums.RESULT.GOOD:
@@ -40,7 +40,7 @@ class mainWindow(QMainWindow):
     
         table_widget = 0   
         #load table
-        table_widget = main_table.MainTable(fIO.changesA, fIO.changesB)            
+        table_widget = main_table.MainTable(self.fIO.changesA, self.fIO.changesB)            
         #add table
         layout.addWidget(table_widget, 1, 0)
         #table_widget.load_test_files("file1.c", "file2.c")
@@ -65,6 +65,7 @@ class mainWindow(QMainWindow):
 
     def openFile(self, tableObj):
         fileOpener = fileOpenDialog.fileOpenDialog()
+<<<<<<< HEAD
         fileA = fileOpener.fileAName
         fileB = fileOpener.fileBName
 
@@ -85,6 +86,17 @@ class mainWindow(QMainWindow):
 
         prompt = QMessageBox.about(self, "Error", "Error Message")
 
+=======
+        #fileA = fileOpener.fileAName
+        #fileB = fileOpener.fileBName
+        fileA = fileOpener.fileAName
+        fileB = fileOpener.fileBName
+
+        result = self.fIO.diffFiles(fileA, fileB)
+        if result == pmEnums.RESULT.GOOD:
+            result = self.fIO.getChangeSets(self.fIO.changesA, self.fIO.changesB)
+            
+>>>>>>> 020321c438a26f196342593b15094d6dea0ea7c7
         tableObj.load_table_contents([], [], fileA, fileB)
 
     def menuItems(self, tableObj):

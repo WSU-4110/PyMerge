@@ -1,5 +1,5 @@
 """
-changeSet class, provides a data structure to make working with file differences (change sets)
+class, provides a data structure to make working with file differences (change sets)
 easier by abstracting the data storage, and providing a single accessor function.
 """
 import pmEnums

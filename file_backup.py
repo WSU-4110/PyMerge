@@ -141,6 +141,18 @@ class Backup(object):
         os.remove(f"{self.hash_type}.txt")
         os.remove(f".meta.{file_name}.dat")
 
+    def get_hash_from_backup(self, backup_file: str) -> str:
+        # Extract the archive contents
+        with zipfile.ZipFile(backup_file) as myzip:
+            myzip.extract(f"{self.hash_type}.txt")
+
+        # Read the hash file contents
+        with open(f"{self.hash_type}.txt", 'r') as hash_file:
+            hash_string = hash_file.read().strip('\n')
+
+        os.remove(f"{self.hash_type}.txt")
+        return hash_string
+
 
 def test():
     test_class = Backup()

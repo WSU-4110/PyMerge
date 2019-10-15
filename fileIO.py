@@ -8,6 +8,7 @@ import changeSet
 import algorithm
 import diff_resolution
 import os.path
+import utilities
 
 
 class fileIO:
@@ -17,15 +18,12 @@ class fileIO:
     
     def diffFiles(self, iFileA, iFileB ):
 
-        fA_ext = os.path.splitext(iFileA)[-1].lower()
-        fB_ext = os.path.splitext(iFileB)[-1].lower()
+        if utilities.bad_file_check(iFileA):
+            print(iFileA, ": Unacceptable file type")
+            return pmEnums.RESULT.BADFILE
 
-        bad_extensions = ["zip", "bzip", "mp3", "wav", "jpg", "png", "mp4", "ppt", "ods", "tar", "wma", "aif", "m4a",
-                        "mpg", "vob", "wmv", "obj", "gif", "tiff", "3dm", "3ds", "svg", "xls", "xlsx", "7z", "",
-                        "gz", "iso", "bin", "msi", "docx"]
-
-        if fA_ext in bad_extensions or fB_ext in bad_extensions:
-            print("Unacceptable file type")
+        if utilities.bad_file_check(iFileB):
+            print(iFileB, ": Unacceptable file type")
             return pmEnums.RESULT.BADFILE
 
         fileA = open(iFileA, 'r')

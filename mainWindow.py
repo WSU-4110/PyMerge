@@ -65,9 +65,11 @@ class mainWindow(QMainWindow):
 
     def openFile(self, tableObj):
         fileOpener = fileOpenDialog.fileOpenDialog()
-<<<<<<< HEAD
+
         fileA = fileOpener.fileAName
         fileB = fileOpener.fileBName
+
+
 
         if not os.path.exists(fileA):
             print(fileA, "Does not exist")
@@ -84,19 +86,18 @@ class mainWindow(QMainWindow):
         if not utilities.file_writable(fileB):
             print(fileB + ": Write permission denied.")
 
-        prompt = QMessageBox.about(self, "Error", "Error Message")
+        # prompt = QMessageBox.about(self, "Error", "Error Message")
 
-=======
         #fileA = fileOpener.fileAName
         #fileB = fileOpener.fileBName
         fileA = fileOpener.fileAName
         fileB = fileOpener.fileBName
 
         result = self.fIO.diffFiles(fileA, fileB)
+
         if result == pmEnums.RESULT.GOOD:
             result = self.fIO.getChangeSets(self.fIO.changesA, self.fIO.changesB)
-            
->>>>>>> 020321c438a26f196342593b15094d6dea0ea7c7
+
         tableObj.load_table_contents([], [], fileA, fileB)
 
     def menuItems(self, tableObj):

@@ -4,6 +4,7 @@ General, non-project-specific functions
 """
 import os
 import hashlib
+import pmEnums
 
 
 def pad_string(string: str, length: int, char=" ", append=True):
@@ -81,3 +82,13 @@ def hash_list(inp_list):
         inp_list[n] = hashlib.md5(str(inp_list[n]).encode("utf-8"))
 
     return
+
+def bad_file_check(fileName):
+    ext = os.path.splitext(fileName)[-1].lower()
+
+    bad_extensions = ["zip", "bzip", "mp3", "wav", "jpg", "png", "mp4", "ppt", "ods", "tar", "wma", "aif", "m4a",
+                      "mpg", "vob", "wmv", "obj", "gif", "tiff", "3dm", "3ds", "svg", "xls", "xlsx", "7z", "",
+                      "gz", "iso", "bin", "msi", "docx"]
+
+    if ext in bad_extensions:
+        return pmEnums.RESULT.BADFILE

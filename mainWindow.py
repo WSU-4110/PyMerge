@@ -30,22 +30,18 @@ class mainWindow(QMainWindow):
             result = self.fIO.diffFiles(fileA, fileB)
             if result == pmEnums.RESULT.GOOD:
                 result = self.fIO.getChangeSets(self.fIO.changesA, self.fIO.changesB)
-            
-        
-        if result == pmEnums.RESULT.GOOD:
-            pass #pass the changesets to window class or whatever to be loaded into the table
-
-    
+                    
         table_widget = 0   
         #load table
         table_widget = main_table.MainTable(self.fIO.changesA, self.fIO.changesB)            
         #add table
         layout.addWidget(table_widget, 1, 0)
-        #table_widget.load_test_files("file1.c", "file2.c")
 
+        #load table with fileA and B if present from command line
         if fileA != 0 and fileB != 0:
             table_widget.load_table_contents([], [], fileA, fileB)    # Left list arguments for now
-        table_widget.load_table_contents([], [])    # Left list arguments for now
+        else:
+            table_widget.load_table_contents([], [])    # Left list arguments for now
         
         print(id(table_widget))
         layout.addWidget(controlButtons.controlButtons(table_widget), 0, 0)
@@ -62,6 +58,9 @@ class mainWindow(QMainWindow):
         self.show()
 
     def openFile(self, tableObj):
+
+        tableObj.clear_table()
+        
         fileOpener = fileOpenDialog.fileOpenDialog()
         #fileA = fileOpener.fileAName
         #fileB = fileOpener.fileBName

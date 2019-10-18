@@ -181,18 +181,6 @@ class MainTable(QWidget):
         
         self.change_set_a = change_set_a
         self.change_set_b = change_set_b
-
-        n = 0
-        while n < len(self.change_set_a.changeList) - 1:
-            data_a = [""]
-            change_type_a = [pmEnums.CHANGEDENUM.SAME]
-            self.change_set_a.getChange(n, change_type_a, data_a)            
-            if change_type_a[0] != pmEnums.CHANGEDENUM.SAME:                
-                self.diff_indices.append(n)
-                while change_type_a[0] != pmEnums.CHANGEDENUM.SAME:
-                    n += 1
-                    self.change_set_a.getChange(n, change_type_a, data_a)
-            n += 1                
                 
         print("now")
         for n in range(len(self.diff_indices)):
@@ -288,7 +276,7 @@ class MainTable(QWidget):
         """
         if len(self.diff_indices) == 0:
             return
-        print( str(len(self.diff_indices)))
+        
         if self.curr_diff_idx == len(self.diff_indices)-1:
             self.curr_diff_idx = 0
             self.jump_to_line(self.diff_indices[self.curr_diff_idx])
@@ -307,7 +295,7 @@ class MainTable(QWidget):
         """
         if len(self.diff_indices) == 0:
             return
-        print(self.curr_diff_idx)
+        
         if self.curr_diff_idx == 0 or self.curr_diff_idx == -1:
             self.curr_diff_idx = len(self.diff_indices)-1
             self.jump_to_line(self.diff_indices[self.curr_diff_idx])
@@ -322,7 +310,7 @@ class MainTable(QWidget):
         """
         undoes last change or group of changes
         :return: No return value
-        """
+        """    
         # TODO: Implement 
         print("undo last")
 
@@ -416,6 +404,20 @@ class MainTable(QWidget):
 
             self.add_line(data_a[0], data_b[0], n, [change_type_a[0], change_type_b[0]])
 
+        #generate list of diff lines, to enable prev/next diff jump buttons
+        n = 0
+        
+        while n < len(self.change_set_a.changeList) - 1:
+            data_a = [""]
+            change_type_a = [pmEnums.CHANGEDENUM.SAME]
+            self.change_set_a.getChange(n, change_type_a, data_a)            
+            if change_type_a[0] != pmEnums.CHANGEDENUM.SAME:                
+                self.diff_indices.append(n)
+                while change_type_a[0] != pmEnums.CHANGEDENUM.SAME:
+                    n += 1
+                    self.change_set_a.getChange(n, change_type_a, data_a)
+            n += 1
+
     def load_test_files(self, file1: str, file2: str):
         """
         Load two arbitrary files as as test
@@ -434,3 +436,11 @@ class MainTable(QWidget):
 
         self.load_table_contents(file1_contents, file2_contents)
         self.jump_to_line(77)
+
+    def clear_table(self):
+        for n in range(self.table.rowCount()):
+            self.table.removeRow(n)
+        self.table.setRowCount(0)
+        del self.change_set_a.changeList[:]
+        del self.change_set_b.changeList[:]
+        

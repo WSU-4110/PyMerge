@@ -18,7 +18,7 @@ import os.path
 import utilities
 
 
-class mainWindow(QMainWindow):    
+class mainWindow(QMainWindow, QMessageBox):
     def __init__(self, fileA=0, fileB=0):
         super().__init__()        
         self.setWindowTitle("PyMerge")
@@ -32,7 +32,6 @@ class mainWindow(QMainWindow):
             result = self.fIO.diffFiles(fileA, fileB)
             if result == pmEnums.RESULT.GOOD:
                 result = self.fIO.getChangeSets(self.fIO.changesA, self.fIO.changesB)
-            
         
         if result == pmEnums.RESULT.GOOD:
             pass #pass the changesets to window class or whatever to be loaded into the table
@@ -69,8 +68,6 @@ class mainWindow(QMainWindow):
         fileA = fileOpener.fileAName
         fileB = fileOpener.fileBName
 
-
-
         if not os.path.exists(fileA):
             print(fileA, "Does not exist")
         if not os.path.exists(fileB):
@@ -86,10 +83,6 @@ class mainWindow(QMainWindow):
         if not utilities.file_writable(fileB):
             print(fileB + ": Write permission denied.")
 
-        # prompt = QMessageBox.about(self, "Error", "Error Message")
-
-        #fileA = fileOpener.fileAName
-        #fileB = fileOpener.fileBName
         fileA = fileOpener.fileAName
         fileB = fileOpener.fileBName
 
@@ -97,6 +90,8 @@ class mainWindow(QMainWindow):
 
         if result == pmEnums.RESULT.GOOD:
             result = self.fIO.getChangeSets(self.fIO.changesA, self.fIO.changesB)
+        elif result == pmEnums.RESULT.BADFILE:
+            QMessageBox.about(self, "Error", "Invalid file type")
 
         tableObj.load_table_contents([], [], fileA, fileB)
 

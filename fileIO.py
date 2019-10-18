@@ -9,6 +9,7 @@ import algorithm
 import diff_resolution
 import os.path
 import utilities
+import ntpath
 
 
 class fileIO:
@@ -18,12 +19,15 @@ class fileIO:
     
     def diffFiles(self, iFileA, iFileB ):
 
-        if utilities.bad_file_check(iFileA):
-            print(iFileA, ": Unacceptable file type")
+        fileA_base_name = ntpath.basename(iFileA)
+        fileB_base_name = ntpath.basename(iFileB)
+
+        if not utilities.valid_file_ext(iFileA):
+            print("\n[-]", fileA_base_name, ": Unacceptable file type\n")
             return pmEnums.RESULT.BADFILE
 
-        if utilities.bad_file_check(iFileB):
-            print(iFileB, ": Unacceptable file type")
+        if not utilities.valid_file_ext(iFileB):
+            print("\n[-]", fileB_base_name, ": Unacceptable file type\n")
             return pmEnums.RESULT.BADFILE
 
         fileA = open(iFileA, 'r')

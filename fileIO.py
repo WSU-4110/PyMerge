@@ -7,6 +7,9 @@ import pmEnums
 import changeSet
 import algorithm
 import diff_resolution
+import os.path
+import utilities
+import ntpath
 
 
 class fileIO:
@@ -15,6 +18,18 @@ class fileIO:
         self.changesA = changeSet.ChangeSet()
     
     def diffFiles(self, iFileA, iFileB ):
+
+        fileA_base_name = ntpath.basename(iFileA)
+        fileB_base_name = ntpath.basename(iFileB)
+
+        if not utilities.valid_file_ext(iFileA):
+            print("\n[-]", fileA_base_name, ": Unacceptable file type\n")
+            return pmEnums.RESULT.BADFILE
+
+        if not utilities.valid_file_ext(iFileB):
+            print("\n[-]", fileB_base_name, ": Unacceptable file type\n")
+            return pmEnums.RESULT.BADFILE
+
         fileA = open(iFileA, 'r')
         fileB = open(iFileB, 'r')
 

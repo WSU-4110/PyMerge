@@ -2,6 +2,7 @@
 algorithm class. Must be provided with two files, and two changeSet objects. It will compare
 the files and populate the ChangeSet Objects
 """
+
 import pmEnums
 import changeSet
 import os
@@ -62,5 +63,3 @@ class algorithm:
         # return pmEnums.RESULT.ERROR
         # return pmEnums.RESULT.GOOD
 
-
-    

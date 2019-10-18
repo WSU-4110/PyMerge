@@ -311,7 +311,8 @@ class MainTable(QWidget):
         undoes last change or group of changes
         :return: No return value
         """    
-        # TODO: Implement 
+        # TODO: Implement
+        undo_ctrlr.undo()
         print("undo last")
 
     @pyqtSlot()
@@ -320,6 +321,7 @@ class MainTable(QWidget):
         redo last undo performed
         :return: No return value
         """
+        undo_ctrlr.redo()
         # TODO: Implement 
         print("redo last")
     

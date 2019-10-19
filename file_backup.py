@@ -86,10 +86,12 @@ class Backup(object):
         """
         return str(hash_value) == str(self.get_hash(file))
 
-    def create_backup(self, file: str) -> str:
+    def create_backup(self, file: str, backup_dir: str) -> str:
         """
         Creates a zip archive containing a backup of a file and the hash value
+
         :param file: file to be backed up
+        :param backup_dir:
         :return: absolute path to backup
         """
         # Create hash file to use for integrity checks during backup retrieval
@@ -102,7 +104,7 @@ class Backup(object):
             temp.write(str(self.get_hash(file)))
 
         # Zip the files together
-        with zipfile.ZipFile(f"{file}.bak", 'w', zipfile.ZIP_DEFLATED) as backup:
+        with zipfile.ZipFile(f"{backup_dir}/{file}.bak", 'w', zipfile.ZIP_DEFLATED) as backup:
             backup.write(file)
             backup.write(hash_file)
             backup.write(meta_file)

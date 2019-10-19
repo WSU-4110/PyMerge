@@ -17,7 +17,6 @@ class PyMergeCLI(object):
         self.file_size_lim: int = 2000000        
         self.cli()
 
-
     def cli(self):
         """
         Main command-line interface function.
@@ -36,7 +35,7 @@ class PyMergeCLI(object):
             elif self.options[0] == "--about":
                 self.about_func()
         elif opt_length == 2:
-            if self.check_paths(self.options[0], self.options[1]):
+            if utilities.check_paths(self.options[0], self.options[1]):
                 left_file = self.options[0]
                 right_file = self.options[1]
             elif self.options[0] == "--file":
@@ -47,7 +46,7 @@ class PyMergeCLI(object):
         elif opt_length == 4 and \
                 self.options[0] == "--file" and \
                 self.options[2] == "--file" and \
-                self.check_paths(self.options[1], self.options[3]):
+                utilities.check_paths(self.options[1], self.options[3]):
             left_file = self.options[1]
             right_file = self.options[3]
         else:

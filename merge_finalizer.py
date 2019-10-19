@@ -70,7 +70,6 @@ class MergeFinalizer(object):
                         output_set.append(item)
             except:
                 return Status.DELETE_ERROR
-
         return Status.DELETE_SUCCESS
 
     def backup_file(self) -> Status:
@@ -79,10 +78,12 @@ class MergeFinalizer(object):
         :return:
         """
         try:
-            self.backup.create_backup(self.outp_file)
-        except:
+            self.backup.create_backup(self.outp_file_left)
+            self.backup.create_backup(self.outp_file_right)
+        except Exception as ex:
+            print(ex)
             return Status.BACKUP_ERROR
-        return Status.BACKUP_ERROR
+        return Status.BACKUP_SUCCESS
 
     def finalize_merge(self, left_set: list or set, right_set: list or set) -> Status:
         """
@@ -109,6 +110,8 @@ class MergeFinalizer(object):
                                 file.truncate(0)
                                 for line in outp_set_left:
                                     file.write(line)
+                                    if line[-1] != "\n":
+                                        file.write("\n")
                         except (FileExistsError, FileNotFoundError):
                             return Status.FILE_WRITE_ERROR
                         try:
@@ -116,6 +119,8 @@ class MergeFinalizer(object):
                                 file.truncate(0)
                                 for line in outp_set_right:
                                     file.write(line)
+                                    if line[-1] != "\n":
+                                        file.write("\n")
                         except (FileExistsError, FileNotFoundError):
                             return Status.FILE_WRITE_ERROR
                     else:

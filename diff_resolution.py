@@ -32,6 +32,7 @@ def diff_set(
     :param ochangeSetB: change set object for the right file
     :return: pmEnums.CHANGED value indicating if operation was successful
     """
+
     file_a_lines: list = iFileA.read().splitlines()
     file_b_lines: list = iFileB.read().splitlines()
     last_vals: list = [0, 0]  # Last found match indices

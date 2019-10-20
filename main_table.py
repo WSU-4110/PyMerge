@@ -369,5 +369,4 @@ class MainTable(QWidget):
     def write_merged_files(self):
         merged_file_contents = self.get_lines_from_tbl()
         merge_writer = merge_finalizer.MergeFinalizer(self.left_file, self.right_file, "file_backup")
-        print(merged_file_contents)
-        print(merge_writer.finalize_merge(merged_file_contents[0], merged_file_contents[1]))
+        merge_writer.finalize_merge(merged_file_contents[0], merged_file_contents[1])

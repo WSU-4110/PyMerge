@@ -31,14 +31,14 @@ class controlButtons(QWidget):
         icon = QtGui.QIcon(gui_config.ICONS["UNDO"])
         undo_change_button.setIcon(icon)
         # undo_change_button.clicked.connect(tableObj.undo_last_change)
-        undo_change_button.clicked.connect(tableObj.write_merged_files)
+        undo_change_button.clicked.connect(tableObj.undo_last_change)
         grid.addWidget(undo_change_button, 0, 1)
         
         next_diff_button = QToolButton()
         next_diff_button.setFixedSize( 80, 50)
         icon = QtGui.QIcon(gui_config.ICONS["NEXT_DIFF"])
         next_diff_button.setIcon(icon)
-        next_diff_button.clicked.connect(tableObj.goto_next_diff)
+        next_diff_button.clicked.connect(tableObj.write_merged_files)
         grid.addWidget(next_diff_button, 1, 2)
         
         prev_diff_button = QToolButton()

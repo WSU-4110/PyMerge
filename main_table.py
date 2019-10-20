@@ -34,6 +34,7 @@ from changeSet import ChangeSet
 import table_row
 import merge_finalizer
 
+
 class MainTable(QWidget):
     def __init__(self, change_set_a, change_set_b):
         """
@@ -48,6 +49,7 @@ class MainTable(QWidget):
         self.table.setRowCount(0)  # Set the initial row count to 0
         self.table.setColumnCount(5)  # Set the column count to 5
         self.setAcceptDrops(True)
+        self.undo_ctrlr: undo_redo.UndoRedo = undo_redo.UndoRedo.get_instance()
 
         # List containing indices of all diff rows. This is used for jump to diff functions
         self.diff_indices: list = []
@@ -239,7 +241,10 @@ class MainTable(QWidget):
         undoes last change or group of changes
         :return: No return value
         """
-        # TODO: Implement
+        # self.undo_ctrlr.undo()
+        # for row in self.rows:
+        #     row.set_row_state()
+        # self.repaint()
         print("undo last")
 
     @pyqtSlot()
@@ -248,7 +253,10 @@ class MainTable(QWidget):
         redo last undo performed
         :return: No return value
         """
-        # TODO: Implement
+        # self.undo_ctrlr.redo()
+        # for row in self.rows:
+        #     row.set_row_state()
+        # self.repaint()
         print("redo last")
 
     def jump_to_line(self, line_num, col=0):

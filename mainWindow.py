@@ -109,10 +109,15 @@ class mainWindow(QMainWindow):
 
         
         
-        openFileButton = QAction("Open File", self)
+        openFileButton = QAction("Open Files", self)
         openFileButton.setShortcut('Ctrl+o')
         openFileButton.triggered.connect(lambda:self.openFile(tableObj))
         fileMenu.addAction(openFileButton)
+
+        saveFileButton = QAction("Save Files", self)
+        saveFileButton.setShortcut('Ctrl+s')
+        saveFileButton.triggered.connect(tableObj.write_merged_files)
+        fileMenu.addAction(saveFileButton)
 
         mergeLeftButton = QAction("Merge Left", self)
         mergeLeftButton.setShortcut('Ctrl+l')        

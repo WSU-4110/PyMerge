@@ -416,6 +416,13 @@ class MainTable(QWidget):
 
             self.add_line(data_a[0], data_b[0], n, [change_type_a[0], change_type_b[0]])
 
+
+    @pyqtSlot()
+    def write_merged_files(self):
+        merged_file_contents = self.get_lines_from_tbl()
+        merge_writer = merge_finalizer.MergeFinalizer(self.left_file, self.right_file, "file_backup")
+        merge_writer.finalize_merge(merged_file_contents[0], merged_file_contents[1])
+
     def load_test_files(self, file1: str, file2: str):
         """
         Load two arbitrary files as as test
@@ -434,3 +441,4 @@ class MainTable(QWidget):
 
         self.load_table_contents(file1_contents, file2_contents)
         self.jump_to_line(77)
+

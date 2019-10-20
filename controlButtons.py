@@ -7,6 +7,7 @@ from PyQt5 import QtCore
 import gui_config
 
 
+
 class controlButtons(QWidget):
     def __init__(self, tableObj):
         super().__init__()
@@ -30,8 +31,7 @@ class controlButtons(QWidget):
         undo_change_button.setFixedSize( 80, 50)
         icon = QtGui.QIcon(gui_config.ICONS["UNDO"])
         undo_change_button.setIcon(icon)
-        # undo_change_button.clicked.connect(tableObj.undo_last_change)
-        undo_change_button.clicked.connect(tableObj.write_merged_files)
+        undo_change_button.clicked.connect(tableObj.undo_last_change)
         grid.addWidget(undo_change_button, 0, 1)
         
         next_diff_button = QToolButton()

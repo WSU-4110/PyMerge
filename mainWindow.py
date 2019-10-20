@@ -37,16 +37,17 @@ class mainWindow(QMainWindow):
         if result == pmEnums.RESULT.GOOD:
             pass #pass the changesets to window class or whatever to be loaded into the table
 
-
+    
         table_widget = 0   
         #load table
         table_widget = main_table.MainTable(self.fIO.changesA, self.fIO.changesB)            
         #add table
         layout.addWidget(table_widget, 1, 0)
+        #table_widget.load_test_files("file1.c", "file2.c")
 
         if fileA != 0 and fileB != 0:
-            table_widget.load_table_contents(fileA, fileB)    # Left list arguments for now
-        table_widget.load_table_contents()    # Left list arguments for now
+            table_widget.load_table_contents([], [], fileA, fileB)    # Left list arguments for now
+        table_widget.load_table_contents([], [])    # Left list arguments for now
         
         print(id(table_widget))
         layout.addWidget(controlButtons.controlButtons(table_widget), 0, 0)
@@ -54,10 +55,11 @@ class mainWindow(QMainWindow):
         widget.setLayout(layout)
         self.setCentralWidget(widget)                
         self.initUI(table_widget)
-
+    
+        
     def initUI(self, tableObj=0):
         #start GUI
-        if tableObj:
+        if(tableObj):
             self.menuItems(tableObj)        
         self.show()
 
@@ -66,6 +68,8 @@ class mainWindow(QMainWindow):
 
         fileA = fileOpener.fileAName
         fileB = fileOpener.fileBName
+
+
 
         if not os.path.exists(fileA):
             print(fileA, "Does not exist")
@@ -84,6 +88,8 @@ class mainWindow(QMainWindow):
 
         # prompt = QMessageBox.about(self, "Error", "Error Message")
 
+        #fileA = fileOpener.fileAName
+        #fileB = fileOpener.fileBName
         fileA = fileOpener.fileAName
         fileB = fileOpener.fileBName
 
@@ -106,7 +112,7 @@ class mainWindow(QMainWindow):
         
         openFileButton = QAction("Open File", self)
         openFileButton.setShortcut('Ctrl+o')
-        openFileButton.triggered.connect(lambda: self.openFile(tableObj))
+        openFileButton.triggered.connect(lambda:self.openFile(tableObj))
         fileMenu.addAction(openFileButton)
 
         mergeLeftButton = QAction("Merge Left", self)

@@ -103,29 +103,29 @@ class UndoRedo(object):
         #print(self.undo_buf.stack)
 
     def undo(self):
-        undo_obj = self.undo_buf.stack_pop()  # Get the state we want to set
+        #undo_obj = self.undo_buf.stack_pop()  # Get the state we want to set
         #redo_obj = UndoRedoAction(undo_obj.obj_)  # Record the current state
 
         # Check if object is None, then push the recorded current state.
-        if undo_obj is not None:
-            self.redo_buf.stack_push(deepcopy(undo_obj))
-
-        # Restore the state to what was popped
-            undo_obj.set_state()
-            return True
+        # if undo_obj is not None:
+        #     self.redo_buf.stack_push(deepcopy(undo_obj))
+        #
+        # # Restore the state to what was popped
+        #     undo_obj.set_state()
+        #     return True
         return False
 
     def redo(self):
-        redo_obj = self.undo_buf.stack_pop()
+        #redo_obj = self.undo_buf.stack_pop()
         #undo_obj = UndoRedoAction(redo_obj.row_obj)
 
         # Check if object is None, then push the recorded current state.
-        if redo_obj is not None:
-            self.undo_buf.stack_push(deepcopy(redo_obj))
-
-            # Restore the state to what was popped
-            redo_obj.set_state()
-            return True
+        # if redo_obj is not None:
+        #     self.undo_buf.stack_push(deepcopy(redo_obj))
+        #
+        #     # Restore the state to what was popped
+        #     redo_obj.set_state()
+        #     return True
         return False
 
 """

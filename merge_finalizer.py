@@ -25,13 +25,15 @@ class Status(Enum):
     FILE_WRITE_SUCCESS = 10
     FILE_WRITE_ERROR = 11
     FILE_PERMISSION_ERR = 12
+    MERGE_FINALIZE_SUCCESS = 13
 
 
 class MergeFinalizer(object):
-    def __init__(self, outp_file_left: str, outp_file_right: str):
+    def __init__(self, outp_file_left: str, outp_file_right: str, backup_dir: str):
         self.outp_file_left: str = outp_file_left
         self.outp_file_right: str = outp_file_right
         self.backup = file_backup.Backup()
+        self.backup_dir = backup_dir
 
     @staticmethod
     def type_checker(data_set: list or set, target_type: type) -> Status:
@@ -43,7 +45,7 @@ class MergeFinalizer(object):
         :return: enumerated Status value
         """
         for item in data_set:
-            if not isinstance(item, target_type):
+            if not isinstance(item, target_type) and item is not None:
                 return Status.TYPE_CHK_ERROR
         return Status.TYPE_CHK_SUCCESS
 
@@ -70,7 +72,7 @@ class MergeFinalizer(object):
                         output_set.append(item)
             except:
                 return Status.DELETE_ERROR
-
+        print(output_set)
         return Status.DELETE_SUCCESS
 
     def backup_file(self) -> Status:
@@ -79,10 +81,12 @@ class MergeFinalizer(object):
         :return:
         """
         try:
-            self.backup.create_backup(self.outp_file)
-        except:
+            self.backup.create_backup(f"{self.outp_file_left}", self.backup_dir)
+            self.backup.create_backup(f"{self.outp_file_right}", self.backup_dir)
+        except Exception as ex:
+            print(ex)
             return Status.BACKUP_ERROR
-        return Status.BACKUP_ERROR
+        return Status.BACKUP_SUCCESS
 
     def finalize_merge(self, left_set: list or set, right_set: list or set) -> Status:
         """
@@ -106,16 +110,18 @@ class MergeFinalizer(object):
                     if self.backup_file() == Status.BACKUP_SUCCESS:
                         try:
                             with open(self.outp_file_left, "w") as file:
-                                file.truncate(0)
                                 for line in outp_set_left:
                                     file.write(line)
+                                    if "\n" not in line:
+                                        file.write("\n")
                         except (FileExistsError, FileNotFoundError):
                             return Status.FILE_WRITE_ERROR
                         try:
                             with open(self.outp_file_right, "w") as file:
-                                file.truncate(0)
                                 for line in outp_set_right:
                                     file.write(line)
+                                    if "\n" not in line:
+                                        file.write("\n")
                         except (FileExistsError, FileNotFoundError):
                             return Status.FILE_WRITE_ERROR
                     else:
@@ -126,3 +132,5 @@ class MergeFinalizer(object):
                 return Status.TYPE_CHK_ERROR
         else:
             return Status.FILE_PERMISSION_ERR
+
+        return Status.MERGE_FINALIZE_SUCCESS

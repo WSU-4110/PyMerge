@@ -14,6 +14,8 @@ import fileIO
 import pmEnums
 import diff_resolution
 import fileOpenDialog
+import os.path
+import utilities
 
 
 class mainWindow(QMainWindow):    
@@ -62,19 +64,41 @@ class mainWindow(QMainWindow):
         tableObj.clear_table()
         
         fileOpener = fileOpenDialog.fileOpenDialog()
+
+        fileA = fileOpener.fileAName
+        fileB = fileOpener.fileBName
+
+
+
+        if not os.path.exists(fileA):
+            print(fileA, "Does not exist")
+        if not os.path.exists(fileB):
+            print(fileB, "Does not exist")
+
+        if not utilities.file_readable(fileA):
+            print(fileA + ": Read permission denied.")
+        if not utilities.file_readable(fileB):
+            print(fileB + ": Read permission denied.")
+
+        if not utilities.file_writable(fileA):
+            print(fileA + ": Write permission denied.")
+        if not utilities.file_writable(fileB):
+            print(fileB + ": Write permission denied.")
+
+        # prompt = QMessageBox.about(self, "Error", "Error Message")
+
         #fileA = fileOpener.fileAName
         #fileB = fileOpener.fileBName
         fileA = fileOpener.fileAName
         fileB = fileOpener.fileBName
 
         result = self.fIO.diffFiles(fileA, fileB)
+
         if result == pmEnums.RESULT.GOOD:
             result = self.fIO.getChangeSets(self.fIO.changesA, self.fIO.changesB)
-            
+
         tableObj.load_table_contents([], [], fileA, fileB)
-        
-        
-        
+
     def menuItems(self, tableObj):
         # ~~~~~~~~~~~~~~~~~~~~~~~~
         # MENUBAR
@@ -123,7 +147,8 @@ class mainWindow(QMainWindow):
         
 #
 
-def startMain(fileA=0, fileB=0):    
+def startMain(fileA=0, fileB=0):
     app = QApplication(sys.argv)
     ex = mainWindow(fileA, fileB)
     sys.exit(app.exec_())
+

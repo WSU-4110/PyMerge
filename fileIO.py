@@ -18,6 +18,9 @@ class fileIO():
     
     def diffFiles(self, iFileA, iFileB):
 
+        if iFileA == "" or iFileB == "":
+            return pmEnums.RESULT.EMPTYFILE
+
         fileA_base_name = ntpath.basename(iFileA)
         fileB_base_name = ntpath.basename(iFileB)
 

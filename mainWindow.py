@@ -103,8 +103,7 @@ class mainWindow(QMainWindow, QMessageBox):
         fileMenu = mainMenu.addMenu('File')
         editMenu = mainMenu.addMenu('Edit')
 
-        
-        
+
         openFileButton = QAction("Open File", self)
         openFileButton.setShortcut('Ctrl+o')
         openFileButton.triggered.connect(lambda:self.openFile(tableObj))
@@ -140,8 +139,6 @@ class mainWindow(QMainWindow, QMessageBox):
         redoChangeButn.triggered.connect(tableObj.redo_last_undo)
         editMenu.addAction(redoChangeButn)
 
-        
-#
 
 def startMain(fileA=0, fileB=0):
     app = QApplication(sys.argv)

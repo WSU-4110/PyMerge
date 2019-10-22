@@ -106,7 +106,6 @@ class mainWindow(QMainWindow, QMessageBox):
         fileMenu = mainMenu.addMenu('File')
         editMenu = mainMenu.addMenu('Edit')
         
-        
         openFileButton = QAction("Open Files", self)
         openFileButton.setShortcut('Ctrl+o')
         openFileButton.triggered.connect(lambda:self.openFile(tableObj))

@@ -36,17 +36,17 @@ class mainWindow(QMainWindow, QMessageBox):
         if result == pmEnums.RESULT.GOOD:
             pass #pass the changesets to window class or whatever to be loaded into the table
 
-    
         table_widget = 0   
         #load table
         table_widget = main_table.MainTable(self.fIO.changesA, self.fIO.changesB)            
         #add table
         layout.addWidget(table_widget, 1, 0)
-        #table_widget.load_test_files("file1.c", "file2.c")
 
+        #load table with fileA and B if present from command line
         if fileA != 0 and fileB != 0:
             table_widget.load_table_contents([], [], fileA, fileB)    # Left list arguments for now
-        table_widget.load_table_contents([], [])    # Left list arguments for now
+        else:
+            table_widget.load_table_contents([], [])    # Left list arguments for now
         
         print(id(table_widget))
         layout.addWidget(controlButtons.controlButtons(table_widget), 0, 0)
@@ -63,6 +63,9 @@ class mainWindow(QMainWindow, QMessageBox):
         self.show()
 
     def openFile(self, tableObj):
+
+        tableObj.clear_table()
+        
         fileOpener = fileOpenDialog.fileOpenDialog()
 
         fileA = fileOpener.fileAName
@@ -102,12 +105,17 @@ class mainWindow(QMainWindow, QMessageBox):
         mainMenu = self.menuBar()
         fileMenu = mainMenu.addMenu('File')
         editMenu = mainMenu.addMenu('Edit')
-
-
-        openFileButton = QAction("Open File", self)
+        
+        
+        openFileButton = QAction("Open Files", self)
         openFileButton.setShortcut('Ctrl+o')
         openFileButton.triggered.connect(lambda:self.openFile(tableObj))
         fileMenu.addAction(openFileButton)
+
+        saveFileButton = QAction("Save Files", self)
+        saveFileButton.setShortcut('Ctrl+s')
+        saveFileButton.triggered.connect(tableObj.write_merged_files)
+        fileMenu.addAction(saveFileButton)
 
         mergeLeftButton = QAction("Merge Left", self)
         mergeLeftButton.setShortcut('Ctrl+l')        

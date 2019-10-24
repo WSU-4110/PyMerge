@@ -23,7 +23,7 @@ class controlButtons(QWidget):
         merge_left_button.setFixedSize( 80, 50)
         icon = QtGui.QIcon(gui_config.ICONS["MERGE_LEFT"])
         merge_left_button.setIcon(icon)
-        #merge_left_button.clicked.connect(bActions.mergeLeft)
+        merge_left_button.clicked.connect(tableObj.merge_left)
         grid.addWidget(merge_left_button, 0, 0)
 
 
@@ -60,5 +60,5 @@ class controlButtons(QWidget):
         merge_right_button.setFixedSize( 80, 50)
         icon = QtGui.QIcon(gui_config.ICONS["MERGE_RIGHT"])
         merge_right_button.setIcon(icon)
-        #merge_right_button.clicked.connect(bActions.mergeRight)
+        merge_right_button.clicked.connect(tableObj.merge_right)
         grid.addWidget(merge_right_button, 0, 4)

@@ -321,10 +321,28 @@ class MainTable(QWidget):
         redo last undo performed
         :return: No return value
         """
-        undo_ctrlr.redo()
+        #undo_ctrlr.redo()
         # TODO: Implement 
         print("redo last")
-    
+
+    @pyqtSlot()
+    def merge_left(self):
+        """
+        merge the whole left selection into the right
+        """
+        indexesList = self.table.selectedIndexes()
+        if len(indexesList) != 0:
+            print(indexesList[0].data)
+        print ("merge left")
+        return 0
+
+    @pyqtSlot()
+    def merge_right(self):
+        """
+        merge the whole right selection into the right
+        """
+        print ("merge right")
+        return 0
     
     def jump_to_line(self, line_num, col=0):
         self.table.scrollToItem(

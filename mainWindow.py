@@ -121,12 +121,12 @@ class mainWindow(QMainWindow):
 
         mergeLeftButton = QAction("Merge Left", self)
         mergeLeftButton.setShortcut('Ctrl+l')        
-        #mergeLeftButton.triggered.connect(tableObj.mergeLeft)
+        mergeLeftButton.triggered.connect(tableObj.merge_left)
         editMenu.addAction(mergeLeftButton)
 
         mergeRightButton = QAction("Merge Right", self)
         mergeRightButton.setShortcut('Ctrl+r')        
-        #mergeRightButton.triggered.connect(tableObj.mergeRight)
+        mergeRightButton.triggered.connect(tableObj.merge_right)
         editMenu.addAction(mergeRightButton)
 
         previousDiffButn = QAction("Previous Difference", self)

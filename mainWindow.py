@@ -42,6 +42,7 @@ class mainWindow(QMainWindow):
         # add table
         layout.addWidget(table_widget, 1, 0)
 
+        #load table with fileA and B if present from command line
         if fileA != 0 and fileB != 0:
             table_widget.load_table_contents(fileA, fileB)  # Left list arguments for now
         table_widget.load_table_contents()  # Left list arguments for now
@@ -60,6 +61,9 @@ class mainWindow(QMainWindow):
         self.show()
 
     def openFile(self, tableObj):
+
+        tableObj.clear_table()
+        
         fileOpener = fileOpenDialog.fileOpenDialog()
 
         fileA = fileOpener.fileAName
@@ -101,9 +105,15 @@ class mainWindow(QMainWindow):
         editMenu = mainMenu.addMenu('Edit')
 
         openFileButton = QAction("Open File", self)
+        openFileButton = QAction("Open Files", self)
         openFileButton.setShortcut('Ctrl+o')
         openFileButton.triggered.connect(lambda: self.openFile(tableObj))
         fileMenu.addAction(openFileButton)
+
+        saveFileButton = QAction("Save Files", self)
+        saveFileButton.setShortcut('Ctrl+s')
+        saveFileButton.triggered.connect(tableObj.write_merged_files)
+        fileMenu.addAction(saveFileButton)
 
         mergeLeftButton = QAction("Merge Left", self)
         mergeLeftButton.setShortcut('Ctrl+l')

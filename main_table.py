@@ -58,20 +58,6 @@ class MainTable(QWidget):
 
         self.change_set_a = change_set_a
         self.change_set_b = change_set_b
-        self.left_file = ""
-        self.right_file = ""
-
-        n = 0
-        while n < len(self.change_set_a.changeList) - 1:
-            data_a = [""]
-            change_type_a = [pmEnums.CHANGEDENUM.SAME]
-            self.change_set_a.getChange(n, change_type_a, data_a)
-            if change_type_a[0] != pmEnums.CHANGEDENUM.SAME:
-                self.diff_indices.append(n)
-                while change_type_a[0] != pmEnums.CHANGEDENUM.SAME:
-                    n += 1
-                    self.change_set_a.getChange(n, change_type_a, data_a)
-            n += 1
 
         print("now")
         for n in range(len(self.diff_indices)):
@@ -225,7 +211,7 @@ class MainTable(QWidget):
         """
         if len(self.diff_indices) == 0:
             return
-        print(self.curr_diff_idx)
+        
         if self.curr_diff_idx == 0 or self.curr_diff_idx == -1:
             self.curr_diff_idx = len(self.diff_indices) - 1
             self.jump_to_line(self.diff_indices[self.curr_diff_idx])
@@ -241,10 +227,10 @@ class MainTable(QWidget):
         undoes last change or group of changes
         :return: No return value
         """
-        # self.undo_ctrlr.undo()
-        # for row in self.rows:
-        #     row.set_row_state()
-        # self.repaint()
+
+        # TODO: Implement
+        undo_ctrlr.undo()
+
         print("undo last")
 
     @pyqtSlot()
@@ -253,10 +239,9 @@ class MainTable(QWidget):
         redo last undo performed
         :return: No return value
         """
-        # self.undo_ctrlr.redo()
-        # for row in self.rows:
-        #     row.set_row_state()
-        # self.repaint()
+
+        undo_ctrlr.redo()
+        # TODO: Implement
         print("redo last")
 
     def jump_to_line(self, line_num, col=0):
@@ -373,9 +358,50 @@ class MainTable(QWidget):
 
             self.add_line(data_a[0], data_b[0], n, [change_type_a[0], change_type_b[0]])
 
+        #generate list of diff lines, to enable prev/next diff jump buttons
+        n = 0
+        
+        while n < len(self.change_set_a.changeList) - 1:
+            data_a = [""]
+            change_type_a = [pmEnums.CHANGEDENUM.SAME]
+            self.change_set_a.getChange(n, change_type_a, data_a)            
+            if change_type_a[0] != pmEnums.CHANGEDENUM.SAME:                
+                self.diff_indices.append(n)
+                while change_type_a[0] != pmEnums.CHANGEDENUM.SAME:
+                    n += 1
+                    self.change_set_a.getChange(n, change_type_a, data_a)
+            n += 1
+
     @pyqtSlot()
     def write_merged_files(self):
         merged_file_contents = self.get_lines_from_tbl()
         merge_writer = merge_finalizer.MergeFinalizer(self.left_file, self.right_file, "file_backup")
-        print(merged_file_contents)
-        print(merge_writer.finalize_merge(merged_file_contents[0], merged_file_contents[1]))
+        merge_writer.finalize_merge(merged_file_contents[0], merged_file_contents[1])
+
+
+    def load_test_files(self, file1: str, file2: str):
+        """
+        Load two arbitrary files as as test
+        :param file1: right hand file to load
+        :param file2: left hand file to load
+        :return: No return value
+        """
+        self.table.horizontalHeaderItem(1).setText(os.path.abspath(file1))
+        self.table.horizontalHeaderItem(4).setText(os.path.abspath(file2))
+
+        with open(file1, "r") as file:
+            file1_contents = file.read().splitlines()
+
+        with open(file2, "r") as file:
+            file2_contents = file.read().splitlines()
+
+        self.load_table_contents(file1_contents, file2_contents)
+        self.jump_to_line(77)
+
+
+    def clear_table(self):
+        for n in range(self.table.rowCount()):
+            self.table.removeRow(n)
+        self.table.setRowCount(0)
+        del self.change_set_a.changeList[:]
+        del self.change_set_b.changeList[:]

@@ -20,7 +20,7 @@ class fileOpenDialog(QWidget):
         self.openFileNameDialog()
         self.openFileNameDialog()
       
-    def openFileNameDialog(self):
+    def openFileNameDialog(self):        
         options = QFileDialog.Options()
         #options |= QFileDialog.DontUseNativeDialog
         if( self.fileAName == "" ):

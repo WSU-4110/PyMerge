@@ -1,4 +1,3 @@
-//
 // Created by Malcolm Hall on 9/20/18.
 //asdf
 
@@ -9,7 +8,12 @@
 
 typedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443f
 {
-	float derivState;      	/* Last position input  */
+	float derivState;      	/* Last position input
+
+
+
+
+	*/
 	float intgrtState;      	/* Integrator state */
 	float intgrtMax;    /* Maximum allowable integrator state   */
 	float intgrtMin;    /* Minimum allowable integrator state   */
@@ -18,6 +22,10 @@ typedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444
 	float kP;    	/* proportional gain    */
 	float kD;     	/* derivative gain  */
 } SPid;
+
+
+
+
 
 
 void InitPID(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)

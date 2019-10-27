@@ -96,7 +96,7 @@ class mainWindow(QMainWindow, QMessageBox):
         elif result == pmEnums.RESULT.BADFILE:
             QMessageBox.about(self, "Error", "Invalid file type")
 
-        tableObj.load_table_contents([], [], fileA, fileB)
+        tableObj.load_table_contents(fileA, fileB)
 
     def menuItems(self, tableObj):
         # ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -117,13 +117,13 @@ class mainWindow(QMainWindow, QMessageBox):
         fileMenu.addAction(saveFileButton)
 
         mergeLeftButton = QAction("Merge Left", self)
-        mergeLeftButton.setShortcut('Ctrl+l')
-        # mergeLeftButton.triggered.connect(tableObj.mergeLeft)
+        mergeLeftButton.setShortcut('Ctrl+l')        
+        mergeLeftButton.triggered.connect(tableObj.merge_left)
         editMenu.addAction(mergeLeftButton)
 
         mergeRightButton = QAction("Merge Right", self)
-        mergeRightButton.setShortcut('Ctrl+r')
-        # mergeRightButton.triggered.connect(tableObj.mergeRight)
+        mergeRightButton.setShortcut('Ctrl+r')        
+        mergeRightButton.triggered.connect(tableObj.merge_right)
         editMenu.addAction(mergeRightButton)
 
         previousDiffButn = QAction("Previous Difference", self)

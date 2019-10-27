@@ -23,11 +23,6 @@ typedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444
 	float kD;     	/* derivative gain  */
 } SPid;
 
-
-
-
-
-
 void InitPID(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
 {
 	pid->kP = kP;

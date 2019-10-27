@@ -229,7 +229,7 @@ class MainTable(QWidget):
         """
 
         # TODO: Implement
-        undo_ctrlr.undo()
+        #undo_ctrlr.undo()
 
         print("undo last")
 
@@ -240,7 +240,7 @@ class MainTable(QWidget):
         :return: No return value
         """
 
-        undo_ctrlr.redo()
+        #undo_ctrlr.redo()
         # TODO: Implement
         print("redo last")
 

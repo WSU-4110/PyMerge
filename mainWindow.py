@@ -18,7 +18,7 @@ import os.path
 import utilities
 
 
-class mainWindow(QMainWindow):
+class mainWindow(QMainWindow, QMessageBox):
     def __init__(self, fileA=0, fileB=0):
         super().__init__()
         self.setWindowTitle("PyMerge")
@@ -32,14 +32,15 @@ class mainWindow(QMainWindow):
             result = self.fIO.diffFiles(fileA, fileB)
             if result == pmEnums.RESULT.GOOD:
                 result = self.fIO.getChangeSets(self.fIO.changesA, self.fIO.changesB)
-
+                
         if result == pmEnums.RESULT.GOOD:
-            pass  # pass the changesets to window class or whatever to be loaded into the table
+            pass #pass the changesets to window class or whatever to be loaded into the table
 
-        table_widget = 0
-        # load table
-        table_widget = main_table.MainTable(self.fIO.changesA, self.fIO.changesB)
-        # add table
+        table_widget = 0   
+        #load table
+        table_widget = main_table.MainTable(self.fIO.changesA, self.fIO.changesB)            
+        #add table
+
         layout.addWidget(table_widget, 1, 0)
 
         #load table with fileA and B if present from command line
@@ -85,7 +86,6 @@ class mainWindow(QMainWindow):
             print(fileB + ": Write permission denied.")
 
         # prompt = QMessageBox.about(self, "Error", "Error Message")
-
         fileA = fileOpener.fileAName
         fileB = fileOpener.fileBName
 
@@ -93,6 +93,8 @@ class mainWindow(QMainWindow):
 
         if result == pmEnums.RESULT.GOOD:
             result = self.fIO.getChangeSets(self.fIO.changesA, self.fIO.changesB)
+        elif result == pmEnums.RESULT.BADFILE:
+            QMessageBox.about(self, "Error", "Invalid file type")
 
         tableObj.load_table_contents([], [], fileA, fileB)
 
@@ -104,7 +106,6 @@ class mainWindow(QMainWindow):
         fileMenu = mainMenu.addMenu('File')
         editMenu = mainMenu.addMenu('Edit')
 
-        openFileButton = QAction("Open File", self)
         openFileButton = QAction("Open Files", self)
         openFileButton.setShortcut('Ctrl+o')
         openFileButton.triggered.connect(lambda: self.openFile(tableObj))
@@ -145,8 +146,6 @@ class mainWindow(QMainWindow):
         redoChangeButn.triggered.connect(tableObj.redo_last_undo)
         editMenu.addAction(redoChangeButn)
 
-
-#
 
 def startMain(fileA=0, fileB=0):
     app = QApplication(sys.argv)

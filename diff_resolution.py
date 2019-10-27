@@ -120,9 +120,9 @@ def diff_set(
 
                     else:
                         last_vals = [x + 1 for x in last_vals]
-                        ochangeSetA.addChange(n, pmEnums.CHANGEDENUM.SAME, "")
+                        ochangeSetA.addChange(n, pmEnums.CHANGEDENUM.ADDED, "")
                         ochangeSetB.addChange(
-                            n, pmEnums.CHANGEDENUM.SAME, file_b_lines[last_vals[1]]
+                            n, pmEnums.CHANGEDENUM.CHANGED, file_b_lines[last_vals[1]]
                         )
 
                 else:

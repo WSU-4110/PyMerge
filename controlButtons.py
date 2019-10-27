@@ -7,7 +7,6 @@ from PyQt5 import QtCore
 import gui_config
 
 
-
 class controlButtons(QWidget):
     def __init__(self, tableObj):
         super().__init__()
@@ -18,7 +17,7 @@ class controlButtons(QWidget):
         grid = QGridLayout()
         self.setLayout(grid)
         print(id(tableObj))
-                
+
         merge_left_button = QToolButton()
         merge_left_button.setFixedSize( 80, 50)
         icon = QtGui.QIcon(gui_config.ICONS["MERGE_LEFT"])
@@ -31,6 +30,7 @@ class controlButtons(QWidget):
         undo_change_button.setFixedSize( 80, 50)
         icon = QtGui.QIcon(gui_config.ICONS["UNDO"])
         undo_change_button.setIcon(icon)
+        # undo_change_button.clicked.connect(tableObj.undo_last_change)
         undo_change_button.clicked.connect(tableObj.undo_last_change)
         grid.addWidget(undo_change_button, 0, 1)
         
@@ -38,7 +38,7 @@ class controlButtons(QWidget):
         next_diff_button.setFixedSize( 80, 50)
         icon = QtGui.QIcon(gui_config.ICONS["NEXT_DIFF"])
         next_diff_button.setIcon(icon)
-        next_diff_button.clicked.connect(tableObj.goto_next_diff)
+        next_diff_button.clicked.connect(tableObj.write_merged_files)
         grid.addWidget(next_diff_button, 1, 2)
         
         prev_diff_button = QToolButton()

@@ -96,7 +96,7 @@ class mainWindow(QMainWindow, QMessageBox):
         elif result == pmEnums.RESULT.BADFILE:
             QMessageBox.about(self, "Error", "Invalid file type")
 
-        tableObj.load_table_contents([], [], fileA, fileB)
+        tableObj.load_table_contents(fileA, fileB)
 
     def menuItems(self, tableObj):
         # ~~~~~~~~~~~~~~~~~~~~~~~~

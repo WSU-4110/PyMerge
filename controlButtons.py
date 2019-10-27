@@ -38,7 +38,7 @@ class controlButtons(QWidget):
         next_diff_button.setFixedSize( 80, 50)
         icon = QtGui.QIcon(gui_config.ICONS["NEXT_DIFF"])
         next_diff_button.setIcon(icon)
-        next_diff_button.clicked.connect(tableObj.write_merged_files)
+        next_diff_button.clicked.connect(tableObj.goto_next_diff)
         grid.addWidget(next_diff_button, 1, 2)
         
         prev_diff_button = QToolButton()

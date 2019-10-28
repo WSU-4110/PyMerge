@@ -1,14 +1,12 @@
+from cython_accelerator import lcs_cython
+import time
+
+USE_CYTHON = True
+
+
 def mat_print(mat):
     for row in mat:
         print(row)
-
-
-"""
-This needs a lot of optimization because the runtime grows quadratically, as does the space.
-For two files that each have 1000 lines with an average of 10 words per line the following would occur:
-    - 1000000 comparisons
-    - tested with 32000 lines on my laptop used like 8GB of memory
-"""
 
 
 def longest_common_subsequence(right_set, left_set):
@@ -76,12 +74,19 @@ def pad_raw_line_matches(match_list, file_length_max):
         idx += 1
         cntr += 1
 
-    # print(file_length_max - max(outp_list[0][-1], outp_list[1][-1]))
-    print(match_list)
-
     return outp_list
 
 
 def padded_lcs(right_set, left_set, file_length_max):
-    raw_matches = longest_common_subsequence(right_set, left_set)
-    return pad_raw_line_matches(raw_matches, file_length_max)
+    if USE_CYTHON:
+        start = time.time()
+        outp = lcs_cython.padded_lcs(right_set, left_set)
+        end = time.time()
+        print(end - start)
+        return outp
+    else:
+        start = time.time()
+        raw_matches = longest_common_subsequence(right_set, left_set)
+        end = time.time()
+        print(end - start)
+        return pad_raw_line_matches(raw_matches, file_length_max)

@@ -59,7 +59,7 @@ class MainTable(QWidget):
         self.change_set_a = change_set_a
         self.change_set_b = change_set_b
 
-        print("now")
+        
         for n in range(len(self.diff_indices)):
             print(str(self.diff_indices[n]) + "\n")
 
@@ -192,8 +192,7 @@ class MainTable(QWidget):
         :return: No return value
         """
         if len(self.diff_indices) == 0:
-            return
-        print(str(len(self.diff_indices)))
+            return        
         if self.curr_diff_idx == len(self.diff_indices) - 1:
             self.curr_diff_idx = 0
             self.jump_to_line(self.diff_indices[self.curr_diff_idx])
@@ -229,7 +228,7 @@ class MainTable(QWidget):
         """
 
         # TODO: Implement
-        # undo_ctrlr.undo()
+        undo_ctrlr.undo()
 
         print("undo last")
 

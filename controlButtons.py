@@ -15,8 +15,7 @@ class controlButtons(QWidget):
 
     def buttonLayout(self, tableObj):
         grid = QGridLayout()
-        self.setLayout(grid)
-        print(id(tableObj))
+        self.setLayout(grid)        
 
         merge_left_button = QToolButton()
         merge_left_button.setFixedSize( 80, 50)

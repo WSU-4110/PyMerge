@@ -8,6 +8,7 @@ algorithms in this file. It will only call the main GUI and application function
 import sys
 import os
 import mainWindow
+import utilities.py
 
 
 class PyMergeCLI(object):
@@ -38,6 +39,7 @@ class PyMergeCLI(object):
                 left_file = self.options[0]
                 right_file = self.options[1]
             elif self.options[0] == "--file":
+                errorbox(self)
                 print("Error: 2 files required for comparison.")
         elif opt_length == 3 and self.options[0] == "--file" and self.check_paths(self.options[1], self.options[2]):
             left_file = self.options[1]
@@ -49,6 +51,7 @@ class PyMergeCLI(object):
             left_file = self.options[1]
             right_file = self.options[3]
         else:
+            errorbox(self)
             print("Error: Invalid options. Type '--help' for information.")
             return
 

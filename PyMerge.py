@@ -123,6 +123,7 @@ PyMerge
         file_ext = file.split('.')[-1]
 
         if file_ext in illegal_exts:
+            errorbox(self)
             print(f"Error: {file} is not an accepted format.")
             return False
         else:
@@ -136,6 +137,7 @@ PyMerge
         :return: boolean indicating whether file is below size limit
         """
         if os.stat(file).st_size > self.file_size_lim:
+            errorbox(self)
             print(f"Error: {file} is greater than limit of {self.file_size_lim} bytes")
             return False
         else:

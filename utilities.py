@@ -6,6 +6,7 @@ import os
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5 import QtGui
+import hashlib
 
 def pad_string(string: str, length: int, char=" ", append=True):
     """
@@ -78,4 +79,7 @@ def line_bit_vector(string1, string2) -> list:
 
 def errorbox(self):
   QMessageBox.critical(self,"Error","There was an error with the program")
+def hashing(iLine):
+    return hashlib.md5(iLine)
+
 

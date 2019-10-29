@@ -9,10 +9,6 @@
 typedef struct44asdf4443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443f
 {
 	float derivState;      	/* Last position input
-
-
-
-
 	*/
 	float intgrtState;      	/* Integrator state */
 	float intgrtMax;    /* Maximum allowable integrator state   */

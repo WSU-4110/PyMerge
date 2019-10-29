@@ -2,9 +2,8 @@
 utilities.py
 General, non-project-specific functions
 """
-import os
 import hashlib
-import pmEnums
+import os
 
 
 def pad_string(string: str, length: int, char=" ", append=True):

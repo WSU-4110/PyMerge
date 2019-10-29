@@ -1,9 +1,9 @@
-import zipfile
+import datetime
 import hashlib
 import os
-import datetime
-import stat
 import pickle
+import zipfile
+
 
 # TODO: Make it so hash type is determined by some information about file during backup retrieval
 # TODO: Add datetime string to backup file name
@@ -69,12 +69,10 @@ class Backup(object):
         """
         with open(file, 'rb') as in_file:
             file_buf = in_file.read(self.BLOCK_SIZE)
-
+            # hash_obj = self.hash_func().update(file_buf)
             while len(file_buf) > 0:
                 self.hash_func().update(file_buf)
                 file_buf = in_file.read(self.BLOCK_SIZE)
-
-        #print(self.hash_func.hexdigest())
         return self.hash_func().hexdigest()
 
     def check_hash(self, file, hash_value: str) -> bool:

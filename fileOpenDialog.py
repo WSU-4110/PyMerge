@@ -7,7 +7,6 @@ import pmEnums, fileIO
 class fileOpenDialog(QWidget):    
     def __init__(self):
         super().__init__()
-        print("wtf")
         self.fileAName = ""
         self.fileBName = ""
         self.title = 'Open FileA'

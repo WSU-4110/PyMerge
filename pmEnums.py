@@ -9,6 +9,7 @@ class RESULT( Enum ):
     ERROR = 1
     NOTIMPL = 2 #not implemented
     BADFILE = 3 #file mismatch
+    EMPTYFILE = 4
 
 class ATTRIB( Enum ):
     DATA = 0

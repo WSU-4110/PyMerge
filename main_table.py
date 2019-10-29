@@ -63,7 +63,7 @@ class MainTable(QWidget):
         for n in range(len(self.diff_indices)):
             print(str(self.diff_indices[n]) + "\n")
 
-        self.table.verticalHeader().setVisible(False)   # Disable the automatic line numbers.
+        self.table.verticalHeader().setVisible(False)  # Disable the automatic line numbers.
 
         # Set the head text
         self.table.setHorizontalHeaderItem(0, QTableWidgetItem("Line"))
@@ -211,7 +211,7 @@ class MainTable(QWidget):
         """
         if len(self.diff_indices) == 0:
             return
-        
+
         if self.curr_diff_idx == 0 or self.curr_diff_idx == -1:
             self.curr_diff_idx = len(self.diff_indices) - 1
             self.jump_to_line(self.diff_indices[self.curr_diff_idx])
@@ -229,7 +229,7 @@ class MainTable(QWidget):
         """
 
         # TODO: Implement
-        #undo_ctrlr.undo()
+        # undo_ctrlr.undo()
 
         print("undo last")
 
@@ -238,11 +238,31 @@ class MainTable(QWidget):
         """
         redo last undo performed
         :return: No return value
-        """
+        """        
+        undo_ctrlr.redo()
 
-        #undo_ctrlr.redo()
         # TODO: Implement
         print("redo last")
+
+    @pyqtSlot()
+    def merge_left(self):
+        """
+        merge the whole left selection into the right
+        """
+        indexesList = self.table.selectedIndexes()
+        if len(indexesList) != 0:
+            print(indexesList[0].data)
+        print ("merge left")
+        return 0
+
+    @pyqtSlot()
+    def merge_right(self):
+        """
+        merge the whole right selection into the right
+        """
+        print ("merge right")
+        return 0
+
 
     def jump_to_line(self, line_num, col=0):
         self.table.scrollToItem(
@@ -253,13 +273,13 @@ class MainTable(QWidget):
         )
 
     def add_line(
-        self,
-        right_text: str,
-        left_text: str,
-        line_num: int or str,
-        change_flags,
-        left_line_num=0,
-        right_line_num=0,
+            self,
+            right_text: str,
+            left_text: str,
+            line_num: int or str,
+            change_flags,
+            left_line_num=0,
+            right_line_num=0,
     ):
         """
         Add a row into the table using the right and left text provided as parameters.
@@ -358,14 +378,14 @@ class MainTable(QWidget):
 
             self.add_line(data_a[0], data_b[0], n, [change_type_a[0], change_type_b[0]])
 
-        #generate list of diff lines, to enable prev/next diff jump buttons
+        # generate list of diff lines, to enable prev/next diff jump buttons
         n = 0
-        
+
         while n < len(self.change_set_a.changeList) - 1:
             data_a = [""]
             change_type_a = [pmEnums.CHANGEDENUM.SAME]
-            self.change_set_a.getChange(n, change_type_a, data_a)            
-            if change_type_a[0] != pmEnums.CHANGEDENUM.SAME:                
+            self.change_set_a.getChange(n, change_type_a, data_a)
+            if change_type_a[0] != pmEnums.CHANGEDENUM.SAME:
                 self.diff_indices.append(n)
                 while change_type_a[0] != pmEnums.CHANGEDENUM.SAME:
                     n += 1
@@ -377,7 +397,6 @@ class MainTable(QWidget):
         merged_file_contents = self.get_lines_from_tbl()
         merge_writer = merge_finalizer.MergeFinalizer(self.left_file, self.right_file, "file_backup")
         merge_writer.finalize_merge(merged_file_contents[0], merged_file_contents[1])
-
 
     def load_test_files(self, file1: str, file2: str):
         """
@@ -397,7 +416,6 @@ class MainTable(QWidget):
 
         self.load_table_contents(file1_contents, file2_contents)
         self.jump_to_line(77)
-
 
     def clear_table(self):
         for n in range(self.table.rowCount()):

@@ -69,9 +69,9 @@ class Backup(object):
         """
         with open(file, 'rb') as in_file:
             file_buf = in_file.read(self.BLOCK_SIZE)
-            hash_obj = self.hash_func().update(file_buf)
+            # hash_obj = self.hash_func().update(file_buf)
             while len(file_buf) > 0:
-                hash_obj.update(file_buf)
+                self.hash_func().update(file_buf)
                 file_buf = in_file.read(self.BLOCK_SIZE)
         return self.hash_func().hexdigest()
 

@@ -129,6 +129,7 @@ class Row(QtCore.QObject):
         self.left_button.setIcon(gui_cfg.ICONS["MERGE_LEFT"])
         self.left_button.clicked.connect(self.merge_left)
         self.table.setCellWidget(self.line_num, 3, self.left_button)
+        return
 
     @pyqtSlot()
     def merge_right(self):

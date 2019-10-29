@@ -10,23 +10,25 @@ import diff_resolution
 import pmEnums
 import utilities
 
-
-class fileIO:
+class fileIO():
     def __init__(self):
         self.changesB = changeSet.ChangeSet()
         self.changesA = changeSet.ChangeSet()
     
-    def diffFiles(self, iFileA, iFileB ):
+    def diffFiles(self, iFileA, iFileB):
+
+        if iFileA == "" or iFileB == "":
+            return pmEnums.RESULT.EMPTYFILE
 
         fileA_base_name = ntpath.basename(iFileA)
         fileB_base_name = ntpath.basename(iFileB)
 
         if not utilities.valid_file_ext(iFileA):
-            print("\n[-]", fileA_base_name, ": Unacceptable file type\n")
+            print("\n[-] Unacceptable file type:", fileA_base_name, "\n")
             return pmEnums.RESULT.BADFILE
 
         if not utilities.valid_file_ext(iFileB):
-            print("\n[-]", fileB_base_name, ": Unacceptable file type\n")
+            print("\n[-] Unacceptable file type:", fileB_base_name, "\n")
             return pmEnums.RESULT.BADFILE
 
         fileA = open(iFileA, 'r')

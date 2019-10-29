@@ -228,9 +228,7 @@ class MainTable(QWidget):
         """
 
         # TODO: Implement
-        undo_ctrlr.undo()
-
-        print("undo last")
+        self.undo_ctrlr.undo()
 
     @pyqtSlot()
     def redo_last_undo(self):
@@ -238,10 +236,7 @@ class MainTable(QWidget):
         redo last undo performed
         :return: No return value
         """        
-        undo_ctrlr.redo()
-
-        # TODO: Implement
-        print("redo last")
+        self.undo_ctrlr.redo()
 
     @pyqtSlot()
     def merge_left(self):

@@ -1,38 +1,24 @@
 # PyQt imports
+# Standard imports
+import os
+
+from PyQt5 import QtGui
+from PyQt5 import QtWidgets
+from PyQt5.QtCore import pyqtSlot, Qt
 from PyQt5.QtWidgets import (
-    QTableView,
     QHeaderView,
-    QLineEdit,
-    QAbstractItemView,
-    QPushButton,
-    QMainWindow,
-    QApplication,
     QWidget,
-    QAction,
     QTableWidget,
     QTableWidgetItem,
-    QVBoxLayout,
     QGridLayout,
 )
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
-from PyQt5 import QtGui
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import pyqtSlot, Qt
-
-# Standard imports
-from copy import deepcopy
-import os
 
 # Project imports
 import gui_config as gui_cfg
-import utilities as util
-import undo_redo
-import pmEnums
-import fileIO
-from changeSet import ChangeSet
-import table_row
 import merge_finalizer
+import pmEnums
+import table_row
+import undo_redo
 
 
 class MainTable(QWidget):

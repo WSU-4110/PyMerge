@@ -1,19 +1,19 @@
 # PyQt imports
+# Standard imports
+from copy import deepcopy
+
+from PyQt5 import QtCore
+from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import (
     QPushButton,
     QTableWidget,
     QTableWidgetItem,
 )
-from PyQt5 import QtCore
-from PyQt5.QtCore import pyqtSlot
-
-# Standard imports
-from copy import deepcopy
 
 # Project imports
 import gui_config as gui_cfg
-import undo_redo
 import pmEnums
+import undo_redo
 
 
 class Row(QtCore.QObject):

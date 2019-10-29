@@ -12,7 +12,7 @@
 #cython: Cython.Compiler.Options.clear_to_none=False
 #cython: Cython.wraparound=False
 
-from libc.stdlib cimport malloc, free
+malloc, free
 
 
 cdef longest_common_subsequence(right_set, left_set):

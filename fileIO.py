@@ -3,13 +3,12 @@ fileIO class, providing an interface for the GUI to input files, and get changeS
 changeSet objects, it is able to handle the rest of the application requirements on its
 own untill it is time to write changes. 
 """
-import pmEnums
-import changeSet
-import algorithm
-import diff_resolution
-import os.path
-import utilities
 import ntpath
+
+import changeSet
+import diff_resolution
+import pmEnums
+import utilities
 
 
 class fileIO:

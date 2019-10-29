@@ -1,7 +1,8 @@
-from cython_accelerator import lcs_cython
 import time
 
-USE_CYTHON = True
+from cython_accelerator import lcs_cython
+
+USE_CYTHON = False
 
 
 def mat_print(mat):

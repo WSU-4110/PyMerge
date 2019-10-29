@@ -1,9 +1,9 @@
-import zipfile
+import datetime
 import hashlib
 import os
-import datetime
-import stat
 import pickle
+import zipfile
+
 
 # TODO: Make it so hash type is determined by some information about file during backup retrieval
 # TODO: Add datetime string to backup file name

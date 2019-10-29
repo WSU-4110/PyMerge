@@ -5,16 +5,16 @@
 Main Window
 """
 
-import sys
-from PyQt5.QtWidgets import *
-from PyQt5 import QtGui
-import controlButtons
-import main_table
-import fileIO
-import pmEnums
-import diff_resolution
-import fileOpenDialog
 import os.path
+import sys
+
+from PyQt5.QtWidgets import *
+
+import controlButtons
+import fileIO
+import fileOpenDialog
+import main_table
+import pmEnums
 import utilities
 
 

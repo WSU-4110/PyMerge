@@ -1,6 +1,5 @@
-from enum import Enum, unique, auto
+from enum import Enum, unique
 
-import pmEnums
 import file_backup
 import utilities
 

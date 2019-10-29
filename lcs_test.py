@@ -1,6 +1,6 @@
-from longest_common_subseq import longest_common_subsequence
 from difflib import SequenceMatcher
 
+from longest_common_subseq import longest_common_subsequence
 
 
 def similar(a, b):

@@ -1,10 +1,10 @@
 import sys
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableWidget, QTableWidgetItem, QVBoxLayout
-from PyQt5 import QtWidgets
+
 from PyQt5 import QtCore
 from PyQt5 import QtGui
-from PyQt5.QtGui import QIcon
+from PyQt5 import QtWidgets
 from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtWidgets import QApplication, QWidget, QTableWidget, QTableWidgetItem, QVBoxLayout
 
 
 class Row(QtCore.QObject):

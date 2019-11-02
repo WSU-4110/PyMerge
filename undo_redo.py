@@ -8,8 +8,18 @@ is then copied to a redo buffer.
 
 class Stack(object):
     def __init__(self, stack_size: int):
-        self.max_size: int = stack_size
+        self._max_size: int = 0
         self.stack = []
+
+        self.max_size = stack_size
+
+    @property
+    def max_size(self) -> int:
+        return self._max_size
+
+    @max_size.setter
+    def max_size(self, value: int):
+        self._max_size = value
 
     def stack_push(self, item):
         # Check if stack is full, then append the object onto the end
@@ -58,6 +68,7 @@ class UndoRedoAction(object):
         Set the current state of the row object to what was recorded in the instance variables
         :return: No return value
         """
+        # Copy the copied attribute dictionary over to the object reference
         for key in self.obj_ref.__dict__:
             try:
                 self.obj_ref.__dict__[key] = self.obj_copy[key]
@@ -67,14 +78,8 @@ class UndoRedoAction(object):
 
 
 class UndoRedo(object):
-    _instance = None
-    MAX_BUF_SIZE = 400
-
-    @staticmethod
-    def get_instance(buf_size=15):
-        if UndoRedo._instance is None:
-            UndoRedo(buf_size)
-        return UndoRedo._instance
+    _instance = None    # Holds the single instance of this class
+    MAX_BUF_SIZE = 400  # Hard upper limit for maximum undo/redo buffer size
 
     def __init__(self, buf_size: int):
         if UndoRedo._instance is not None:
@@ -84,6 +89,12 @@ class UndoRedo(object):
             self._undo_buf = Stack(buf_size)
             self._buf_size = buf_size
             UndoRedo._instance = self
+
+    @staticmethod
+    def get_instance(buf_size=15):
+        if UndoRedo._instance is None:
+            UndoRedo(buf_size)
+        return UndoRedo._instance
 
     @property
     def buf_size(self) -> int:
@@ -102,7 +113,7 @@ class UndoRedo(object):
         self._undo_buf.stack_push(UndoRedoAction(record_obj))
 
     def undo(self) -> bool:
-        undo_obj:UndoRedoAction = self._undo_buf.stack_pop()  # Get the state we want to set
+        undo_obj: UndoRedoAction = self._undo_buf.stack_pop()  # Get the state we want to set
 
         # Check if object is None, then push the recorded current state.
         if undo_obj is not None:

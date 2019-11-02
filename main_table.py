@@ -44,11 +44,15 @@ class MainTable(QWidget):
 
         self.change_set_a = change_set_a
         self.change_set_b = change_set_b
+        self.left_file: str = ""
+        self.right_file: str = ""
 
         self.table.verticalHeader().setVisible(
             False
         )  # Disable the automatic line numbers.
         self.table.setVerticalScrollMode(0)
+
+        self.table.rowHeight(10)
 
         # Set the head text
         self.table.setHorizontalHeaderItem(0, QTableWidgetItem("Line"))
@@ -299,6 +303,8 @@ class MainTable(QWidget):
         row_instance = table_row.Row(
             line_num, self.table, right_text, left_text, line_num, change_flags
         )
+        row_instance.actual_indices[0] = left_line_num
+        row_instance.actual_indices[1] = right_line_num
         self.rows.append(row_instance)
 
     def get_lines_from_tbl(self) -> list:
@@ -364,7 +370,6 @@ class MainTable(QWidget):
 
         # generate list of diff lines, to enable prev/next diff jump buttons
         n = 0
-
         while n < len(self.change_set_a.changeList) - 1:
             data_a = [""]
             change_type_a = [pmEnums.CHANGEDENUM.SAME]

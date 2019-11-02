@@ -45,11 +45,10 @@ class MainTable(QWidget):
         self.change_set_a = change_set_a
         self.change_set_b = change_set_b
 
-        print("now")
-        for n in range(len(self.diff_indices)):
-            print(str(self.diff_indices[n]) + "\n")
-
-        self.table.verticalHeader().setVisible(False)  # Disable the automatic line numbers.
+        self.table.verticalHeader().setVisible(
+            False
+        )  # Disable the automatic line numbers.
+        self.table.setVerticalScrollMode(0)
 
         # Set the head text
         self.table.setHorizontalHeaderItem(0, QTableWidgetItem("Line"))
@@ -179,7 +178,6 @@ class MainTable(QWidget):
         """
         if len(self.diff_indices) == 0:
             return
-        print(str(len(self.diff_indices)))
         if self.curr_diff_idx == len(self.diff_indices) - 1:
             self.curr_diff_idx = 0
             self.jump_to_line(self.diff_indices[self.curr_diff_idx])
@@ -215,20 +213,19 @@ class MainTable(QWidget):
         """
 
         # TODO: Implement
-        # undo_ctrlr.undo()
-
-        print("undo last")
+        self.undo_ctrlr.undo()
+        for row in self.rows:
+            row.set_row_state()
 
     @pyqtSlot()
     def redo_last_undo(self):
         """
         redo last undo performed
         :return: No return value
-        """        
-        undo_ctrlr.redo()
-
-        # TODO: Implement
-        print("redo last")
+        """
+        self.undo_ctrlr.redo()
+        for row in self.rows:
+            row.set_row_state()
 
     @pyqtSlot()
     def merge_left(self):
@@ -238,7 +235,7 @@ class MainTable(QWidget):
         indexesList = self.table.selectedIndexes()
         if len(indexesList) != 0:
             print(indexesList[0].data)
-        print ("merge left")
+        print("merge left")
         return 0
 
     @pyqtSlot()
@@ -246,9 +243,8 @@ class MainTable(QWidget):
         """
         merge the whole right selection into the right
         """
-        print ("merge right")
+        print("merge right")
         return 0
-
 
     def jump_to_line(self, line_num, col=0):
         self.table.scrollToItem(
@@ -259,13 +255,13 @@ class MainTable(QWidget):
         )
 
     def add_line(
-            self,
-            right_text: str,
-            left_text: str,
-            line_num: int or str,
-            change_flags,
-            left_line_num=0,
-            right_line_num=0,
+        self,
+        right_text: str,
+        left_text: str,
+        line_num: int or str,
+        change_flags,
+        left_line_num=0,
+        right_line_num=0,
     ):
         """
         Add a row into the table using the right and left text provided as parameters.
@@ -310,11 +306,10 @@ class MainTable(QWidget):
         Gets the data from the table and returns it as a 2D list.
         :return: list containing right and left hand file data
         """
-        outp_left = []
-        outp_right = []
+        outp_left: list = []
+        outp_right: list = []
 
         for row in self.rows:
-            print(row.row_deleted)
             if row.row_deleted[1]:
                 outp_left.append(None)
             else:
@@ -334,6 +329,9 @@ class MainTable(QWidget):
                 print("Error: could not clear main table.")
                 return False
         self.rows.clear()
+        self.table.setRowCount(0)
+        del self.change_set_a.changeList[:]
+        del self.change_set_b.changeList[:]
         return True
 
     def load_table_contents(self, file1=0, file2=0):
@@ -381,8 +379,12 @@ class MainTable(QWidget):
     @pyqtSlot()
     def write_merged_files(self):
         merged_file_contents = self.get_lines_from_tbl()
-        merge_writer = merge_finalizer.MergeFinalizer(self.left_file, self.right_file, "file_backup")
-        merge_writer.finalize_merge(merged_file_contents[0][:-1], merged_file_contents[1][:-1])
+        merge_writer = merge_finalizer.MergeFinalizer(
+            self.left_file, self.right_file, "file_backup"
+        )
+        merge_writer.finalize_merge(
+            merged_file_contents[0][:-1], merged_file_contents[1][:-1]
+        )
 
     def load_test_files(self, file1: str, file2: str):
         """
@@ -402,10 +404,3 @@ class MainTable(QWidget):
 
         self.load_table_contents(file1_contents, file2_contents)
         self.jump_to_line(77)
-
-    def clear_table(self):
-        for n in range(self.table.rowCount()):
-            self.table.removeRow(n)
-        self.table.setRowCount(0)
-        del self.change_set_a.changeList[:]
-        del self.change_set_b.changeList[:]

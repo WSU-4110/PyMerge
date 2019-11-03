@@ -12,9 +12,6 @@
 #cython: Cython.Compiler.Options.clear_to_none=False
 #cython: Cython.wraparound=False
 
-malloc, free
-
-
 cdef longest_common_subsequence(right_set, left_set):
     idx_matches = [[], []]  # Index matches
     cdef unsigned int right_size = len(right_set)  # Calculate the size only once
@@ -57,6 +54,47 @@ cdef longest_common_subsequence(right_set, left_set):
 
     return idx_matches
 
+cdef longest_common_subsequence2(left_set, right_set):
+    cdef unsigned int left_set_size = len(left_set)
+    cdef unsigned int right_set_size = len(right_set)
+    cdef unsigned int total_size = left_set_size + right_set_size
+    cdef unsigned int array_size = 2 * total_size + 1
+    bounded_array = [0] * array_size
+    k_candidates = [None] * array_size
+    outp = [[], []]
+    cdef int  x_idx = 0
+    cdef int  y_idx = 0
+    cdef int  idx = 0
+
+    for d in range(total_size + 1):
+        for k in range(-d, d + 1, 2):
+            if k == -d or (
+                k != d and bounded_array[total_size + k - 1] < bounded_array[total_size + k + 1]
+            ):
+                idx = total_size + k + 1
+                x_idx = bounded_array[idx]
+            else:
+                idx = total_size + k - 1
+                x_idx = bounded_array[idx] + 1
+            y_idx = x_idx - k
+            snake = k_candidates[idx]
+            while x_idx < left_set_size and y_idx < right_set_size and left_set[x_idx] == right_set[y_idx]:
+                snake = ((x_idx, y_idx), snake)
+                x_idx += 1
+                y_idx += 1
+            if x_idx >= left_set_size and y_idx >= right_set_size:
+                while snake:
+                    outp[0].append(snake[0][0])
+                    outp[1].append(snake[0][1])
+                    snake = snake[1]
+                outp[0].reverse()
+                outp[1].reverse()
+                return outp
+            bounded_array[total_size + k] = x_idx
+            k_candidates[total_size + k] = snake
+
+
+
 
 # Pass your match list to this
 cdef pad_raw_line_matches(match_list, int file_length_max):
@@ -91,6 +129,9 @@ cdef pad_raw_line_matches(match_list, int file_length_max):
     return outp_list
 
 
-def padded_lcs(right_set, left_set):
-    raw_matches = longest_common_subsequence(right_set, left_set)
+def padded_lcs(right_set, left_set, myers=True):
+    if myers:
+        raw_matches = longest_common_subsequence2(right_set, left_set)
+    else:
+        raw_matches = longest_common_subsequence(right_set, left_set)
     return pad_raw_line_matches(raw_matches, 0)

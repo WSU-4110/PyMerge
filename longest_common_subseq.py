@@ -1,8 +1,14 @@
 import time
 
-from cython_accelerator import lcs_cython
 
-USE_CYTHON = True
+use_cython = True
+
+try:
+    from cython_accelerator import lcs_cython
+except ImportError:
+    use_cython = False
+
+
 USE_MYERS_DIFF = True
 
 
@@ -117,7 +123,7 @@ def pad_raw_line_matches(match_list, file_length_max):
 
 
 def padded_lcs(right_set, left_set, file_length_max):
-    if USE_CYTHON:
+    if use_cython:
         start = time.time()
         outp = lcs_cython.padded_lcs(right_set, left_set, myers=USE_MYERS_DIFF)
         end = time.time()

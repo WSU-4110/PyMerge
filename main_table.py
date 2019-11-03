@@ -49,10 +49,12 @@ class MainTable(QWidget):
         self.left_file: str = ""
         self.right_file: str = ""
 
+
         self.table.verticalHeader().setVisible(
             False
         )  # Disable the automatic line numbers.
         self.table.setVerticalScrollMode(0)
+
 
         # Set the head text
         self.table.setHorizontalHeaderItem(0, QTableWidgetItem("Line"))
@@ -182,6 +184,7 @@ class MainTable(QWidget):
         """
         if len(self.diff_indices) == 0:
             return
+
         if self.curr_diff_idx == len(self.diff_indices) - 1:
             self.curr_diff_idx = 0
             self.jump_to_line(self.diff_indices[self.curr_diff_idx])
@@ -221,6 +224,7 @@ class MainTable(QWidget):
         for row in self.rows:
             row.set_row_state()
 
+
     @pyqtSlot()
     def redo_last_undo(self):
         """
@@ -230,6 +234,7 @@ class MainTable(QWidget):
         self.undo_ctrlr.redo()
         for row in self.rows:
             row.set_row_state()
+
 
     @pyqtSlot()
     def merge_left(self):

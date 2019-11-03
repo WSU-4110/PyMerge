@@ -47,18 +47,18 @@ class mainWindow(QMainWindow, QMessageBox):
         if fileA != 0 and fileB != 0:
             table_widget.load_table_contents(fileA, fileB)  # Left list arguments for now
         table_widget.load_table_contents()  # Left list arguments for now
-
-        print(id(table_widget))
-        layout.addWidget(controlButtons.controlButtons(table_widget), 0, 0)
+        
+        control_buttons_widget = controlButtons.controlButtons(table_widget)
+        layout.addWidget(control_buttons_widget, 0, 0)
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
-        self.initUI(table_widget)
+        self.initUI(table_widget, control_buttons_widget)
 
-    def initUI(self, tableObj=0):
+    def initUI(self, tableObj=0, butn_widget=0):
         # start GUI
         if tableObj:
-            self.menuItems(tableObj)
+            self.menuItems(tableObj, butn_widget)
         self.show()
 
     def openFile(self, tableObj):
@@ -98,13 +98,14 @@ class mainWindow(QMainWindow, QMessageBox):
 
         tableObj.load_table_contents(fileA, fileB)
 
-    def menuItems(self, tableObj):
+    def menuItems(self, tableObj, butn_widget):
         # ~~~~~~~~~~~~~~~~~~~~~~~~
         # MENUBAR
         # ~~~~~~~~~~~~~~~~~~~~~~~~
         mainMenu = self.menuBar()
         fileMenu = mainMenu.addMenu('File')
         editMenu = mainMenu.addMenu('Edit')
+        viewMenu = mainMenu.addMenu('View')
 
         openFileButton = QAction("Open Files", self)
         openFileButton.setShortcut('Ctrl+o')
@@ -146,6 +147,16 @@ class mainWindow(QMainWindow, QMessageBox):
         redoChangeButn.triggered.connect(tableObj.redo_last_undo)
         editMenu.addAction(redoChangeButn)
 
+        HideShowButtons = QAction("Hide/Show Buttons", self)
+        #no shortcut
+        HideShowButtons.triggered.connect(lambda: self.hideShowButns(butn_widget))
+        viewMenu.addAction(HideShowButtons)
+
+    def hideShowButns(self, butn_widget):        
+        if butn_widget.isVisible():
+            butn_widget.hide()
+        else:
+            butn_widget.show()
 
 def startMain(fileA=0, fileB=0):
     app = QApplication(sys.argv)

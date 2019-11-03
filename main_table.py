@@ -12,6 +12,8 @@ from PyQt5.QtWidgets import (
     QTableWidgetItem,
     QGridLayout,
 )
+from PyQt5.QtCore import QEvent
+from PyQt5.Qt import QResizeEvent
 
 # Project imports
 import gui_config as gui_cfg
@@ -51,8 +53,6 @@ class MainTable(QWidget):
             False
         )  # Disable the automatic line numbers.
         self.table.setVerticalScrollMode(0)
-
-        self.table.rowHeight(10)
 
         # Set the head text
         self.table.setHorizontalHeaderItem(0, QTableWidgetItem("Line"))
@@ -277,6 +277,7 @@ class MainTable(QWidget):
 
         """
         self.table.insertRow(line_num)
+        self.table.setRowHeight(line_num, 28)
         self.table.setItem(line_num, 0, QTableWidgetItem(str(line_num + 1)))
         self.table.setItem(line_num, 1, QTableWidgetItem(str(right_text)))
         self.table.setItem(line_num, 2, QTableWidgetItem(""))

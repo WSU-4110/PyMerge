@@ -7,6 +7,7 @@ Main Window
 
 import sys
 from PyQt5.QtWidgets import *
+from PyQt5.QtCore import pyqtSlot
 from PyQt5 import QtGui
 import controlButtons
 import main_table
@@ -63,6 +64,8 @@ class mainWindow(QMainWindow, QMessageBox):
 
     def openFile(self, tableObj):
 
+        self.statusBar().showMessage('Opening files...')
+
         tableObj.clear_table()
         
         fileOpener = fileOpenDialog.fileOpenDialog()
@@ -97,6 +100,12 @@ class mainWindow(QMainWindow, QMessageBox):
             QMessageBox.about(self, "Error", "Invalid file type")
 
         tableObj.load_table_contents(fileA, fileB)
+
+        self.statusBar().clearMessage()
+
+    @pyqtSlot()
+    def statusBar(self):
+        print("Connect this to methods in main_table.py")
 
     def menuItems(self, tableObj):
         # ~~~~~~~~~~~~~~~~~~~~~~~~

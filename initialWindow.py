@@ -21,5 +21,6 @@ class initialWindow(QMainWindow):
 def startWindow():
     app = QApplication(sys.argv)
     ex = initialWindow()
+    # sys.exit(app.exec_())
 
 

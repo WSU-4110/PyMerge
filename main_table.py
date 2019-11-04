@@ -191,6 +191,11 @@ class MainTable(QWidget):
         Scrolls the table window to the next difference incrementally (starts at the first diff)
         :return: No return value
         """
+
+        next_diff_status_bar = QAction("next diff", self)
+        next_diff_status_bar.connect(lambda: self.openFile(tableObj))
+        next_diff_status_bar.addAction(openFileButton)
+
         if len(self.diff_indices) == 0:
             return
         print(str(len(self.diff_indices)))
@@ -205,6 +210,7 @@ class MainTable(QWidget):
 
     @pyqtSlot()
     def goto_prev_diff(self):
+
         """
         Scrolls the table window to the previous difference incrementally
         :return: No return value

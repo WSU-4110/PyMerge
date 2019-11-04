@@ -6,7 +6,7 @@
 
 
 
-typedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443f
+typedef structtypedef
 {
 	float derivState;      	/* Last position input
 	*/
@@ -22,8 +22,6 @@ typedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444
 
 
 
-
-
 void InitPID(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
 {
 	pid->kP = kP;
@@ -33,8 +31,6 @@ void InitPID(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
 	pid->intgrtMax = iMax;
 }
 //other comment
-
-}
 
 void InitPID(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
 {

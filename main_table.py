@@ -282,6 +282,7 @@ class MainTable(QWidget):
         :return: No return value
 
         """
+
         self.table.insertRow(line_num)
         self.table.setRowHeight(line_num, 28)
         self.table.setItem(line_num, 0, QTableWidgetItem(str(line_num + 1)))
@@ -307,14 +308,19 @@ class MainTable(QWidget):
             gui_cfg.COLORS["TBL_LINE_COL_DEFAULT_BG"]
         )
 
-
+        
         #this instantiation is what I want to limit
         row_instance = self.rowFactory.getRow(
             line_num, self.table, right_text, left_text, line_num, change_flags
-        )
-        #row_instance.actual_indices[0] = left_line_num
-        #row_instance.actual_indices[1] = right_line_num
+        )        
         self.rows.append(row_instance)
+
+    @pyqtSlot()    
+    def getRowCount(self):
+        print( "Row Count: " + str(len(self.rows)))
+        print( "Row Object Count: " + str(len(self.rowFactory.rows)))
+        
+
 
     def get_lines_from_tbl(self) -> list:
         """
@@ -374,7 +380,7 @@ class MainTable(QWidget):
             change_type_b = [pmEnums.CHANGEDENUM.SAME]
             self.change_set_a.getChange(n, change_type_a, data_a)
             self.change_set_b.getChange(n, change_type_b, data_b)
-
+            
             self.add_line(data_a[0], data_b[0], n, [change_type_a[0], change_type_b[0]])
 
         # generate list of diff lines, to enable prev/next diff jump buttons

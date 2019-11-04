@@ -40,6 +40,7 @@ class mainWindow(QMainWindow, QMessageBox):
         #load table
         table_widget = main_table.MainTable(self.fIO.changesA, self.fIO.changesB)            
         #add table
+        
 
         layout.addWidget(table_widget, 1, 0)
 
@@ -151,6 +152,10 @@ class mainWindow(QMainWindow, QMessageBox):
         #no shortcut
         HideShowButtons.triggered.connect(lambda: self.hideShowButns(butn_widget))
         viewMenu.addAction(HideShowButtons)
+
+        ShowRowCount = QAction("Show Row Count", self)
+        ShowRowCount.triggered.connect(tableObj.getRowCount)
+        viewMenu.addAction(ShowRowCount)
 
     def hideShowButns(self, butn_widget):        
         if butn_widget.isVisible():

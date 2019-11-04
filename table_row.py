@@ -74,7 +74,7 @@ class Row(QtCore.QObject):
         elif self.change_state_flags[0] == pmEnums.CHANGEDENUM.ADDED:
             self.set_left_background(gui_cfg.COLORS["ROW_PAD_SPACE"], buttons=True)
 
-        elif self.change_state_flags[0] == pmEnums.CHANGEDENUM.SAME:
+        else: 
             self.set_left_background(gui_cfg.COLORS["ROW_DEFAULT"])
 
         if self.change_state_flags[1] == pmEnums.CHANGEDENUM.CHANGED:
@@ -85,8 +85,7 @@ class Row(QtCore.QObject):
 
         elif self.change_state_flags[1] == pmEnums.CHANGEDENUM.ADDED:
             self.set_right_background(gui_cfg.COLORS["ROW_PAD_SPACE"], buttons=True)
-
-        elif self.change_state_flags[1] == pmEnums.CHANGEDENUM.SAME:
+        else:
             self.set_right_background(gui_cfg.COLORS["ROW_DEFAULT"])
 
     def set_right_background(self, background, buttons=False):

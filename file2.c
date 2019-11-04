@@ -2,14 +2,15 @@
 //asdf
 
 #include "PID.h"
+#include "otherfile"
 
 
 
-
-typedef struct44asdf4443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443f
+typedef structtypedefC
 {
 	float derivState;      	/* Last position input
 	*/
+        float NEW_VARIABLE
 	float intgrtState;      	/* Integrator state */
 	float intgrtMax;    /* Maximum allowable integrator state   */
 	float intgrtMin;    /* Minimum allowable integrator state   */
@@ -27,9 +28,7 @@ void InitPID(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
 	pid->intgrtMin = iMin;
 	pid->intgrtMax = iMax;
 }
-//other comment
 
-}
 void InitPID(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
 {
 	pid->kP = kP;
@@ -38,10 +37,10 @@ void InitPID(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
 	pid->intgrtMin = iMin;
 	pid->intgrtMax = iMax;
 }
-//other comment
+
 
 }
-void InitPID(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
+void InitPIDfunctionB(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
 {
 	pid->kP = kP;
 	pid->kI = kI;
@@ -49,6 +48,6 @@ void InitPID(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
 	pid->intgrtMin = iMin;
 	pid->intgrtMax = iMax;
 }
-//other comment
+//changed comment
 
 }

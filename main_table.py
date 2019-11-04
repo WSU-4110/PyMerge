@@ -21,7 +21,7 @@ import merge_finalizer
 import pmEnums
 import table_row
 import undo_redo
-
+import row_factory
 
 class MainTable(QWidget):
     def __init__(self, change_set_a, change_set_b):
@@ -31,6 +31,7 @@ class MainTable(QWidget):
         super().__init__()
 
         self.rows: list = []
+        self.rowFactory = row_factory.RowFactory()
         grid = QGridLayout()
         self.setLayout(grid)
         self.table = QTableWidget()
@@ -306,11 +307,13 @@ class MainTable(QWidget):
             gui_cfg.COLORS["TBL_LINE_COL_DEFAULT_BG"]
         )
 
-        row_instance = table_row.Row(
+
+        #this instantiation is what I want to limit
+        row_instance = self.rowFactory.getRow(
             line_num, self.table, right_text, left_text, line_num, change_flags
         )
-        row_instance.actual_indices[0] = left_line_num
-        row_instance.actual_indices[1] = right_line_num
+        #row_instance.actual_indices[0] = left_line_num
+        #row_instance.actual_indices[1] = right_line_num
         self.rows.append(row_instance)
 
     def get_lines_from_tbl(self) -> list:

@@ -129,5 +129,3 @@ PyMerge
 
 if __name__ == '__main__':
     PyMergeCLI(sys.argv)
-
-# hello

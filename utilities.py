@@ -4,6 +4,9 @@ General, non-project-specific functions
 """
 import hashlib
 import os
+import sys
+
+from PyQt5.QtWidgets import *
 
 
 def pad_string(string: str, length: int, char=" ", append=True):
@@ -121,3 +124,10 @@ def check_paths(*args):
         except (FileNotFoundError, FileExistsError):
             return False
     return True
+def hashing(ilist):
+    olist=list()
+    for string in ilist:
+        olist.append(int(hashlib.md5(string.encode()).hexdigest(),16))
+    return olist
+def error(self):
+    QmessageBox.critical(self,"Error","There was an error")

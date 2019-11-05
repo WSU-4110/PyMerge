@@ -18,11 +18,4 @@ class controlButtons(QWidget):
         self.setLayout(grid)
         print(id(tableObj))
 
-        merge_left_button = QToolButton()
-        merge_left_button.setFixedSize(80, 50)
-        icon = QtGui.QIcon(gui_config.ICONS["MERGE_LEFT"])
-        merge_left_button.setIcon(icon)
-        merge_left_button.clicked.connect(tableObj.merge_left)
-        grid.addWidget(merge_left_button, 0, 0)
-
 

@@ -1,9 +1,9 @@
-import zipfile
+import datetime
 import hashlib
 import os
-import datetime
-import stat
 import pickle
+import zipfile
+
 
 # TODO: Make it so hash type is determined by some information about file during backup retrieval
 # TODO: Add datetime string to backup file name
@@ -69,12 +69,10 @@ class Backup(object):
         """
         with open(file, 'rb') as in_file:
             file_buf = in_file.read(self.BLOCK_SIZE)
-
+            # hash_obj = self.hash_func().update(file_buf)
             while len(file_buf) > 0:
                 self.hash_func().update(file_buf)
                 file_buf = in_file.read(self.BLOCK_SIZE)
-
-        #print(self.hash_func.hexdigest())
         return self.hash_func().hexdigest()
 
     def check_hash(self, file, hash_value: str) -> bool:
@@ -86,10 +84,12 @@ class Backup(object):
         """
         return str(hash_value) == str(self.get_hash(file))
 
-    def create_backup(self, file: str) -> str:
+    def create_backup(self, file: str, backup_dir: str) -> str:
         """
         Creates a zip archive containing a backup of a file and the hash value
+
         :param file: file to be backed up
+        :param backup_dir:
         :return: absolute path to backup
         """
         # Create hash file to use for integrity checks during backup retrieval
@@ -102,7 +102,7 @@ class Backup(object):
             temp.write(str(self.get_hash(file)))
 
         # Zip the files together
-        with zipfile.ZipFile(f"{file}.bak", 'w', zipfile.ZIP_DEFLATED) as backup:
+        with zipfile.ZipFile(f"{backup_dir}/{file}.bak", 'w', zipfile.ZIP_DEFLATED) as backup:
             backup.write(file)
             backup.write(hash_file)
             backup.write(meta_file)
@@ -140,6 +140,18 @@ class Backup(object):
         # Remove unecessary archive files
         os.remove(f"{self.hash_type}.txt")
         os.remove(f".meta.{file_name}.dat")
+
+    def get_hash_from_backup(self, backup_file: str) -> str:
+        # Extract the archive contents
+        with zipfile.ZipFile(backup_file) as myzip:
+            myzip.extract(f"{self.hash_type}.txt")
+
+        # Read the hash file contents
+        with open(f"{self.hash_type}.txt", 'r') as hash_file:
+            hash_string = hash_file.read().strip('\n')
+
+        os.remove(f"{self.hash_type}.txt")
+        return hash_string
 
 
 def test():

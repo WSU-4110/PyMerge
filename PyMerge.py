@@ -2,20 +2,20 @@
 This is the entry point for the PyMerge program. Command line arguments will be passed
 to this file and the functions in this file will invoke the GUI. There will be no merge/compare/GUI
 algorithms in this file. It will only call the main GUI and application functions.
-
 """
 
 import sys
-import os
+
 import mainWindow
-import utilities.py
+import utilities
+import initialWindow
 
 
 class PyMergeCLI(object):
     def __init__(self, *args):
         self.options: list = self.sanitize(args[0][1:])
         self.file_size_lim: int = 2000000
-        self.cli()        
+        self.cli()
 
     def cli(self):
         """
@@ -35,23 +35,21 @@ class PyMergeCLI(object):
             elif self.options[0] == "--about":
                 self.about_func()
         elif opt_length == 2:
-            if self.check_paths(self.options[0], self.options[1]):
+            if utilities.check_paths(self.options[0], self.options[1]):
                 left_file = self.options[0]
                 right_file = self.options[1]
             elif self.options[0] == "--file":
-                errorbox(self)
                 print("Error: 2 files required for comparison.")
-        elif opt_length == 3 and self.options[0] == "--file" and self.check_paths(self.options[1], self.options[2]):
+        elif opt_length == 3 and self.options[0] == "--file" and utilities.check_paths(self.options[1], self.options[2]):
             left_file = self.options[1]
             right_file = self.options[2]
         elif opt_length == 4 and \
                 self.options[0] == "--file" and \
                 self.options[2] == "--file" and \
-                self.check_paths(self.options[1], self.options[3]):
+                utilities.check_paths(self.options[1], self.options[3]):
             left_file = self.options[1]
             right_file = self.options[3]
         else:
-            errorbox(self)
             print("Error: Invalid options. Type '--help' for information.")
             return
 
@@ -108,6 +106,9 @@ PyMerge
 
     def invoke_application(self, file1: str, file2: str):
         """Invoke the main application here"""
+
+        # initialWindow.startWindow()
+
         if file1 != "" or file2 != "":
             if self.validate_files(file1, file2, path_check=False):
                 mainWindow.startMain(file1, file2)
@@ -115,49 +116,11 @@ PyMerge
             mainWindow.startMain()
         print(file1, file2)
 
-    @staticmethod
-    def validate_file_ext(file: str) -> bool:
-        illegal_exts = {"zip", "bzip", "mp3", "wav", "jpg", "png", "mp4", "ppt", "ods", "tar", "wma", "aif", "m4a",
-                        "mpg", "vob", "wmv", "obj", "gif", "tiff", "3dm", "3ds", "svg", "xls", "xlsx", "7z", "",
-                        "gz", "iso", "bin", "msi", "docx"}
-        file_ext = file.split('.')[-1]
-
-        if file_ext in illegal_exts:
-            errorbox(self)
-            print(f"Error: {file} is not an accepted format.")
-            return False
-        else:
-            return True
-
-    def validate_file_size(self, file: str) -> bool:
-        """
-        Validate the size of a file according to a limit parameter
-        :param file: File to be checked
-        :param size_lim: size limit in bytes
-        :return: boolean indicating whether file is below size limit
-        """
-        if os.stat(file).st_size > self.file_size_lim:
-            errorbox(self)
-            print(f"Error: {file} is greater than limit of {self.file_size_lim} bytes")
-            return False
-        else:
-            return True
-
-    @staticmethod
-    def check_paths(*args):
-        for arg in args:
-            try:
-                if not os.path.exists(arg) or not os.path.isfile(arg):
-                    print("Invalid file path: ", arg)
-                    return False
-            except (FileNotFoundError, FileExistsError):
-                return False
-        return True
-
     def validate_files(self, file1, file2, path_check=False):
-        size_valid = self.validate_file_size(file2) and self.validate_file_size(file2)
-        ext_valid = self.validate_file_ext(file1) and self.validate_file_ext(file2)
-        paths_valid = self.check_paths(file1, file2) if path_check else True
+        size_valid = utilities.validate_file_size(file2, self.file_size_lim) and \
+                     utilities.validate_file_size(file2, self.file_size_lim)
+        ext_valid = utilities.valid_file_ext(file1) and utilities.valid_file_ext(file2)
+        paths_valid = utilities.check_paths(file1, file2) if path_check else True
 
         if size_valid and ext_valid and paths_valid:
             return True

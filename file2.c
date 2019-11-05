@@ -1,13 +1,16 @@
-//
 // Created by Malcolm Hall on 9/20/18.
-//
+//asdf
 
 #include "PID.h"
+#include "otherfile"
 
 
-typedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444443f
+
+typedef structtypedefC
 {
-	float derivState;      	/* Last position input  */
+	float derivState;      	/* Last position input
+	*/
+        float NEW_VARIABLE
 	float intgrtState;      	/* Integrator state */
 	float intgrtMax;    /* Maximum allowable integrator state   */
 	float intgrtMin;    /* Minimum allowable integrator state   */
@@ -17,6 +20,14 @@ typedef struct444443ftypedef struct444443ftypedef struct444443ftypedef struct444
 	float kD;     	/* derivative gain  */
 } SPid;
 
+void InitPID(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
+{
+	pid->kP = kP;
+	pid->kI = kI;
+	pid->k_D = kD;
+	pid->intgrtMin = iMin;
+	pid->intgrtMax = iMax;
+}
 
 void InitPID(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
 {
@@ -28,19 +39,15 @@ void InitPID(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
 }
 
 
-float UpdatePID(SPid* pid, float error, float position)
+}
+void InitPIDfunctionB(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
 {
-	float pTerm, dTerm, iTerm;
-
-	// Maximum and minimum allowable integrator state
-	pTerm = pid->kP * error;
-
-	/*  calculate the integral state with appropriate limiting  */
-	pid->intgrtState += error;
-	if (pid->intgrtState > pid->intgrtMax)
-	{
-		pid->intgrtState = pid->intgrtMax;
-	}
-	else if (pid->intgrtState < pid->intgrtMin)
+	pid->kP = kP;
+	pid->kI = kI;
+	pid->k_D = kD;
+	pid->intgrtMin = iMin;
+	pid->intgrtMax = iMax;
+}
+//changed comment
 
 }

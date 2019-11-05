@@ -121,10 +121,3 @@ def check_paths(*args):
         except (FileNotFoundError, FileExistsError):
             return False
     return True
-def hashing(ilist):
-    olist=list()
-    for string in ilist:
-        olist.append(int(hashlib.md5(string.encode()).hexdigest(),16))
-    return olist
-def error(self,Message):
-    QmessageBox.critical(self,"Error",Message)

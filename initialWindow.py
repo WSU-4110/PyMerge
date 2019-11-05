@@ -7,7 +7,7 @@ Initial Window
 
 import sys
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import pyqtSlot, Qt
 from PyQt5 import QtGui
 import controlButtons
 import main_table
@@ -20,28 +20,38 @@ import utilities
 
 
 class initialWindow(QMainWindow, QMessageBox):
-    def __init__(self, fileA=0, fileB=0):
+    def __init__(self):
         super().__init__()
         self.setWindowTitle("PyMerge-init")
         self.setGeometry(500, 250, 500, 250)
         layout = QGridLayout()
 
-        widget = QWidget()
-        widget.setLayout(layout)
-        self.setCentralWidget(widget)
+        # widget = QWidget()
+        # widget.setLayout(layout)
+        # self.setCentralWidget(widget)
 
-        button = QPushButton('PyQt5 button', self)
-        button.setToolTip('This is an example button')
-        button.move(500, 70)
+        importFile1Button = QPushButton('import file', self)
+        importFile1Button.resize(100,50)
+        importFile1Button.move(83, 75)
+        importFile1Button.clicked.connect(self.import_file1_on_click)
+
+        importFile2Button = QPushButton('import file', self)
+        importFile2Button.resize(100, 50)
+        importFile2Button.move(300, 75)
+        importFile2Button.clicked.connect(self.import_file2_on_click)
 
         self.show()
 
     @pyqtSlot()
-    def on_click(self):
-        print('PyQt5 button click')
+    def import_file1_on_click(self):
+        print('Importing file 1')
 
-def startMain(fileA=0, fileB=0):
+    @pyqtSlot()
+    def import_file2_on_click(self):
+        print('Importing file 2')
+
+def startMain():
     app = QApplication(sys.argv)
-    ex = initialWindow(fileA, fileB)
+    ex = initialWindow()
     sys.exit(app.exec_())
 

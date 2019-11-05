@@ -108,7 +108,7 @@ PyMerge
     def invoke_application(self, file1: str, file2: str):
         """Invoke the main application here"""
 
-        initialWindow.startMain(file1,file2)
+        initialWindow.startMain()
 
         # if file1 != "" or file2 != "":
         #     if self.validate_files(file1, file2, path_check=False):

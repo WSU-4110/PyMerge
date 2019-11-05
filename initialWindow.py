@@ -1,7 +1,13 @@
 #!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
+"""
+Initial Window
+"""
 
 import sys
 from PyQt5.QtWidgets import *
+from PyQt5.QtCore import pyqtSlot
 from PyQt5 import QtGui
 import controlButtons
 import main_table
@@ -12,15 +18,30 @@ import fileOpenDialog
 import os.path
 import utilities
 
-class initialWindow(QMainWindow):
-    def __init__(self):
+
+class initialWindow(QMainWindow, QMessageBox):
+    def __init__(self, fileA=0, fileB=0):
         super().__init__()
-        self.setWindowTitle("Initial Window")
-        self.setGeometry(1000, 1000, 2000, 1000)
+        self.setWindowTitle("PyMerge-init")
+        self.setGeometry(500, 250, 500, 250)
+        layout = QGridLayout()
 
-def startWindow():
+        widget = QWidget()
+        widget.setLayout(layout)
+        self.setCentralWidget(widget)
+
+        button = QPushButton('PyQt5 button', self)
+        button.setToolTip('This is an example button')
+        button.move(500, 70)
+
+        self.show()
+
+    @pyqtSlot()
+    def on_click(self):
+        print('PyQt5 button click')
+
+def startMain(fileA=0, fileB=0):
     app = QApplication(sys.argv)
-    ex = initialWindow()
-    # sys.exit(app.exec_())
-
+    ex = initialWindow(fileA, fileB)
+    sys.exit(app.exec_())
 

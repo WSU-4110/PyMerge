@@ -49,6 +49,8 @@ class MainTable(QWidget):
         # Contains the index of the current diff that has been jumped to
         self.curr_diff_idx: int = -1
         self.selected_block: list = [0, 0]
+        self.block_undo_size: list = []
+        self.block_redo_size: list = []
 
         self.table.cellClicked.connect(self.cellClickedEvent)
         
@@ -232,7 +234,13 @@ class MainTable(QWidget):
         """
 
         # TODO: Implement
-        self.undo_ctrlr.undo()
+        if len(self.block_undo_size) != 0:
+            n = self.block_undo_size.pop()
+            self.block_redo_size.append(n)
+            for i in range(n):            
+                self.undo_ctrlr.undo()
+        else:
+            self.undo_ctrlr.undo()
         for row in self.rows:
             row.set_row_state()
 
@@ -243,7 +251,13 @@ class MainTable(QWidget):
         redo last undo performed
         :return: No return value
         """
-        self.undo_ctrlr.redo()
+        if len(self.block_redo_size) != 0:
+            n = self.block_redo_size.pop()
+            self.block_undo_size.append(n)
+            for i in range(n):
+                self.undo_ctrlr.redo()
+        else:
+            self.undo_ctrlr.redo()
         for row in self.rows:
             row.set_row_state()
 
@@ -256,8 +270,8 @@ class MainTable(QWidget):
         self.table.clearSelection()
         for n in range(self.selected_block[0], self.selected_block[1]):
             self.rows[n].merge_left()
-        if self.selected_block[1] - self.selected_block[0] > 1:
-            self.undo_ctrlr.record_block_action(self.selected_block[1] - self.selected_block[0])
+        
+        self.block_undo_size.append(self.selected_block[1] - self.selected_block[0])
                 
         return
 
@@ -269,8 +283,8 @@ class MainTable(QWidget):
         self.table.clearSelection()
         for n in range(self.selected_block[0], self.selected_block[1]):
             self.rows[n].merge_right()
-        if self.selected_block[1] - self.selected_block[0] > 1:
-            self.undo_ctrlr.record_block_action(self.selected_block[1] - self.selected_block[0])
+        
+        self.block_undo_size.append(self.selected_block[1] - self.selected_block[0])
                 
         return
 

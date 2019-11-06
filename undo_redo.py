@@ -88,6 +88,8 @@ class UndoRedo(object):
             self._redo_buf = Stack(buf_size)
             self._undo_buf = Stack(buf_size)
             self._buf_size = buf_size
+            self._block_undo = []
+            self._block_redo = []
             UndoRedo._instance = self
 
     @staticmethod
@@ -112,26 +114,45 @@ class UndoRedo(object):
     def record_action(self, record_obj):
         self._undo_buf.stack_push(UndoRedoAction(record_obj))
 
+    def record_block_action(self, undoBlockSize: int):
+        self._block_undo.append(undoBlockSize)
+
     def undo(self) -> bool:
-        undo_obj: UndoRedoAction = self._undo_buf.stack_pop()  # Get the state we want to set
+        if len(self._block_undo) == 0:
+            undo_obj: UndoRedoAction = self._undo_buf.stack_pop()  # Get the state we want to set
 
-        # Check if object is None, then push the recorded current state.
-        if undo_obj is not None:
-            self._redo_buf.stack_push(UndoRedoAction(undo_obj.obj_ref))
+            # Check if object is None, then push the recorded current state.
+            if undo_obj is not None:
+                self._redo_buf.stack_push(UndoRedoAction(undo_obj.obj_ref))        
+                #Restore the state to what was popped
+                undo_obj.set_state()
+            return True
 
-            # Restore the state to what was popped
-            undo_obj.set_state()
+        else:
+            print("poping multiple")
+            block_undo_size = self._block_undo.pop()
+            self._block_redo.append(block_undo_size)            
+            for n in range(block_undo_size):                
+                print(n)
+                
             return True
         return False
 
     def redo(self) -> bool:
-        redo_obj: UndoRedoAction = self._redo_buf.stack_pop()
+        if len(self._block_redo) == 0:
+            redo_obj: UndoRedoAction = self._redo_buf.stack_pop()
 
-        # Check if object is None, then push the recorded current state.
-        if redo_obj is not None:
-            self._undo_buf.stack_push(UndoRedoAction(redo_obj.obj_ref))
+            # Check if object is None, then push the recorded current state.
+            if redo_obj is not None:
+                self._undo_buf.stack_push(UndoRedoAction(redo_obj.obj_ref))
 
-            # Restore the state to what was popped
-            redo_obj.set_state()
+                # Restore the state to what was popped
+                redo_obj.set_state()
+                return True
+        else:
+            print("redoing multiple")
+            for n in range(self._block_redo.pop()):
+                print(n)
+                
             return True
         return False

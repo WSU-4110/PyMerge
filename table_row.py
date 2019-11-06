@@ -76,7 +76,7 @@ class Row(QtCore.QObject):
 
         elif self.change_state_flags[0] == pmEnums.CHANGEDENUM.SAME:
             self.set_left_background(gui_cfg.COLORS["ROW_DEFAULT"])
-
+            #self.table.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
         if self.change_state_flags[1] == pmEnums.CHANGEDENUM.CHANGED:
             self.set_right_background(gui_cfg.COLORS["ROW_DIFF"], buttons=True)
 
@@ -85,11 +85,13 @@ class Row(QtCore.QObject):
 
         elif self.change_state_flags[1] == pmEnums.CHANGEDENUM.ADDED:
             self.set_right_background(gui_cfg.COLORS["ROW_PAD_SPACE"], buttons=True)
-
+            
         elif self.change_state_flags[1] == pmEnums.CHANGEDENUM.SAME:
             self.set_right_background(gui_cfg.COLORS["ROW_DEFAULT"])
+            #self.table.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
 
     def set_right_background(self, background, buttons=False):
+        #self.table.item(self.row_num, gui_cfg.RIGHT_TXT_COL_IDX).setFlags(QtCore.Qt.ItemIsEditable)
         self.table.item(self.row_num, gui_cfg.RIGHT_TXT_COL_IDX).setBackground(
             background
         )

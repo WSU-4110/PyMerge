@@ -130,8 +130,8 @@ class Row(QtCore.QObject):
         :return: No return value
         """
         # This is a significant user action so we need to record the change in the undo stack
-        self.undo_ctrlr.record_action(self)
-
+        self.undo_ctrlr.record_action(self)        
+        self.undo_ctrlr.undo_buf_size += 1
         # Set booleans
         if self.change_state_flags[1] == pmEnums.CHANGEDENUM.ADDED:
             self.row_deleted[0] = True
@@ -164,8 +164,8 @@ class Row(QtCore.QObject):
         :return: No return value
         """
         # This is a significant user action so we need to record the change in the undo stack
-        self.undo_ctrlr.record_action(self)
-
+        self.undo_ctrlr.record_action(self)    
+        self.undo_ctrlr.undo_buf_size += 1
         # Set booleans
         if self.change_state_flags[0] == pmEnums.CHANGEDENUM.ADDED:
             self.row_deleted[0] = True

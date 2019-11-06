@@ -25,6 +25,7 @@ class Stack(object):
         # Check if stack is full, then append the object onto the end
         if len(self.stack) < self.max_size or self.max_size == -1:
             self.stack.append(item)
+            
         else:
             self._rotate()
             self.stack[-1] = item
@@ -87,6 +88,7 @@ class UndoRedo(object):
         else:
             self._redo_buf = Stack(buf_size)
             self._undo_buf = Stack(buf_size)
+            self.undo_buf_size = 0
             self._buf_size = buf_size            
             UndoRedo._instance = self
 
@@ -114,7 +116,7 @@ class UndoRedo(object):
 
 
     def undo(self) -> bool:
-
+        
         undo_obj: UndoRedoAction = self._undo_buf.stack_pop()  # Get the state we want to set
         
         # Check if object is None, then push the recorded current state.

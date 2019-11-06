@@ -105,7 +105,7 @@ class MainTable(QWidget):
         # Convert icon paths from gui_config.py to QIcon objects
         gui_cfg.convert_icon_dict()
         grid.addWidget(self.table)
-
+    
     def set_tbl_fonts_and_colors(self):
         """
         Contains all the function calls required to setup the color and text formatting for the table.
@@ -233,14 +233,24 @@ class MainTable(QWidget):
         :return: No return value
         """
 
-        # TODO: Implement
+        undoStackSize = 0
+        for n in self.block_undo_size:
+            undoStackSize += n
+        
+        difference = self.undo_ctrlr.undo_buf_size - undoStackSize        
+        for i in range(difference):            
+            self.block_undo_size.append(1)
+        
         if len(self.block_undo_size) != 0:
             n = self.block_undo_size.pop()
             self.block_redo_size.append(n)
             for i in range(n):            
                 self.undo_ctrlr.undo()
+                self.undo_ctrlr.undo_buf_size -= 1
         else:
             self.undo_ctrlr.undo()
+            if self.undo_ctrlr.undo_buf_size != 0:
+                self.undo_ctrlr.undo_buf_size -= 1
         for row in self.rows:
             row.set_row_state()
 
@@ -261,31 +271,50 @@ class MainTable(QWidget):
         for row in self.rows:
             row.set_row_state()
 
-
     @pyqtSlot()
     def merge_left(self):
         """
         merge the whole left selection into the right
         """
+        
         self.table.clearSelection()
         for n in range(self.selected_block[0], self.selected_block[1]):
             self.rows[n].merge_left()
         
         self.block_undo_size.append(self.selected_block[1] - self.selected_block[0])
                 
+        undoStackSize = 0
+        for n in self.block_undo_size:
+            undoStackSize += n
+        
+        difference = undoStackSize - self.undo_ctrlr.undo_buf_size
+        difference = abs(difference)
+        for i in range(difference):
+            self.block_undo_size.insert( len(self.block_undo_size)-1, 1)
+
         return
 
     @pyqtSlot()
     def merge_right(self):
         """
         merge the whole right selection into the left
-        """
+        """                
+      
         self.table.clearSelection()
         for n in range(self.selected_block[0], self.selected_block[1]):
             self.rows[n].merge_right()
-        
+
         self.block_undo_size.append(self.selected_block[1] - self.selected_block[0])
-                
+        
+        undoStackSize = 0
+        for n in self.block_undo_size:
+            undoStackSize += n
+
+        difference = undoStackSize - self.undo_ctrlr.undo_buf_size
+        difference = abs(difference)
+        for i in range(difference):
+            self.block_undo_size.insert( len(self.block_undo_size)-1, 1)
+        
         return
 
     @pyqtSlot()
@@ -309,6 +338,8 @@ class MainTable(QWidget):
             self.table.selectRow(line_num), QtWidgets.QAbstractItemView.PositionAtTop
         )
 
+    
+        
     def add_line(
         self,
         right_text: str,
@@ -357,6 +388,7 @@ class MainTable(QWidget):
         )
         row_instance.actual_indices[0] = left_line_num
         row_instance.actual_indices[1] = right_line_num
+        
         self.rows.append(row_instance)
 
     def get_lines_from_tbl(self) -> list:
@@ -390,6 +422,8 @@ class MainTable(QWidget):
         self.table.setRowCount(0)
         del self.change_set_a.changeList[:]
         del self.change_set_b.changeList[:]
+        self.block_undo_size.clear()
+        self.block_redo_size.clear()
         return True
 
     def load_table_contents(self, file1=0, file2=0):
@@ -488,7 +522,7 @@ class MainTable(QWidget):
         else:
             self.select_block(self.table.currentRow())
         
-        
-
-        
-        
+ 
+ 
+ 
+ 

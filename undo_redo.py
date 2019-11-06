@@ -63,6 +63,7 @@ class UndoRedoAction(object):
     def __init__(self, record_obj):
         self.obj_copy = record_obj.__dict__.copy()
         self.obj_ref = record_obj
+        
 
     def set_state(self):
         """
@@ -71,6 +72,8 @@ class UndoRedoAction(object):
         """
         # Copy the copied attribute dictionary over to the object reference
         for key in self.obj_ref.__dict__:
+            self.obj_ref.right_button.setEnabled(True)
+            self.obj_ref.left_button.setEnabled(True)
             try:
                 self.obj_ref.__dict__[key] = self.obj_copy[key]
             except KeyError:

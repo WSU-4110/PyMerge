@@ -331,7 +331,7 @@ class MainTable(QWidget):
     def jump_to_line(self, line_num, col=0):
         self.table.clearSelection()
         self.table.scrollToItem(
-            self.table.item(line_num, col), QtWidgets.QAbstractItemView.PositionAtTop
+            self.table.item(line_num-1, col), QtWidgets.QAbstractItemView.PositionAtTop
         )
         
         self.table.scrollToItem(
@@ -424,6 +424,11 @@ class MainTable(QWidget):
         del self.change_set_b.changeList[:]
         self.block_undo_size.clear()
         self.block_redo_size.clear()
+        self.curr_diff_idx = -1
+        self.selected_block[0] = 0
+        self.selected_block[1] = 0
+        self.diff_indices.clear()
+        self.diff_index_block_end.clear()
         return True
 
     def load_table_contents(self, file1=0, file2=0):

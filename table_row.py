@@ -76,7 +76,7 @@ class Row(QtCore.QObject):
 
         elif self.change_state_flags[0] == pmEnums.CHANGEDENUM.SAME:
             self.set_left_background(gui_cfg.COLORS["ROW_DEFAULT"])
-
+            #self.table.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
         if self.change_state_flags[1] == pmEnums.CHANGEDENUM.CHANGED:
             self.set_right_background(gui_cfg.COLORS["ROW_DIFF"], buttons=True)
 
@@ -85,11 +85,13 @@ class Row(QtCore.QObject):
 
         elif self.change_state_flags[1] == pmEnums.CHANGEDENUM.ADDED:
             self.set_right_background(gui_cfg.COLORS["ROW_PAD_SPACE"], buttons=True)
-
+            
         elif self.change_state_flags[1] == pmEnums.CHANGEDENUM.SAME:
             self.set_right_background(gui_cfg.COLORS["ROW_DEFAULT"])
+            #self.table.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
 
     def set_right_background(self, background, buttons=False):
+        #self.table.item(self.row_num, gui_cfg.RIGHT_TXT_COL_IDX).setFlags(QtCore.Qt.ItemIsEditable)
         self.table.item(self.row_num, gui_cfg.RIGHT_TXT_COL_IDX).setBackground(
             background
         )
@@ -128,8 +130,8 @@ class Row(QtCore.QObject):
         :return: No return value
         """
         # This is a significant user action so we need to record the change in the undo stack
-        self.undo_ctrlr.record_action(self)
-
+        self.undo_ctrlr.record_action(self)        
+        self.undo_ctrlr.undo_buf_size += 1
         # Set booleans
         if self.change_state_flags[1] == pmEnums.CHANGEDENUM.ADDED:
             self.row_deleted[0] = True
@@ -151,7 +153,9 @@ class Row(QtCore.QObject):
         self.left_background_color = gui_cfg.COLORS["ROW_MERGED"]
         self.right_background_color = gui_cfg.COLORS["ROW_MERGED"]
         self.right_text = self.left_text
-
+        self.right_button.setEnabled(False)
+        self.left_button.setEnabled(False)
+                
         # Table isn't gonna repaint itself. Gotta show users the changes we just made.
         self.table.repaint()
 
@@ -162,8 +166,8 @@ class Row(QtCore.QObject):
         :return: No return value
         """
         # This is a significant user action so we need to record the change in the undo stack
-        self.undo_ctrlr.record_action(self)
-
+        self.undo_ctrlr.record_action(self)    
+        self.undo_ctrlr.undo_buf_size += 1
         # Set booleans
         if self.change_state_flags[0] == pmEnums.CHANGEDENUM.ADDED:
             self.row_deleted[0] = True
@@ -184,7 +188,9 @@ class Row(QtCore.QObject):
         self.left_background_color = gui_cfg.COLORS["ROW_MERGED"]
         self.right_background_color = gui_cfg.COLORS["ROW_MERGED"]
         self.left_text = self.right_text
-
+        
+        self.left_button.setEnabled(False)
+        self.right_button.setEnabled(False)        
         # Table isn't gonna repaint itself. Gotta show users the changes we just made.
         self.table.repaint()
 

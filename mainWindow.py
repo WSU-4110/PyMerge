@@ -23,6 +23,8 @@ class mainWindow(QMainWindow, QMessageBox):
         super().__init__()
         self.setWindowTitle("PyMerge")
         self.setGeometry(1000, 1000, 2000, 1000)
+        self.table_widget = 0
+        self.control_buttons_widget = 0
         layout = QGridLayout()
 
         # load files and generate changesets
@@ -32,38 +34,35 @@ class mainWindow(QMainWindow, QMessageBox):
             result = self.fIO.diffFiles(fileA, fileB)
             if result == pmEnums.RESULT.GOOD:
                 result = self.fIO.getChangeSets(self.fIO.changesA, self.fIO.changesB)
-                
-        if result == pmEnums.RESULT.GOOD:
-            pass #pass the changesets to window class or whatever to be loaded into the table
 
-        table_widget = 0   
+        self.table_widget = 0   
         #load table
-        table_widget = main_table.MainTable(self.fIO.changesA, self.fIO.changesB)            
+        self.table_widget = main_table.MainTable(self.fIO.changesA, self.fIO.changesB)            
         #add table
 
-        layout.addWidget(table_widget, 1, 0)
+        layout.addWidget(self.table_widget, 1, 0)
 
         #load table with fileA and B if present from command line
         if fileA != 0 and fileB != 0:
-            table_widget.load_table_contents(fileA, fileB)  # Left list arguments for now
-        table_widget.load_table_contents()  # Left list arguments for now
+            self.table_widget.load_table_contents(fileA, fileB)  # Left list arguments for now
+        self.table_widget.load_table_contents()  # Left list arguments for now
         
-        control_buttons_widget = controlButtons.controlButtons(table_widget)
-        layout.addWidget(control_buttons_widget, 0, 0)
+        self.control_buttons_widget = controlButtons.controlButtons(self.table_widget)
+        layout.addWidget(self.control_buttons_widget, 0, 0)
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
-        self.initUI(table_widget, control_buttons_widget)
+        self.initUI()
 
-    def initUI(self, tableObj=0, butn_widget=0):
+    def initUI(self):
         # start GUI
-        if tableObj:
-            self.menuItems(tableObj, butn_widget)
+
+        self.menuItems()
         self.show()
 
-    def openFile(self, tableObj):
+    def openFile(self):
 
-        tableObj.clear_table()
+        self.table_widget.clear_table()
         
         fileOpener = fileOpenDialog.fileOpenDialog()
 
@@ -96,9 +95,9 @@ class mainWindow(QMainWindow, QMessageBox):
         elif result == pmEnums.RESULT.BADFILE:
             QMessageBox.about(self, "Error", "Invalid file type")
 
-        tableObj.load_table_contents(fileA, fileB)
+        self.table_widget.load_table_contents(fileA, fileB)
 
-    def menuItems(self, tableObj, butn_widget):
+    def menuItems(self):
         # ~~~~~~~~~~~~~~~~~~~~~~~~
         # MENUBAR
         # ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -109,54 +108,60 @@ class mainWindow(QMainWindow, QMessageBox):
 
         openFileButton = QAction("Open Files", self)
         openFileButton.setShortcut('Ctrl+o')
-        openFileButton.triggered.connect(lambda: self.openFile(tableObj))
+        openFileButton.triggered.connect(lambda: self.openFile())
         fileMenu.addAction(openFileButton)
 
         saveFileButton = QAction("Save Files", self)
         saveFileButton.setShortcut('Ctrl+s')
-        saveFileButton.triggered.connect(tableObj.write_merged_files)
+        saveFileButton.triggered.connect(self.table_widget.write_merged_files)
         fileMenu.addAction(saveFileButton)
 
         mergeLeftButton = QAction("Merge Left", self)
         mergeLeftButton.setShortcut('Ctrl+l')        
-        mergeLeftButton.triggered.connect(tableObj.merge_left)
+        mergeLeftButton.triggered.connect(self.table_widget.merge_left)
         editMenu.addAction(mergeLeftButton)
 
         mergeRightButton = QAction("Merge Right", self)
         mergeRightButton.setShortcut('Ctrl+r')        
-        mergeRightButton.triggered.connect(tableObj.merge_right)
+        mergeRightButton.triggered.connect(self.table_widget.merge_right)
         editMenu.addAction(mergeRightButton)
 
         previousDiffButn = QAction("Previous Difference", self)
         previousDiffButn.setShortcut('Ctrl+p')
-        previousDiffButn.triggered.connect(tableObj.goto_prev_diff)
+        previousDiffButn.triggered.connect(self.table_widget.goto_prev_diff)
         editMenu.addAction(previousDiffButn)
 
         nextDiffButn = QAction("Next Difference", self)
         nextDiffButn.setShortcut('Ctrl+n')
-        nextDiffButn.triggered.connect(tableObj.goto_next_diff)
+        nextDiffButn.triggered.connect(self.table_widget.goto_next_diff)
         editMenu.addAction(nextDiffButn)
 
         undoChangeButn = QAction("Undo", self)
         undoChangeButn.setShortcut('Ctrl+z')
-        undoChangeButn.triggered.connect(tableObj.undo_last_change)
+        undoChangeButn.triggered.connect(self.table_widget.undo_last_change)
         editMenu.addAction(undoChangeButn)
 
         redoChangeButn = QAction("Redo", self)
         redoChangeButn.setShortcut('Ctrl+y')
-        redoChangeButn.triggered.connect(tableObj.redo_last_undo)
+        redoChangeButn.triggered.connect(self.table_widget.redo_last_undo)
         editMenu.addAction(redoChangeButn)
 
         HideShowButtons = QAction("Hide/Show Buttons", self)
         #no shortcut
-        HideShowButtons.triggered.connect(lambda: self.hideShowButns(butn_widget))
+        HideShowButtons.triggered.connect(lambda: self.hideShowButns())
         viewMenu.addAction(HideShowButtons)
 
-    def hideShowButns(self, butn_widget):        
-        if butn_widget.isVisible():
-            butn_widget.hide()
+
+        row = QAction("current row", self)
+        #no shortcut
+        row.triggered.connect(self.table_widget.printCurrentRow)
+        viewMenu.addAction(row)
+
+    def hideShowButns(self):        
+        if self.control_buttons_widget.isVisible():
+            self.control_buttons_widget.hide()
         else:
-            butn_widget.show()
+            self.control_buttons_widget.show()
 
 def startMain(fileA=0, fileB=0):
     app = QApplication(sys.argv)

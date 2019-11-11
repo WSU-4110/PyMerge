@@ -103,39 +103,39 @@ class MergeFinalizer(object):
         outp_set_left: list = []
         outp_set_right: list = []
 
-        if utilities.file_writable(self.outp_file_left) and utilities.file_writable(self.outp_file_right):
-            if (
-                self.type_checker(left_set, target_type=str) == Status.TYPE_CHK_SUCCESS
-                and self.type_checker(right_set, target_type=str) == Status.TYPE_CHK_SUCCESS
-            ):
-                if (
-                    self.deletion(left_set, outp_set_left) == Status.DELETE_SUCCESS
-                    and self.deletion(right_set, outp_set_right) == Status.DELETE_SUCCESS
-                ):
-                    if self.backup_file() == Status.BACKUP_SUCCESS:
-                        try:
-                            with open(self.outp_file_left, "w") as file:
-                                for line in outp_set_left:
-                                    file.write(line)
-                                    if "\n" not in line:
-                                        file.write("\n")
-                        except (FileExistsError, FileNotFoundError):
-                            return Status.FILE_WRITE_ERROR
-                        try:
-                            with open(self.outp_file_right, "w") as file:
-                                for line in outp_set_right:
-                                    file.write(line)
-                                    if "\n" not in line:
-                                        file.write("\n")
-                        except (FileExistsError, FileNotFoundError):
-                            return Status.FILE_WRITE_ERROR
-                    else:
-                        return Status.BACKUP_ERROR
-                else:
-                    return Status.DELETE_ERROR
-            else:
-                return Status.TYPE_CHK_ERROR
-        else:
+        if not utilities.file_writable(self.outp_file_left) or not utilities.file_writable(self.outp_file_right):
             return Status.FILE_PERMISSION_ERR
+
+        elif (
+            self.type_checker(left_set, target_type=str) != Status.TYPE_CHK_SUCCESS
+            or self.type_checker(right_set, target_type=str) != Status.TYPE_CHK_SUCCESS
+        ):
+            return Status.TYPE_CHK_ERROR
+
+        elif (
+            self.deletion(left_set, outp_set_left) != Status.DELETE_SUCCESS
+            or self.deletion(right_set, outp_set_right) != Status.DELETE_SUCCESS
+        ):
+            return Status.DELETE_ERROR
+
+        elif self.backup_file() != Status.BACKUP_SUCCESS:
+            return Status.BACKUP_ERROR
+        else:
+            try:
+                with open(self.outp_file_left, "w") as file:
+                    for line in outp_set_left:
+                        file.write(line)
+                        if "\n" not in line:
+                            file.write("\n")
+            except (FileExistsError, FileNotFoundError):
+                return Status.FILE_WRITE_ERROR
+            try:
+                with open(self.outp_file_right, "w") as file:
+                    for line in outp_set_right:
+                        file.write(line)
+                        if "\n" not in line:
+                            file.write("\n")
+            except (FileExistsError, FileNotFoundError):
+                return Status.FILE_WRITE_ERROR
 
         return Status.MERGE_FINALIZE_SUCCESS

@@ -79,7 +79,7 @@ class UndoRedoAction(object):
 
 class UndoRedo(object):
     _instance = None    # Holds the single instance of this class
-    MAX_BUF_SIZE = 400  # Hard upper limit for maximum undo/redo buffer size
+    _max_buf_size = 400  # Hard upper limit for maximum undo/redo buffer size
 
     def __init__(self, buf_size: int):
         if UndoRedo._instance is not None:
@@ -90,11 +90,19 @@ class UndoRedo(object):
             self._buf_size = buf_size
             UndoRedo._instance = self
 
-    @staticmethod
-    def get_instance(buf_size=15):
+    @property
+    def instance(self):
         if UndoRedo._instance is None:
-            UndoRedo(buf_size)
+            UndoRedo(15)
         return UndoRedo._instance
+
+    @property
+    def max_buf_size(self):
+        return self._max_buf_size
+
+    @max_buf_size.setter
+    def max_buf_size(self, value):
+        self._max_buf_size = value
 
     @property
     def buf_size(self) -> int:
@@ -104,8 +112,8 @@ class UndoRedo(object):
     def buf_size(self, value: int):
         if value <= 0:
             self._buf_size = 0
-        elif value >= self.MAX_BUF_SIZE:
-            self._buf_size = self.MAX_BUF_SIZE
+        elif value >= self._max_buf_size:
+            self._buf_size = self._max_buf_size
         else:
             self._buf_size = value
 

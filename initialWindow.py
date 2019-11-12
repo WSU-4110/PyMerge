@@ -39,15 +39,15 @@ class initialWindow(QMainWindow, QMessageBox):
         self.file_label1 = QLabel(self)
         self.file_label2 = QLabel(self)
 
-        importFile1Button = QPushButton('import file', self)
-        importFile1Button.resize(100,50)
-        importFile1Button.move(50, 75)
-        importFile1Button.clicked.connect(self.import_file1_on_click)
+        self.importFile1Button = QPushButton('import file', self)
+        self.importFile1Button.resize(100,50)
+        self.importFile1Button.move(50, 75)
+        self.importFile1Button.clicked.connect(self.import_file1_on_click)
 
-        importFile2Button = QPushButton('import file', self)
-        importFile2Button.resize(100, 50)
-        importFile2Button.move(350, 75)
-        importFile2Button.clicked.connect(self.import_file2_on_click)
+        self.importFile2Button = QPushButton('import file', self)
+        self.importFile2Button.resize(100, 50)
+        self.importFile2Button.move(350, 75)
+        self.importFile2Button.clicked.connect(self.import_file2_on_click)
 
         compare = QPushButton('compare', self)
         compare.resize(100, 30)
@@ -59,6 +59,7 @@ class initialWindow(QMainWindow, QMessageBox):
 
     @pyqtSlot()
     def import_file1_on_click(self):
+        self.importFile1Button.setEnabled(False)
         print('Importing file 1')
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File')
         self.fileA = filename
@@ -66,9 +67,11 @@ class initialWindow(QMainWindow, QMessageBox):
         self.file_label1.setText(ntpath.basename(self.fileA))
         self.file_label1.move(60, 150)
         self.file_label1.show()
+        self.importFile1Button.setEnabled(True)
 
     @pyqtSlot()
     def import_file2_on_click(self):
+        self.importFile2Button.setEnabled(False)
         print('Importing file 2')
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File')
         self.fileB = filename
@@ -76,6 +79,7 @@ class initialWindow(QMainWindow, QMessageBox):
         self.file_label2.setText(ntpath.basename(self.fileB))
         self.file_label2.move(360, 150)
         self.file_label2.show()
+        self.importFile2Button.setEnabled(True)
 
     @pyqtSlot()
     def switch_to_main_window(self):

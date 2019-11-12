@@ -1,6 +1,5 @@
-from enum import Enum, unique, auto
+from enum import Enum, unique
 
-import pmEnums
 import file_backup
 import utilities
 
@@ -50,6 +49,13 @@ class MergeFinalizer(object):
         return Status.TYPE_CHK_SUCCESS
 
     @staticmethod
+    def set_equal(left_set: set or list or tuple, right_set: set or list or tuple) -> bool:
+        """
+        Returns whether two sets or lists are equal
+        """
+        return left_set == right_set
+
+    @staticmethod
     def deletion(
         data_set: list or set, output_set: list or set, delete_token=None
     ) -> Status:
@@ -72,7 +78,6 @@ class MergeFinalizer(object):
                         output_set.append(item)
             except:
                 return Status.DELETE_ERROR
-        print(output_set)
         return Status.DELETE_SUCCESS
 
     def backup_file(self) -> Status:

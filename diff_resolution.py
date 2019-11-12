@@ -1,8 +1,7 @@
 # from changeSet import change_set
-import os
-import pmEnums
-import longest_common_subseq
 import changeSet
+import longest_common_subseq
+import pmEnums
 
 
 def get_next_idx_match(match_list: list or set, curr_idx: int) -> list:

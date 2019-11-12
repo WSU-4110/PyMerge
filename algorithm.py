@@ -3,9 +3,10 @@ algorithm class. Must be provided with two files, and two changeSet objects. It 
 the files and populate the ChangeSet Objects
 """
 
-import pmEnums
-import changeSet
 import os
+
+import pmEnums
+
 
 class algorithm:
     def __init__(self):

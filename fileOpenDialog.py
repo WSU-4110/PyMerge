@@ -1,13 +1,11 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog
-from PyQt5 import QtCore
-from PyQt5.QtGui import QIcon
-import pmEnums, fileIO
+
+from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog
+
 
 class fileOpenDialog(QWidget):    
     def __init__(self):
         super().__init__()
-        print("wtf")
         self.fileAName = ""
         self.fileBName = ""
         self.title = 'Open FileA'

@@ -9,6 +9,7 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import pyqtSlot
 from PyQt5 import QtWidgets
+import ntpath
 
 # from mainWindow import mainWindow
 import mainWindow
@@ -30,12 +31,13 @@ class initialWindow(QMainWindow, QMessageBox):
         super().__init__()
         self.setWindowTitle("PyMerge-init")
         self.setGeometry(500, 250, 500, 250)
+        # self.setGeometry(1000, 1000, 2000, 1000)
         self.fileA = ""
         self.fileB = ""
         layout = QGridLayout()
 
-        # self.switch_window = QtCore.pyqtSignal(str)
-        # self.line_edit = QtWidgets.QLineEdit()
+        self.file_label1 = QLabel(self)
+        self.file_label2 = QLabel(self)
 
         importFile1Button = QPushButton('import file', self)
         importFile1Button.resize(100,50)
@@ -61,11 +63,19 @@ class initialWindow(QMainWindow, QMessageBox):
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File')
         self.fileA = filename
 
+        self.file_label1.setText(ntpath.basename(self.fileA))
+        self.file_label1.move(60, 150)
+        self.file_label1.show()
+
     @pyqtSlot()
     def import_file2_on_click(self):
         print('Importing file 2')
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File')
         self.fileB = filename
+
+        self.file_label2.setText(ntpath.basename(self.fileB))
+        self.file_label2.move(360, 150)
+        self.file_label2.show()
 
     @pyqtSlot()
     def switch_to_main_window(self):
@@ -75,9 +85,6 @@ class initialWindow(QMainWindow, QMessageBox):
 
         # self.window = QtWidgets.QMainWindow
         # self.ui = mainWindow(self.fileA, self.fileB)
-        # self.window.show()
-
-        # self.switch_window.emit(self.line_edit.text())
         # self.window.show()
 
         self.hide()

@@ -34,6 +34,10 @@ class MainTable(QWidget):
         grid = QGridLayout()
         self.setLayout(grid)
         self.table = QTableWidget()
+        self.table.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+        
+
+        
         self.table.setRowCount(0)  # Set the initial row count to 0
         self.table.setColumnCount(5)  # Set the column count to 5
         self.setAcceptDrops(True)
@@ -41,9 +45,15 @@ class MainTable(QWidget):
 
         # List containing indices of all diff rows. This is used for jump to diff functions
         self.diff_indices: list = []
+        self.diff_index_block_end: list = []
         # Contains the index of the current diff that has been jumped to
         self.curr_diff_idx: int = -1
+        self.selected_block: list = [0, 0]
+        self.block_undo_size: list = []
+        self.block_redo_size: list = []
 
+        self.table.cellClicked.connect(self.cellClickedEvent)
+        
         self.change_set_a = change_set_a
         self.change_set_b = change_set_b
         self.left_file: str = ""
@@ -95,7 +105,7 @@ class MainTable(QWidget):
         # Convert icon paths from gui_config.py to QIcon objects
         gui_cfg.convert_icon_dict()
         grid.addWidget(self.table)
-
+    
     def set_tbl_fonts_and_colors(self):
         """
         Contains all the function calls required to setup the color and text formatting for the table.
@@ -181,7 +191,7 @@ class MainTable(QWidget):
         """
         Scrolls the table window to the next difference incrementally (starts at the first diff)
         :return: No return value
-        """
+        """        
         if len(self.diff_indices) == 0:
             return
 
@@ -191,6 +201,8 @@ class MainTable(QWidget):
         else:
             self.curr_diff_idx += 1
             self.jump_to_line(self.diff_indices[self.curr_diff_idx])
+        
+        self.select_block()        
         self.table.repaint()
         return
 
@@ -209,6 +221,8 @@ class MainTable(QWidget):
         else:
             self.curr_diff_idx -= 1
             self.jump_to_line(self.diff_indices[self.curr_diff_idx])
+
+        self.select_block()
         self.table.repaint()
         return
 
@@ -219,8 +233,24 @@ class MainTable(QWidget):
         :return: No return value
         """
 
-        # TODO: Implement
-        self.undo_ctrlr.undo()
+        undoStackSize = 0
+        for n in self.block_undo_size:
+            undoStackSize += n
+        
+        difference = self.undo_ctrlr.undo_buf_size - undoStackSize        
+        for i in range(difference):            
+            self.block_undo_size.append(1)
+        
+        if len(self.block_undo_size) != 0:
+            n = self.block_undo_size.pop()
+            self.block_redo_size.append(n)
+            for i in range(n):            
+                self.undo_ctrlr.undo()
+                self.undo_ctrlr.undo_buf_size -= 1
+        else:
+            self.undo_ctrlr.undo()
+            if self.undo_ctrlr.undo_buf_size != 0:
+                self.undo_ctrlr.undo_buf_size -= 1
         for row in self.rows:
             row.set_row_state()
 
@@ -231,38 +261,85 @@ class MainTable(QWidget):
         redo last undo performed
         :return: No return value
         """
-        self.undo_ctrlr.redo()
+        if len(self.block_redo_size) != 0:
+            n = self.block_redo_size.pop()
+            self.block_undo_size.append(n)
+            for i in range(n):
+                self.undo_ctrlr.redo()
+        else:
+            self.undo_ctrlr.redo()
         for row in self.rows:
             row.set_row_state()
-
 
     @pyqtSlot()
     def merge_left(self):
         """
         merge the whole left selection into the right
         """
-        indexesList = self.table.selectedIndexes()
-        if len(indexesList) != 0:
-            print(indexesList[0].data)
-        print("merge left")
-        return 0
+        
+        self.table.clearSelection()
+        for n in range(self.selected_block[0], self.selected_block[1]):
+            self.rows[n].merge_left()
+        
+        self.block_undo_size.append(self.selected_block[1] - self.selected_block[0])
+                
+        undoStackSize = 0
+        for n in self.block_undo_size:
+            undoStackSize += n
+        
+        difference = undoStackSize - self.undo_ctrlr.undo_buf_size
+        difference = abs(difference)
+        for i in range(difference):
+            self.block_undo_size.insert( len(self.block_undo_size)-1, 1)
+
+        return
 
     @pyqtSlot()
     def merge_right(self):
         """
+        merge the whole right selection into the left
+        """                
+      
+        self.table.clearSelection()
+        for n in range(self.selected_block[0], self.selected_block[1]):
+            self.rows[n].merge_right()
+
+        self.block_undo_size.append(self.selected_block[1] - self.selected_block[0])
+        
+        undoStackSize = 0
+        for n in self.block_undo_size:
+            undoStackSize += n
+
+        difference = undoStackSize - self.undo_ctrlr.undo_buf_size
+        difference = abs(difference)
+        for i in range(difference):
+            self.block_undo_size.insert( len(self.block_undo_size)-1, 1)
+        
+        return
+
+    @pyqtSlot()
+    def printCurrentRow(self):
+        """
         merge the whole right selection into the right
         """
-        print("merge right")
+        print("current Row")
+        print(self.table.currentRow())
         return 0
 
+    
+
     def jump_to_line(self, line_num, col=0):
+        self.table.clearSelection()
         self.table.scrollToItem(
-            self.table.item(line_num, col), QtWidgets.QAbstractItemView.PositionAtTop
+            self.table.item(line_num-1, col), QtWidgets.QAbstractItemView.PositionAtTop
         )
+        
         self.table.scrollToItem(
             self.table.selectRow(line_num), QtWidgets.QAbstractItemView.PositionAtTop
         )
 
+    
+        
     def add_line(
         self,
         right_text: str,
@@ -311,6 +388,7 @@ class MainTable(QWidget):
         )
         row_instance.actual_indices[0] = left_line_num
         row_instance.actual_indices[1] = right_line_num
+        
         self.rows.append(row_instance)
 
     def get_lines_from_tbl(self) -> list:
@@ -344,6 +422,13 @@ class MainTable(QWidget):
         self.table.setRowCount(0)
         del self.change_set_a.changeList[:]
         del self.change_set_b.changeList[:]
+        self.block_undo_size.clear()
+        self.block_redo_size.clear()
+        self.curr_diff_idx = -1
+        self.selected_block[0] = 0
+        self.selected_block[1] = 0
+        self.diff_indices.clear()
+        self.diff_index_block_end.clear()
         return True
 
     def load_table_contents(self, file1=0, file2=0):
@@ -385,6 +470,7 @@ class MainTable(QWidget):
                 while change_type_a[0] != pmEnums.CHANGEDENUM.SAME:
                     n += 1
                     self.change_set_a.getChange(n, change_type_a, data_a)
+                self.diff_index_block_end.append(n)
             n += 1
 
     @pyqtSlot()
@@ -415,3 +501,33 @@ class MainTable(QWidget):
 
         self.load_table_contents(file1_contents, file2_contents)
         self.jump_to_line(77)
+
+    def select_block(self, n=-1):
+        if n != -1:
+            j = 0
+            for i in self.diff_indices:
+                if n >= i:
+                   self.curr_diff_idx = j 
+                j += 1
+                    
+            
+        self.table.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
+        self.table.clearSelection()
+        self.selected_block[0] = self.diff_indices[self.curr_diff_idx]
+        self.selected_block[1] = self.diff_index_block_end[self.curr_diff_idx]
+        for n in range(self.diff_indices[self.curr_diff_idx], self.diff_index_block_end[self.curr_diff_idx]):
+            self.table.selectRow(n)
+        
+        self.table.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+
+    @pyqtSlot()
+    def cellClickedEvent(self):
+        if self.rows[self.table.currentRow()].change_state_flags[0] == pmEnums.CHANGEDENUM.SAME:            
+            self.table.clearSelection()
+        else:
+            self.select_block(self.table.currentRow())
+        
+ 
+ 
+ 
+ 

@@ -9,7 +9,10 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import pyqtSlot
 from PyQt5 import QtWidgets
-from mainWindow import mainWindow
+
+# from mainWindow import mainWindow
+import mainWindow
+
 from PyQt5 import QtGui
 import controlButtons
 import main_table
@@ -19,6 +22,7 @@ import diff_resolution
 import fileOpenDialog
 import os.path
 import utilities
+from PyQt5 import QtCore
 
 
 class initialWindow(QMainWindow, QMessageBox):
@@ -29,6 +33,9 @@ class initialWindow(QMainWindow, QMessageBox):
         self.fileA = ""
         self.fileB = ""
         layout = QGridLayout()
+
+        # self.switch_window = QtCore.pyqtSignal(str)
+        # self.line_edit = QtWidgets.QLineEdit()
 
         importFile1Button = QPushButton('import file', self)
         importFile1Button.resize(100,50)
@@ -66,9 +73,17 @@ class initialWindow(QMainWindow, QMessageBox):
         print(self.fileA)
         print(self.fileB)
 
-        self.window = QtWidgets.QMainWindow
-        self.ui = mainWindow(self.fileA, self.fileB)
-        self.window.show()
+        # self.window = QtWidgets.QMainWindow
+        # self.ui = mainWindow(self.fileA, self.fileB)
+        # self.window.show()
+
+        # self.switch_window.emit(self.line_edit.text())
+        # self.window.show()
+
+        self.hide()
+        # self.window = QtWidgets.QMainWindow
+        # QtGui.QDialog.closeEvent(self, event)
+        mainWindow.startMain(self.fileA, self.fileB)
 
 def startMain():
     app = QApplication(sys.argv)

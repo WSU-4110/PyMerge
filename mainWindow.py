@@ -36,9 +36,9 @@ class mainWindow(QMainWindow, QMessageBox):
             if result == pmEnums.RESULT.GOOD:
                 result = self.fIO.getChangeSets(self.fIO.changesA, self.fIO.changesB)
 
-        self.table_widget = 0   
+        self.table_widget = 0
         #load table
-        self.table_widget = main_table.MainTable(self.fIO.changesA, self.fIO.changesB)            
+        self.table_widget = main_table.MainTable(self.fIO.changesA, self.fIO.changesB)
         #add table
 
         layout.addWidget(self.table_widget, 1, 0)
@@ -47,7 +47,7 @@ class mainWindow(QMainWindow, QMessageBox):
         if fileA != 0 and fileB != 0:
             self.table_widget.load_table_contents(fileA, fileB)  # Left list arguments for now
         self.table_widget.load_table_contents()  # Left list arguments for now
-        
+
         self.control_buttons_widget = controlButtons.controlButtons(self.table_widget)
         layout.addWidget(self.control_buttons_widget, 0, 0)
         widget = QWidget()
@@ -57,18 +57,17 @@ class mainWindow(QMainWindow, QMessageBox):
 
     def initUI(self):
         # start GUI
-
         self.menuItems()
         self.show()
 
     def openFile(self):
 
-        # self.statusBar().showMessage('Opening files...')
+        # self.statusBar().showMessage('Opening file...')
 
-        # tableObj.clear_table()
+        # self.table_widget.clear_table()
 
-        self.table_widget.clear_table()
-        
+        print("\n\n" +  str(type(self)) + "\n\n")
+
         fileOpener = fileOpenDialog.fileOpenDialog()
 
         fileA = fileOpener.fileAName
@@ -130,12 +129,12 @@ class mainWindow(QMainWindow, QMessageBox):
         fileMenu.addAction(saveFileButton)
 
         mergeLeftButton = QAction("Merge Left", self)
-        mergeLeftButton.setShortcut('Ctrl+l')        
+        mergeLeftButton.setShortcut('Ctrl+l')
         mergeLeftButton.triggered.connect(self.table_widget.merge_left)
         editMenu.addAction(mergeLeftButton)
 
         mergeRightButton = QAction("Merge Right", self)
-        mergeRightButton.setShortcut('Ctrl+r')        
+        mergeRightButton.setShortcut('Ctrl+r')
         mergeRightButton.triggered.connect(self.table_widget.merge_right)
         editMenu.addAction(mergeRightButton)
 
@@ -164,13 +163,12 @@ class mainWindow(QMainWindow, QMessageBox):
         HideShowButtons.triggered.connect(lambda: self.hideShowButns())
         viewMenu.addAction(HideShowButtons)
 
-
         row = QAction("current row", self)
         #no shortcut
         row.triggered.connect(self.table_widget.printCurrentRow)
         viewMenu.addAction(row)
 
-    def hideShowButns(self):        
+    def hideShowButns(self):
         if self.control_buttons_widget.isVisible():
             self.control_buttons_widget.hide()
         else:
@@ -180,4 +178,3 @@ def startMain(fileA=0, fileB=0):
     app = QApplication(sys.argv)
     ex = mainWindow(fileA, fileB)
     sys.exit(app.exec_())
-

@@ -193,9 +193,9 @@ class MainTable(QWidget):
         :return: No return value
         """
 
-        next_diff_status_bar = QAction("next diff", self)
-        next_diff_status_bar.connect(lambda: self.openFile(tableObj))
-        next_diff_status_bar.addAction(openFileButton)
+        # next_diff_status_bar = QAction("next diff", self)
+        # next_diff_status_bar.connect(lambda: self.openFile(tableObj))
+        # next_diff_status_bar.addAction(openFileButton)
 
         if len(self.diff_indices) == 0:
             return

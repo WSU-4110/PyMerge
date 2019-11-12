@@ -1,0 +1,14 @@
+class filecheck(file1,file2):
+    if opt_length == 0:
+        valid()
+    else:
+        invlaid()
+
+    def valid(self):
+        #right now we only have one valid input type so it is simple run the program
+        self.invoke_application(left_file, right_file)
+        return
+    def invalid(self):
+        #Incase of invlalid input produce an error and exit
+        print("Error: Invalid options. Type '--help' for information.")
+        return

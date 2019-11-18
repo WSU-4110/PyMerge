@@ -20,7 +20,22 @@ class controlButtons(QWidget):
 
     def buttonLayout(self):
         grid = QGridLayout()
-        self.setLayout(grid)        
+        self.setLayout(grid)
+
+        import_file1_button = QPushButton()
+        icon = QtGui.QIcon(gui_config.ICONS["IMPORT_FILE"])
+        import_file1_button.setIcon(icon)
+        import_file1_button.setFixedHeight(50)
+        # import_file1_button.setFixedWidth(50)
+        import_file1_button.setToolTip("import left file")
+        grid.addWidget(import_file1_button,1,0)
+
+        import_file2_button = QPushButton()
+        import_file2_button.setIcon(icon)
+        import_file2_button.setFixedHeight(50)
+        # import_file2_button.setFixedWidth(50)
+        import_file2_button.setToolTip("import right file")
+        grid.addWidget(import_file2_button, 1, 5)
 
         merge_left_button = QPushButton()
         icon = QtGui.QIcon(gui_config.ICONS["MERGE_LEFT"])
@@ -29,7 +44,6 @@ class controlButtons(QWidget):
         merge_left_button.setToolTip('merge left version into right')
         merge_left_button.clicked.connect(self.tableObj.merge_left)
         grid.addWidget(merge_left_button, 0, 0)
-
 
         undo_change_button = QPushButton()
         icon = QtGui.QIcon(gui_config.ICONS["UNDO"])
@@ -62,7 +76,6 @@ class controlButtons(QWidget):
         redo_change_button.setToolTip("redo last change")
         redo_change_button.clicked.connect(self.tableObj.redo_last_undo)
         grid.addWidget(redo_change_button, 0, 4)
-
         
         merge_right_button = QPushButton()
         icon = QtGui.QIcon(gui_config.ICONS["MERGE_RIGHT"])

@@ -103,7 +103,9 @@ class MainTable(QWidget):
         self.table.setEditTriggers(QTableWidget.NoEditTriggers)
 
         # Convert icon paths from gui_config.py to QIcon objects
-        gui_cfg.convert_icon_dict()
+        #gui_cfg.converted ensures test software can run correctly
+        if gui_cfg.converted == False:
+            gui_cfg.convert_icon_dict()
         grid.addWidget(self.table)
     
     def set_tbl_fonts_and_colors(self):

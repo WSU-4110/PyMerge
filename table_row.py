@@ -18,19 +18,6 @@ import undo_redo
 
 
 class Row(QtCore.QObject):
-    # __slots__ = [
-    #     "row",
-    #     "table",
-    #     "right_text",
-    #     "left_text",
-    #     "line_num",
-    #     "change_state_flags",
-    #     "deleted",
-    #     "actual_indices",
-    #     "right_button",
-    #     "left_button",
-    #     "undo_ctrlr"
-    # ]
 
     def __init__(
         self,

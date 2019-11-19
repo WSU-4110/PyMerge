@@ -70,10 +70,15 @@ class UndoRedoAction(object):
         Set the current state of the row object to what was recorded in the instance variables
         :return: No return value
         """
-        # Copy the copied attribute dictionary over to the object reference
+        # Copy the copied attribute dictionary over to the object reference        
         for key in self.obj_ref.__dict__:
-            self.obj_ref.right_button.setEnabled(True)
-            self.obj_ref.left_button.setEnabled(True)
+            if self.obj_ref.right_button.isEnabled() == True:            
+                self.obj_ref.right_button.setEnabled(False)
+                self.obj_ref.left_button.setEnabled(False)
+            else:
+                self.obj_ref.right_button.setEnabled(True)
+                self.obj_ref.left_button.setEnabled(True)
+
             try:
                 self.obj_ref.__dict__[key] = self.obj_copy[key]
             except KeyError:

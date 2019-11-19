@@ -28,6 +28,9 @@ class mainWindow(QMainWindow, QMessageBox):
         self.control_buttons_widget = 0
         layout = QGridLayout()
 
+        self.file1 = ""
+        self.file2 = ""
+
         # load files and generate changesets
         result = pmEnums.RESULT.ERROR
         self.fIO = fileIO.fileIO()
@@ -48,7 +51,7 @@ class mainWindow(QMainWindow, QMessageBox):
             self.table_widget.load_table_contents(fileA, fileB)  # Left list arguments for now
         self.table_widget.load_table_contents()  # Left list arguments for now
 
-        self.control_buttons_widget = controlButtons.controlButtons(self.table_widget)
+        self.control_buttons_widget = controlButtons.controlButtons(self.table_widget, self)
         layout.addWidget(self.control_buttons_widget, 0, 0)
         widget = QWidget()
         widget.setLayout(layout)
@@ -176,6 +179,23 @@ class mainWindow(QMainWindow, QMessageBox):
             self.control_buttons_widget.hide()
         else:
             self.control_buttons_widget.show()
+
+    @pyqtSlot()
+    def import_file1(self):
+        print("Importing file 1")
+        options = QFileDialog.Options()
+        self.file1, _ = QFileDialog.getOpenFileName(self, "Open File A", "","", options=options)
+
+    @pyqtSlot()
+    def import_file2(self):
+        print("Importing file 2")
+        options = QFileDialog.Options()
+        self.file2, _ = QFileDialog.getOpenFileName(self, "Open File B", "", "", options=options)
+
+    @pyqtSlot()
+    def merge_files(self):
+        print("Merging " + ntpath.basename(self.file1) + " and " + ntpath.basename(self.file2))
+        self.openFileHelper(self.file1, self.file2)
 
 def startMain(fileA=0, fileB=0):
     app = QApplication(sys.argv)

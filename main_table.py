@@ -192,21 +192,21 @@ class MainTable(QWidget):
         else:
             event.ignore()
 
-    @pyqtSlot()
-    def import_file1(self):
-        print("Importing file 1")
-        options = QFileDialog.Options()
-        self.file1, _ = QFileDialog.getOpenFileName(self, "Open File A", "","", options=options)
-
-    @pyqtSlot()
-    def import_file2(self):
-        print("Importing file 2")
-        options = QFileDialog.Options()
-        self.file2, _ = QFileDialog.getOpenFileName(self, "Open File B", "", "", options=options)
-
-    @pyqtSlot()
-    def merge_files(self):
-        print("Merging " + ntpath.basename(self.file1) + " and " + ntpath.basename(self.file2))
+    # @pyqtSlot()
+    # def import_file1(self):
+    #     print("Importing file 1")
+    #     options = QFileDialog.Options()
+    #     self.file1, _ = QFileDialog.getOpenFileName(self, "Open File A", "","", options=options)
+    #
+    # @pyqtSlot()
+    # def import_file2(self):
+    #     print("Importing file 2")
+    #     options = QFileDialog.Options()
+    #     self.file2, _ = QFileDialog.getOpenFileName(self, "Open File B", "", "", options=options)
+    #
+    # @pyqtSlot()
+    # def merge_files(self):
+    #     print("Merging " + ntpath.basename(self.file1) + " and " + ntpath.basename(self.file2))
 
 
     @pyqtSlot()

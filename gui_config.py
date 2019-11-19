@@ -39,6 +39,11 @@ ICONS = {
     "NEXT_DIFF": "icons/down-arrow.png",
 }
 
+#converted changes to true with the ICONS are converted once
+#this conversion fails if you attempt to convert everything a second time
+#this only happens when the global scope of the ICONS is saved in a software test
+#but the mainWindow is initialized multiple times. 
+converted = False
 
 """
 Colors to be used for all styling the GUI. 
@@ -74,12 +79,16 @@ RIGHT_TXT_COL_IDX = 4
 
 
 def convert_icon_dict():
+    
     global ICONS
-
+    global converted
+    converted = True
     if not ICONS["OBJ_CONVERSION"][0]:
         for icon in ICONS:
             if isinstance(ICONS[icon], str):
                 ICONS[icon] = QIcon(ICONS[icon])
         ICONS["OBJ_CONVERSION"][0] = True
+
         ICONS["OBJ_CONVERSION"] = set(ICONS["OBJ_CONVERSION"])
+
 

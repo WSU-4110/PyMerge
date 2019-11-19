@@ -103,7 +103,10 @@ class MainTable(QWidget):
         self.table.setEditTriggers(QTableWidget.NoEditTriggers)
 
         # Convert icon paths from gui_config.py to QIcon objects
-        gui_cfg.convert_icon_dict()
+        #gui_cgf.converted ensures test software can run correctly
+        if gui_cfg.converted == False:
+            gui_cfg.convert_icon_dict()
+
         grid.addWidget(self.table)
     
     def set_tbl_fonts_and_colors(self):
@@ -203,7 +206,7 @@ class MainTable(QWidget):
             self.jump_to_line(self.diff_indices[self.curr_diff_idx])
         
         self.select_block()        
-        self.table.repaint()
+        #self.table.repaint()
         return
 
     @pyqtSlot()
@@ -317,16 +320,6 @@ class MainTable(QWidget):
         
         return
 
-    @pyqtSlot()
-    def printCurrentRow(self):
-        """
-        merge the whole right selection into the right
-        """
-        print("current Row")
-        print(self.table.currentRow())
-        return 0
-
-    
 
     def jump_to_line(self, line_num, col=0):
         self.table.clearSelection()
@@ -334,9 +327,9 @@ class MainTable(QWidget):
             self.table.item(line_num-1, col), QtWidgets.QAbstractItemView.PositionAtTop
         )
         
-        self.table.scrollToItem(
-            self.table.selectRow(line_num), QtWidgets.QAbstractItemView.PositionAtTop
-        )
+        # self.table.scrollToItem(
+        #     self.table.selectRow(line_num), QtWidgets.QAbstractItemView.PositionAtTop
+        # )
 
     
         
@@ -503,6 +496,7 @@ class MainTable(QWidget):
         self.jump_to_line(77)
 
     def select_block(self, n=-1):
+
         if n != -1:
             j = 0
             for i in self.diff_indices:
@@ -517,6 +511,8 @@ class MainTable(QWidget):
         self.selected_block[1] = self.diff_index_block_end[self.curr_diff_idx]
         for n in range(self.diff_indices[self.curr_diff_idx], self.diff_index_block_end[self.curr_diff_idx]):
             self.table.selectRow(n)
+            
+            
         
         self.table.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
 

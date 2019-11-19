@@ -17,7 +17,7 @@ import fileOpenDialog
 import main_table
 import pmEnums
 import utilities
-
+import ntpath
 
 class mainWindow(QMainWindow, QMessageBox):
     def __init__(self, fileA=0, fileB=0):
@@ -73,6 +73,11 @@ class mainWindow(QMainWindow, QMessageBox):
         fileA = fileOpener.fileAName
         fileB = fileOpener.fileBName
 
+        self.openFileHelper(fileA, fileB)
+
+        # self.statusBar().clearMessage()
+
+    def openFileHelper(self, fileA, fileB):
         if not os.path.exists(fileA):
             print(fileA, "Does not exist")
         if not os.path.exists(fileB):
@@ -89,8 +94,8 @@ class mainWindow(QMainWindow, QMessageBox):
             print(fileB + ": Write permission denied.")
 
         # prompt = QMessageBox.about(self, "Error", "Error Message")
-        fileA = fileOpener.fileAName
-        fileB = fileOpener.fileBName
+        # fileA = fileOpener.fileAName
+        # fileB = fileOpener.fileBName
 
         result = self.fIO.diffFiles(fileA, fileB)
 
@@ -100,8 +105,6 @@ class mainWindow(QMainWindow, QMessageBox):
             QMessageBox.about(self, "Error", "Invalid file type")
 
         self.table_widget.load_table_contents(fileA, fileB)
-
-        # self.statusBar().clearMessage()
 
     @pyqtSlot()
     def statusBar(self):

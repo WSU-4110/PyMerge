@@ -38,6 +38,7 @@ ICONS = {
     "PREV_DIFF": "icons/up-arrow.png",
     "NEXT_DIFF": "icons/down-arrow.png",
     "IMPORT_FILE": "icons/import-file.png",
+    "MERGE": "icon/merge2.png",
 }
 
 #converted changes to true with the ICONS are converted once

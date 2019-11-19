@@ -21,6 +21,10 @@ import merge_finalizer
 import pmEnums
 import table_row
 import undo_redo
+import fileOpenDialog
+from PyQt5.QtWidgets import QFileDialog
+import ntpath
+import mainWindow
 
 
 class MainTable(QWidget):
@@ -35,9 +39,9 @@ class MainTable(QWidget):
         self.setLayout(grid)
         self.table = QTableWidget()
         self.table.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
-        
+        self.file1 = ""
+        self.file2 = ""
 
-        
         self.table.setRowCount(0)  # Set the initial row count to 0
         self.table.setColumnCount(5)  # Set the column count to 5
         self.setAcceptDrops(True)
@@ -187,6 +191,23 @@ class MainTable(QWidget):
             print(links)
         else:
             event.ignore()
+
+    @pyqtSlot()
+    def import_file1(self):
+        print("Importing file 1")
+        options = QFileDialog.Options()
+        self.file1, _ = QFileDialog.getOpenFileName(self, "Open File A", "","", options=options)
+
+    @pyqtSlot()
+    def import_file2(self):
+        print("Importing file 2")
+        options = QFileDialog.Options()
+        self.file2, _ = QFileDialog.getOpenFileName(self, "Open File B", "", "", options=options)
+
+    @pyqtSlot()
+    def merge_files(self):
+        print("Merging " + ntpath.basename(self.file1) + " and " + ntpath.basename(self.file2))
+
 
     @pyqtSlot()
     def goto_next_diff(self):

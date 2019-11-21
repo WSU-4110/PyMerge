@@ -2,6 +2,7 @@ from enum import Enum, unique
 
 import file_backup
 import utilities
+import os
 
 """
 Get data from table -> type checking -> deletions -> original file backup -> truncate file -> write data to file
@@ -33,6 +34,17 @@ class MergeFinalizer(object):
         self.outp_file_right: str = outp_file_right
         self.backup = file_backup.Backup()
         self.backup_dir = backup_dir
+
+    @staticmethod
+    def check_for_backup_dir():
+        try:
+            if os.path.exists("file_backup") and os.path.isdir("file_backup"):
+                return True
+            else:
+                os.mkdir("file_backup")
+                return True
+        except OSError:
+            return False
 
     @staticmethod
     def type_checker(data_set: list or set, target_type: type) -> Status:
@@ -102,6 +114,8 @@ class MergeFinalizer(object):
         """
         outp_set_left: list = []
         outp_set_right: list = []
+
+        self.check_for_backup_dir()
 
         if not utilities.file_writable(self.outp_file_left) or not utilities.file_writable(self.outp_file_right):
             return Status.FILE_PERMISSION_ERR

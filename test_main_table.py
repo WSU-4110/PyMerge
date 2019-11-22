@@ -24,7 +24,7 @@ class TestMainTable(unittest.TestCase):
         self.assertEqual( expectedDiffIndex, self.table.curr_diff_idx  )
         expectedDiffLine = 9
         self.assertEqual( expectedDiffLine, self.table.table.currentRow() )
-WHDL78K
+
         #an empty table will leave the curr_diff_indx at -1
         self.table2.goto_next_diff()
         self.assertEqual( -1, self.table2.curr_diff_idx)

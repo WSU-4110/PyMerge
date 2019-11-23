@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/malcolmhall/PyMerge/LCS_C/xml_writer.c
+xml_writer.h
+/Users/malcolmhall/PyMerge/LCS_C/xml_writer.h
+
+/Users/malcolmhall/PyMerge/LCS_C/xml_writer.h
+stdio.h
+-
+fcntl.h
+-
+errno.h
+-
+

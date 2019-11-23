@@ -20,7 +20,7 @@ def get_next_idx_match(match_list: list or set, curr_idx: int) -> list:
 
 
 def diff_set(
-    iFileA, iFileB, ochangeSetA: changeSet.ChangeSet, ochangeSetB: changeSet.ChangeSet
+    iFileA, iFileB, file_a_path, file_b_path, ochangeSetA: changeSet.ChangeSet, ochangeSetB: changeSet.ChangeSet
 ):
     """
     This function gets the diff between two files and adds each line to a change set.
@@ -42,10 +42,11 @@ def diff_set(
         "$"
     )  # Append a token on the end to make sure last 'lines' always match
     file_b_lines.append("$")
-    raw_diff: list = longest_common_subseq.padded_lcs(
-        file_a_lines, file_b_lines, max(len(file_a_lines), len(file_b_lines))
-    )
-
+    # raw_diff: list = longest_common_subseq.padded_lcs(
+    #     file_a_lines, file_b_lines, max(len(file_a_lines), len(file_b_lines))
+    # )
+    raw_diff = longest_common_subseq.lcs_c_if(file_a_path, file_b_path, "test.xml")
+    print(raw_diff)
     for n in range(len(raw_diff[0])):
         if raw_diff[0][n] != -1 and raw_diff[1][n] != -1:
             ochangeSetA.addChange(

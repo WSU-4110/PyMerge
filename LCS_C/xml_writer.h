@@ -1,5 +1,5 @@
 /**********************************************************************************
-File: myers_lcs.h
+File: xml_writer.h
 Author: Malcolm Hall
 Description:
 
@@ -20,63 +20,38 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 **********************************************************************************/
 
-#ifndef MYERSLCS_MYERS_LCS_H
-#define MYERSLCS_MYERS_LCS_H
+#ifndef MYERSLCS_XML_WRITER_H
+#define MYERSLCS_XML_WRITER_H
 
 /**********************************************************************************
 *       HEADER FILES
 **********************************************************************************/
-#include <stdio.h>
-
-
+#include<stdio.h>
+#include<fcntl.h>
+#include<errno.h>
 
 /**********************************************************************************
 *       DATA STRUCTURES/VARIABLE DECLARATIONS
 **********************************************************************************/
 
-typedef unsigned int Boolean_t;
-
-struct Snake_t {
-    long long head[2U];
-    struct Snake_t *tail;
-};
-
-
-typedef struct {
-    FILE *leftFp;
-    FILE *rightFp;
-    long long leftLineCnt;
-    long long rightLineCnt;
-    long long maxLineLen; // Remove
-    long long maxLineCnt;
-    long long totalSize;
-    long long arySize;
-    long long *leftOutp;
-    long long *rightOutp;
-    char **leftLines;
-    char **rightLines;
-} DiffConfig_t;
 
 
 /**********************************************************************************
 *       FUNCTION DECLARATIONS/PROTOTYPES
 **********************************************************************************/
-void loadDiffConfig(DiffConfig_t *diffConfig, const char *leftFile, const char* rightFile);
-static inline Boolean_t lineEqual(char *line1, char *line2);
-void loadFileLines(DiffConfig_t *diffConfig);
-long long getFileLineCnt(FILE *fp, long long *maxLineLen);
-void freeDiffConfig(DiffConfig_t *diffConfig);
-void lcs(DiffConfig_t *diffConfig);
+void writeMatchTag(FILE *fd, long long left, long long right, long long idx);
 
-static inline void initSnake(struct Snake_t *snake);
-struct Snake_t *copySnake(struct Snake_t *snake);
-static inline struct Snake_t *addSnakeHead(struct Snake_t *snake, long x, long y);
-void printSnake(struct Snake_t *snake);
-static inline long long Max(long long a, long long b);
+void writeLCSOutpFile(
+        char *rightFile,
+        char*leftFile,
+        char *outp_file,
+        long *rightSet,
+        long *leftSet,
+        long size
+);
 
 
-
-#endif //MYERSLCS_MYERS_LCS_H
+#endif //MYERSLCS_XML_WRITER_H
 /**********************************************************************************
 *       END OF FILE
 **********************************************************************************/

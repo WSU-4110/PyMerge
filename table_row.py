@@ -94,7 +94,7 @@ class Row(QtCore.QObject):
         #self.table.item(self.row_num, gui_cfg.RIGHT_TXT_COL_IDX).setFlags(QtCore.Qt.ItemIsEditable)
         self.table.item(self.row_num, gui_cfg.RIGHT_TXT_COL_IDX).setBackground(
             background
-        )
+        )        
         self.right_background_color = background
         if buttons:
             self.add_row_merge_buttons()
@@ -157,6 +157,7 @@ class Row(QtCore.QObject):
         self.left_button.setEnabled(False)
                 
         # Table isn't gonna repaint itself. Gotta show users the changes we just made.
+        self.table.clearSelection()
         self.table.repaint()
 
     @pyqtSlot()
@@ -192,6 +193,7 @@ class Row(QtCore.QObject):
         self.left_button.setEnabled(False)
         self.right_button.setEnabled(False)        
         # Table isn't gonna repaint itself. Gotta show users the changes we just made.
+        self.table.clearSelection()
         self.table.repaint()
 
     def set_row_state(self):

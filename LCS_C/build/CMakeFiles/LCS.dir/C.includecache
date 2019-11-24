@@ -6,15 +6,17 @@
 
 #IncludeRegexTransform: 
 
-/Users/malcolmhall/PyMerge/LCS_C/xml_writer.c
-xml_writer.h
-/Users/malcolmhall/PyMerge/LCS_C/xml_writer.h
+/Users/malcolmhall/PyMerge/LCS_C/myers_lcs.c
+stdlib.h
+-
+string.h
+-
+sys/proc_info.h
+-
+myers_lcs.h
+/Users/malcolmhall/PyMerge/LCS_C/myers_lcs.h
 
-/Users/malcolmhall/PyMerge/LCS_C/xml_writer.h
+/Users/malcolmhall/PyMerge/LCS_C/myers_lcs.h
 stdio.h
--
-fcntl.h
--
-errno.h
 -
 

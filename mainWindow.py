@@ -70,6 +70,10 @@ class mainWindow(QMainWindow, QMessageBox):
 
         # self.statusBar().showMessage('Opening file...')
 
+        self.statusBar = QStatusBar()
+        self.statusBar.showMessage("Opening file...")
+        self.setStatusBar(self.statusBar)
+
         # self.table_widget.clear_table()
 
         print("\n\n" +  str(type(self)) + "\n\n")
@@ -85,14 +89,14 @@ class mainWindow(QMainWindow, QMessageBox):
 
         self.openFileHelper(fileA, fileB)
 
-        # self.statusBar().clearMessage()
+        self.statusBar.clearMessage()
 
     def openFileHelper(self, fileA, fileB):
 
-        if utilities.file_writable(fileA):
+        if not utilities.file_writable(fileA):
             QMessageBox.about(self, "Error", os.path.basename(fileA) + " is not writable")
             return
-        if utilities.file_writable(fileB):
+        if not utilities.file_writable(fileB):
             QMessageBox.about(self, "Error", os.path.basename(fileB) + " is not writable")
             return
 

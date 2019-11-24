@@ -64,6 +64,10 @@ class mainWindow(QMainWindow, QMessageBox):
 
     def openFile(self):
 
+        self.statusBar = QStatusBar()
+        self.statusBar.showMessage("Opening file...")
+        self.setStatusBar(self.statusBar)
+
         self.table_widget.clear_table()
         
         fileOpener = fileOpenDialog.fileOpenDialog()
@@ -92,6 +96,9 @@ class mainWindow(QMainWindow, QMessageBox):
 
             
         self.table_widget.load_table_contents(fileA, fileB)
+
+        self.statusBar.clearMessage()
+
         return result
 
     def menuItems(self):

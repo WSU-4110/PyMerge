@@ -28,6 +28,9 @@ class mainWindow(QMainWindow, QMessageBox):
         self.control_buttons_widget = 0
         layout = QGridLayout()
 
+        self.fileA = ""
+        self.fileB = ""
+
         # load files and generate changesets
         result = pmEnums.RESULT.ERROR
         self.fIO = fileIO.fileIO()
@@ -72,6 +75,9 @@ class mainWindow(QMainWindow, QMessageBox):
 
         fileA = fileOpener.fileAName
         fileB = fileOpener.fileBName
+
+        self.fileA = fileA
+        self.fileB = fileB
         
         result = self.fIO.diffFiles(fileA, fileB)
 

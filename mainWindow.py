@@ -204,6 +204,10 @@ class mainWindow(QMainWindow, QMessageBox):
         print("Merging " + ntpath.basename(self.file1) + " and " + ntpath.basename(self.file2))
         self.openFileHelper(self.file1, self.file2)
 
+    @pyqtSlot()
+    def set_unsaved_changes_statu_bar(self):
+        print("\n\n Unsaved changes \n\n")
+
     def openHelp(self):
         subprocess.Popen("file1.c",shell=True)
 

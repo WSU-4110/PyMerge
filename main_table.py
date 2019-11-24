@@ -263,6 +263,8 @@ class MainTable(QWidget):
         :return: No return value
         """
 
+        
+
         undoStackSize = 0
         for n in self.block_undo_size:
             undoStackSize += n

@@ -19,6 +19,8 @@ import main_table
 import pmEnums
 import utilities
 import ntpath
+import os
+
 
 class mainWindow(QMainWindow, QMessageBox):
     def __init__(self, fileA=0, fileB=0):
@@ -74,6 +76,7 @@ class mainWindow(QMainWindow, QMessageBox):
 
         fileOpener = fileOpenDialog.fileOpenDialog()
         fileOpener.openFileNameDialog()
+
         if fileOpener.fileAName != "":
             fileOpener.openFileNameDialog()
 
@@ -85,24 +88,13 @@ class mainWindow(QMainWindow, QMessageBox):
         # self.statusBar().clearMessage()
 
     def openFileHelper(self, fileA, fileB):
-        if not os.path.exists(fileA):
-            print(fileA, "Does not exist")
-        if not os.path.exists(fileB):
-            print(fileB, "Does not exist")
 
-        if not utilities.file_readable(fileA):
-            print(fileA + ": Read permission denied.")
-        if not utilities.file_readable(fileB):
-            print(fileB + ": Read permission denied.")
-
-        if not utilities.file_writable(fileA):
-            print(fileA + ": Write permission denied.")
-        if not utilities.file_writable(fileB):
-            print(fileB + ": Write permission denied.")
-
-        # prompt = QMessageBox.about(self, "Error", "Error Message")
-        # fileA = fileOpener.fileAName
-        # fileB = fileOpener.fileBName
+        if utilities.file_writable(fileA):
+            QMessageBox.about(self, "Error", os.path.basename(fileA) + " is not writable")
+            return
+        if utilities.file_writable(fileB):
+            QMessageBox.about(self, "Error", os.path.basename(fileB) + " is not writable")
+            return
 
         result = self.fIO.diffFiles(fileA, fileB)
 

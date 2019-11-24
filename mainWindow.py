@@ -75,10 +75,10 @@ class mainWindow(QMainWindow, QMessageBox):
         fileA = fileOpener.fileAName
         fileB = fileOpener.fileBName
 
-        if utilities.file_writable(fileA):
+        if not utilities.file_writable(fileA):
             QMessageBox.about(self, "Error", os.path.basename(fileA) + " is not writable")
             return
-        if utilities.file_writable(fileB):
+        if not utilities.file_writable(fileB):
             QMessageBox.about(self, "Error", os.path.basename(fileB) + " is not writable")
             return
         

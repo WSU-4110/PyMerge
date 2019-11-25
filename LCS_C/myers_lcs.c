@@ -213,30 +213,8 @@ void lcs(DiffConfig_t *diffConfig)
             && (y_idx < diffConfig->rightLineCnt)
             && lineEqual(diffConfig->leftLines[x_idx], diffConfig->rightLines[y_idx]))
             {
-            /*
-                struct Snake_t *newHead = (struct Snake_t*)(malloc(sizeof(struct Snake_t)));
-    initSnake(newHead);
-    newHead->head[0U] = x;
-    newHead->head[1U] = y;
-    newHead->tail = snake->tail;
-    return newHead;
-
-
-            */
-//                struct Snake_t *temp = (struct Snake_t*)(malloc(sizeof(struct Snake_t)));
-//                initSnake(temp);
-//                temp->head[0] = x_idx;
-//                temp->head[1] = y_idx;
-//                temp->tail = snake->tail;
-//                snake = temp;
-                struct Snake_t *newHead = (struct Snake_t*)(malloc(sizeof(struct Snake_t)));
-                initSnake(newHead);
-                newHead->head[0U] = x_idx;
-                newHead->head[1U] = y_idx;
-                newHead->tail = snake->tail;
-                snake = newHead;
-                printSnake(snake);
-                //snake->tail = addSnakeHead(snake, x_idx, y_idx);
+                //printSnake(snake);
+                snake->tail = addSnakeHead(snake, x_idx, y_idx);
                 x_idx++;
                 y_idx++;
             }

@@ -135,7 +135,7 @@ def lcs_c_if(left_file, right_file, xml_file):
         outp_list[0].append(int(match.attrib["left"]))
         outp_list[1].append(int(match.attrib["right"]))
     print(len(outp_list[0]))
-    os.remove(xml_file)
+    #os.remove(xml_file)
     # for n in range(len(outp_list[0])):
     #     print(outp_list[0][n], outp_list[1][n])
     return outp_list

@@ -1,7 +1,7 @@
 import time
 
 
-use_cython = True
+use_cython = False
 
 try:
     from cython_accelerator import lcs_cython
@@ -93,6 +93,7 @@ def longest_common_subsequence2(left_set, right_set):
                 return outp
             bounded_array[total_size + k] = x_idx
             k_candidates[total_size + k] = snake
+            print(snake)
 
 
 # Pass your match list to this

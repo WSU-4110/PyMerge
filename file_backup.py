@@ -20,27 +20,43 @@ class Backup(object):
         """
         self.BLOCK_SIZE: int = block_size
         self.hash_type: str = hash_type
-        self.hash_func = hashlib.sha256()  # Default to SHA256
-
-        # Choose the correct hash function
-        if self.hash_type == "SHA224":
-            self.hash_func = hashlib.sha224
-        if self.hash_type == "SHA256":
-            self.hash_func = hashlib.sha256
-        if self.hash_type == "SHA512":
-            self.hash_func = hashlib.sha512
-        if self.hash_type == "MD5":
-            self.hash_func = hashlib.md5
+        self.hash_func = hashlib.sha256  # Default to SHA256
+        self.hash_func = self.get_hash_func(hash_type)
 
     @staticmethod
-    def format_datetime() -> str:
+    def get_hash_func(hash_type):
+        # Choose the correct hash function
+        if hash_type == "SHA224":
+            return hashlib.sha224
+        if hash_type == "SHA256":
+            return hashlib.sha256
+        if hash_type == "SHA512":
+            return hashlib.sha512
+        if hash_type == "MD5":
+            return hashlib.md5
+        else:
+            return hashlib.sha256
+
+    @staticmethod
+    def format_datetime(date_time) -> str:
         """
         Format datetime as string with ':' and ' ' removed.
         :return: string containing datetime values
         """
-        datetime_str = str(datetime.datetime.now())
-        datetime_str = datetime_str.replace(":", "").replace(" ", "_").replace("-", "")
+        datetime_str = str(date_time)
+        datetime_str = datetime_str.replace(":", "").replace(" ", "_").replace("-", "").replace('.', '')
         return datetime_str
+
+    @staticmethod
+    def check_for_backup_folder():
+        if not os.path.exists("backup"):
+            os.mkdir("backup")
+        else:
+            pass
+
+    @staticmethod
+    def get_meta_file_name(file_name: str):
+        return f".meta.{file_name}.dat"
 
     def create_meta_file(self, file: str) -> str:
         """
@@ -49,6 +65,7 @@ class Backup(object):
         :return: string containing absolute path to metadata file
         """
         file_name = file.replace('\\', "/").split("/")[-1]
+        meta_file_name = self.get_meta_file_name(file)
         meta_info: dict = {
             "NAME": file_name,
             "SIZE": int(os.stat(file).st_size),
@@ -56,10 +73,10 @@ class Backup(object):
             "HASH_TYPE": self.hash_type,
         }
 
-        with open(f".meta.{file_name}.dat", 'wb') as meta_file:
+        with open(meta_file_name, 'wb') as meta_file:
             pickle.dump({"META": meta_info}, meta_file)
 
-        return os.path.abspath(f".meta.{file_name}.dat")
+        return os.path.abspath(meta_file_name)
 
     def get_hash(self, file: str) -> hex:
         """
@@ -84,6 +101,10 @@ class Backup(object):
         """
         return str(hash_value) == str(self.get_hash(file))
 
+    @staticmethod
+    def get_hash_file_name(hash_type: str):
+        return f"{hash_type}.txt"
+
     def create_backup(self, file: str, backup_dir: str) -> str:
         """
         Creates a zip archive containing a backup of a file and the hash value
@@ -93,7 +114,7 @@ class Backup(object):
         :return: absolute path to backup
         """
         # Create hash file to use for integrity checks during backup retrieval
-        hash_file = f"{self.hash_type}.txt"
+        hash_file = self.get_hash_file_name(self.hash_type)
 
         # Create meta data file to use as comparison when backup is retrieved
         meta_file = self.create_meta_file(file)

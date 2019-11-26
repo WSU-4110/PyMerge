@@ -2,7 +2,7 @@ language: python
 python:
   - "3.7"
 before_install:
-  - QT_QPA_PLATFORM=offscreen
+  - sudo apt-get install -qq libegl1-mesa
   - sudo apt-get update
   - sudo apt-get -y install python3-pyqt5
 script:

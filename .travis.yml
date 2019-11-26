@@ -8,5 +8,5 @@ before_install:
 script:
   - python test_main_table.py
   - python test_backup.py
-
+  - python unitTesting.py
   

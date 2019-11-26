@@ -1,5 +1,7 @@
 language: python
 python:
   - "3.7"
+ install:
+  - pip install PyQt5
 script:
   - python test_main_table.py

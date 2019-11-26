@@ -23,7 +23,7 @@ class mainWindow(QMainWindow, QMessageBox):
     def __init__(self, fileA=0, fileB=0):
         super().__init__()
         self.setWindowTitle("PyMerge")
-        self.setGeometry(100, 100, 1000, 800)
+        self.setGeometry(10, 50, 1800, 900)
         self.table_widget = 0
         self.control_buttons_widget = 0
         layout = QGridLayout()
@@ -153,7 +153,7 @@ class mainWindow(QMainWindow, QMessageBox):
             self.control_buttons_widget.show()
 
     def openHelp(self):
-        subprocess.Popen("file1.c",shell=True)
+        subprocess.Popen("PyMerge_Manual.pdf",shell=True)
 
 def startMain(fileA=0, fileB=0):
     app = QApplication(sys.argv)

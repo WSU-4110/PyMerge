@@ -12,12 +12,7 @@ class fileOpenDialog(QWidget):
         if( self.fileAName != "" ):
             self.title = 'Open FileB'
         self.setGeometry(100, 100, 400, 500)
-        
-        
-        
-
-
-      
+              
     def openFileNameDialog(self):        
         options = QFileDialog.Options()
         #options |= QFileDialog.DontUseNativeDialog

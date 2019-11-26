@@ -107,8 +107,15 @@ void loadFileLines(DiffConfig_t *diffConfig)
     fseek(diffConfig->rightFp, 0, SEEK_SET);
 
     while (getline(&diffConfig->leftLines[i++], &len, diffConfig->leftFp) != NONE) {}
+    //diffConfig->leftLines[diffConfig->maxLineCnt] = "$$ENDTOKEN$$";
+    //printf("%d, %s\n", i, diffConfig->leftLines[i]);
     i = 0U;
     while (getline(&diffConfig->rightLines[i++], &len, diffConfig->rightFp) != NONE) {}
+    //diffConfig->rightLines[diffConfig->maxLineCnt] = "$$ENDTOKEN$$";
+    //
+    //printf("%d, %s\n", i, diffConfig->rightLines[i]);
+
+
 }
 
 
@@ -207,7 +214,8 @@ void lcs(DiffConfig_t *diffConfig)
                 x_idx = boundedAry[idx] + 1;
             }
             y_idx = x_idx - k;
-            snake = copySnake(kLines[idx]);
+            //snake = copySnake(kLines[idx]);
+            snake = kLines[idx];
 
             while ((x_idx < diffConfig->leftLineCnt)
             && (y_idx < diffConfig->rightLineCnt)
@@ -276,7 +284,7 @@ struct Snake_t *copySnake(struct Snake_t *snake)
     {
         if (newSnake == NULL)
         {
-            newSnake = (struct Snake_t *)malloc(sizeof(struct Snake_t));
+            newSnake = (struct Snake_t*)malloc(sizeof(struct Snake_t));
             newSnake->head[0] = current->head[0];
             newSnake->head[1] = current->head[1];
             newSnake->tail = NULL;

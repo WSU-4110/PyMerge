@@ -39,10 +39,10 @@ ICONS = {
     "NEXT_DIFF": "icons/down-arrow.png",
 }
 
-#converted changes to true with the ICONS are converted once
-#this conversion fails if you attempt to convert everything a second time
-#this only happens when the global scope of the ICONS is saved in a software test
-#but the mainWindow is initialized multiple times. 
+# converted changes to true with the ICONS are converted once
+# this conversion fails if you attempt to convert everything a second time
+# this only happens when the global scope of the ICONS is saved in a software test
+# but the mainWindow is initialized multiple times.
 converted = False
 
 """

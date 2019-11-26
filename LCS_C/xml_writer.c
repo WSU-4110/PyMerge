@@ -27,7 +27,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 *       HEADER FILES
 **********************************************************************************/
 #include "xml_writer.h"
-
+#include <time.h>
 
 /**********************************************************************************
 *       DEFINES
@@ -69,12 +69,15 @@ void writeLCSOutpFile(
         )
 {
     FILE *fd = fopen(outp_file, "w+");
+    time_t ltime; /* calendar time */
+    ltime=time(NULL); /* get current cal time */
 
     fprintf(fd, "<lcs_output>\n");
     fprintf(fd, "\t<meta>\n");
     fprintf(fd, "\t\t<left_file>%s</left_file>\n", leftFile);
     fprintf(fd, "\t\t<right_file>%s</right_file>\n", rightFile);
     fprintf(fd, "\t\t<line_length>%lld</line_length>\n", size);
+    fprintf(fd, "\t\t<timestamp>\n\t\t\t%s\t\t</timestamp>\n", asctime( localtime(&ltime) ) );
     fprintf(fd, "\t</meta>\n");
     fprintf(fd, "\t<matches>\n");
     for (long long i = 0; i < size; i++)

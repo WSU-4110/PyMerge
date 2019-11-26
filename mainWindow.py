@@ -6,6 +6,7 @@ Main Window
 """
 
 import os.path
+import subprocess
 import sys
 
 from PyQt5.QtWidgets import *
@@ -22,7 +23,7 @@ class mainWindow(QMainWindow, QMessageBox):
     def __init__(self, fileA=0, fileB=0):
         super().__init__()
         self.setWindowTitle("PyMerge")
-        self.setGeometry(1000, 1000, 2000, 1000)
+        self.setGeometry(100, 100, 1000, 800)
         self.table_widget = 0
         self.control_buttons_widget = 0
         layout = QGridLayout()
@@ -65,37 +66,24 @@ class mainWindow(QMainWindow, QMessageBox):
         self.table_widget.clear_table()
         
         fileOpener = fileOpenDialog.fileOpenDialog()
+        fileOpener.openFileNameDialog()
+        if fileOpener.fileAName != "":
+            fileOpener.openFileNameDialog()
 
         fileA = fileOpener.fileAName
         fileB = fileOpener.fileBName
-
-        if not os.path.exists(fileA):
-            print(fileA, "Does not exist")
-        if not os.path.exists(fileB):
-            print(fileB, "Does not exist")
-
-        if not utilities.file_readable(fileA):
-            print(fileA + ": Read permission denied.")
-        if not utilities.file_readable(fileB):
-            print(fileB + ": Read permission denied.")
-
-        if not utilities.file_writable(fileA):
-            print(fileA + ": Write permission denied.")
-        if not utilities.file_writable(fileB):
-            print(fileB + ": Write permission denied.")
-
-        # prompt = QMessageBox.about(self, "Error", "Error Message")
-        fileA = fileOpener.fileAName
-        fileB = fileOpener.fileBName
-
+        
         result = self.fIO.diffFiles(fileA, fileB)
 
         if result == pmEnums.RESULT.GOOD:
             result = self.fIO.getChangeSets(self.fIO.changesA, self.fIO.changesB)
+
         elif result == pmEnums.RESULT.BADFILE:
             QMessageBox.about(self, "Error", "Invalid file type")
 
+            
         self.table_widget.load_table_contents(fileA, fileB)
+        return result
 
     def menuItems(self):
         # ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -105,7 +93,8 @@ class mainWindow(QMainWindow, QMessageBox):
         fileMenu = mainMenu.addMenu('File')
         editMenu = mainMenu.addMenu('Edit')
         viewMenu = mainMenu.addMenu('View')
-
+        helpMenu = mainMenu.addMenu('Help')
+        
         openFileButton = QAction("Open Files", self)
         openFileButton.setShortcut('Ctrl+o')
         openFileButton.triggered.connect(lambda: self.openFile())
@@ -151,17 +140,20 @@ class mainWindow(QMainWindow, QMessageBox):
         HideShowButtons.triggered.connect(lambda: self.hideShowButns())
         viewMenu.addAction(HideShowButtons)
 
-
-        row = QAction("current row", self)
+        HelpButton = QAction("Manual", self)
         #no shortcut
-        row.triggered.connect(self.table_widget.printCurrentRow)
-        viewMenu.addAction(row)
+        HelpButton.triggered.connect(lambda: self.openHelp())
+        helpMenu.addAction(HelpButton)
+        
 
     def hideShowButns(self):        
         if self.control_buttons_widget.isVisible():
             self.control_buttons_widget.hide()
         else:
             self.control_buttons_widget.show()
+
+    def openHelp(self):
+        subprocess.Popen("file1.c",shell=True)
 
 def startMain(fileA=0, fileB=0):
     app = QApplication(sys.argv)

@@ -23,7 +23,7 @@ class mainWindow(QMainWindow, QMessageBox):
     def __init__(self, fileA=0, fileB=0):
         super().__init__()
         self.setWindowTitle("PyMerge")
-        self.setGeometry(10, 50, 1800, 900)
+        self.setGeometry(10, 50, 1750, 900)
         self.table_widget = 0
         self.control_buttons_widget = 0
         layout = QGridLayout()

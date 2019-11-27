@@ -1,8 +1,5 @@
 import time
-from xml.etree import ElementTree as ET
-import subprocess
-import time
-import os
+
 
 use_cython = False
 
@@ -121,44 +118,23 @@ def pad_raw_line_matches(match_list, file_length_max):
         outp_list[1].append(match_list[1][idx])
         idx += 1
         cntr += 1
-    # for n in range(len(outp_list[0])):
-    #     print(outp_list[0][n], outp_list[1][n])
-    return outp_list
 
-
-def lcs_c_if(left_file, right_file, xml_file):
-    proc = subprocess.run(["./LCS_C/build/LCS", left_file, right_file, xml_file])
-    outp_list = [[], []]
-    tree = ET.parse(xml_file)
-    root = tree.getroot()
-    for match in root.iter("match"):
-        outp_list[0].append(int(match.attrib["left"]))
-        outp_list[1].append(int(match.attrib["right"]))
-    #os.remove(xml_file)
-    # for n in range(len(outp_list[0])):
-    #     print(outp_list[0][n], outp_list[1][n])
     return outp_list
 
 
 def padded_lcs(right_set, left_set, file_length_max):
     if use_cython:
-        start = time.time()
+        #start = time.time()
         outp = lcs_cython.padded_lcs(right_set, left_set, myers=USE_MYERS_DIFF)
-        end = time.time()
-        print(end - start)
+        #end = time.time()
+        #print(end - start)
         return outp
     else:
-        start = time.time()
+        #start = time.time()
         if USE_MYERS_DIFF:
             raw_matches = longest_common_subsequence2(right_set, left_set)
         else:
             raw_matches = longest_common_subsequence(right_set, left_set)
-        end = time.time()
-        print(end - start)
+        #end = time.time()
+        #print(end - start)
         return pad_raw_line_matches(raw_matches, file_length_max)
-
-
-# start = time.time()
-# print(lcs_c_if("file1.c", "file2.c", "outputTest.xml"))
-# end = time.time()
-# print(end - start)

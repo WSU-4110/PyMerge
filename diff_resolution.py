@@ -42,12 +42,12 @@ def diff_set(
         "$"
     )  # Append a token on the end to make sure last 'lines' always match
     file_b_lines.append("$")
-    # raw_diff: list = longest_common_subseq.padded_lcs(
-    #     file_a_lines, file_b_lines, max(len(file_a_lines), len(file_b_lines))
-    # )
+    raw_diff: list = longest_common_subseq.padded_lcs(
+        file_a_lines, file_b_lines, max(len(file_a_lines), len(file_b_lines))
+    )
 
     start = time.time()
-    raw_diff = longest_common_subseq.lcs_c_if(file_a_path, file_b_path, "test.xml")
+    #raw_diff = longest_common_subseq.lcs_c_if(file_a_path, file_b_path, "test.xml")
     #print(raw_diff)
     end = time.time()
     print(end - start)

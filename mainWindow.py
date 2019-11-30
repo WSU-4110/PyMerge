@@ -28,6 +28,9 @@ class mainWindow(QMainWindow, QMessageBox):
         self.control_buttons_widget = 0
         layout = QGridLayout()
 
+        self.fileA = ""
+        self.fileB = ""
+
         # load files and generate changesets
         result = pmEnums.RESULT.ERROR
         self.fIO = fileIO.fileIO()
@@ -65,6 +68,7 @@ class mainWindow(QMainWindow, QMessageBox):
 
         self.table_widget.clear_table()
         
+
         fileOpenerA = fileOpenDialog.fileOpenDialog()
         fileOpenerB = fileOpenDialog.fileOpenDialog()
         

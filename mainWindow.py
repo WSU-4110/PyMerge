@@ -65,13 +65,15 @@ class mainWindow(QMainWindow, QMessageBox):
 
         self.table_widget.clear_table()
         
-        fileOpener = fileOpenDialog.fileOpenDialog()
-        fileOpener.openFileNameDialog()
-        if fileOpener.fileAName != "":
-            fileOpener.openFileNameDialog()
-
-        fileA = fileOpener.fileAName
-        fileB = fileOpener.fileBName
+        fileOpenerA = fileOpenDialog.fileOpenDialog()
+        fileOpenerB = fileOpenDialog.fileOpenDialog()
+        
+        fileOpenerA.openFileNameDialog()
+        fileA = fileOpenerA.fileName
+        
+        if fileA != "":
+            fileOpenerB.openFileNameDialog()        
+        fileB = fileOpenerB.fileName
         
         result = self.fIO.diffFiles(fileA, fileB)
 

@@ -21,6 +21,7 @@ import merge_finalizer
 import pmEnums
 import table_row
 import undo_redo
+import fileIO
 
 
 class MainTable(QWidget):
@@ -35,9 +36,7 @@ class MainTable(QWidget):
         self.setLayout(grid)
         self.table = QTableWidget()
         self.table.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
-        
-
-        
+        self.fileDropped = ""
         self.table.setRowCount(0)  # Set the initial row count to 0
         self.table.setColumnCount(5)  # Set the column count to 5
         self.setAcceptDrops(True)
@@ -175,6 +174,7 @@ class MainTable(QWidget):
         else:
             event.ignore()
 
+
     def dropEvent(self, event):
         """
         Override the dropEvent method
@@ -184,8 +184,35 @@ class MainTable(QWidget):
         if event.mimeData().hasUrls:
             event.setDropAction(Qt.CopyAction)
             event.accept()
-            links = event.mimeData().urls()[0]
-            print(links)
+            #links = event.mimeData().urls()[0]
+            for url in event.mimeData().urls():
+                path = url.toLocalFile()
+            #print(path)            
+            if self.fileDropped == "":
+                self.fileDropped = path
+            else:
+                self.clear_table()
+                fileB = path
+                
+                self.fIO = fileIO.fileIO()
+                print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                result = self.fIO.diffFiles(self.fileDropped, fileB)
+                if result == pmEnums.RESULT.GOOD:
+                    print("result good")
+                    result = result = self.fIO.getChangeSets(self.fIO.changesA, self.fIO.changesB)
+                change_set_rereferenceA = self.change_set_a
+                change_set_rereferenceB = self.change_set_b
+                self.change_set_a = self.fIO.changesA
+                self.change_set_b = self.fIO.changesB
+                
+                self.load_table_contents(self.fileDropped, fileB)
+                print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+
+                self.change_set_a = change_set_rereferenceA
+                self.change_set_b = change_set_rereferenceB
+
+                self.fileDropped = ""                
+            
         else:
             event.ignore()
 

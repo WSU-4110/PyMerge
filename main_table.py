@@ -56,7 +56,7 @@ class MainTable(QWidget):
         self.setLayout(grid)
         self.table = QTableWidget()
         self.table.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
-        self.fileDropped = ""
+        self.file_dropped = ""
         self.table.setRowCount(0)  # Set the initial row count to 0
         self.table.setColumnCount(5)  # Set the column count to 5
         self.setAcceptDrops(True)
@@ -78,12 +78,10 @@ class MainTable(QWidget):
         self.left_file: str = ""
         self.right_file: str = ""
 
-
         self.table.verticalHeader().setVisible(
             False
         )  # Disable the automatic line numbers.
         self.table.setVerticalScrollMode(0)
-
 
         # Set the head text
         self.table.setHorizontalHeaderItem(0, QTableWidgetItem("Line"))
@@ -122,8 +120,8 @@ class MainTable(QWidget):
         self.table.setEditTriggers(QTableWidget.NoEditTriggers)
 
         # Convert icon paths from gui_config.py to QIcon objects
-        #gui_cgf.converted ensures test software can run correctly
-        if gui_cfg.converted == False:
+        # gui_cgf.converted ensures test software can run correctly
+        if not gui_cfg.converted:
             gui_cfg.convert_icon_dict()
 
         grid.addWidget(self.table)
@@ -194,7 +192,6 @@ class MainTable(QWidget):
         else:
             event.ignore()
 
-
     def dropEvent(self, event):
         """
         Override the dropEvent method
@@ -204,36 +201,37 @@ class MainTable(QWidget):
         if event.mimeData().hasUrls:
             event.setDropAction(Qt.CopyAction)
             event.accept()
-            #links = event.mimeData().urls()[0]
+
             for url in event.mimeData().urls():
                 path = url.toLocalFile()
-            #print(path)            
-            if self.fileDropped == "":                
-                self.fileDropped = path
+
+            if self.file_dropped == "":
+                self.file_dropped = path
             else:
                 self.clear_table()
                 fileB = path
 
-                #I use a local instance of fileIO to generate changesets, since                            #main_table can't access the main window instance of fileIO
-                self.fIO = FileIO.FileIO()
-                result = self.fIO.diff_files(self.fileDropped, fileB)
+                # I use a local instance of fileIO to generate changesets, since
+                # main_table can't access the main window instance of fileIO
+                self.file_io = FileIO.FileIO()
+                result = self.file_io.diff_files(self.file_dropped, fileB)
                 if result == pmEnums.RESULT.GOOD:
-                    result = result = self.fIO.get_change_sets(self.fIO.changes_a, self.fIO.changes_b)
-                #I point the local changeSets to a local changeSet
-                #but I must point the local changeSets back at the mainWindow changeSets
-                #so I user could open different file via file open after they do a click and drag
-                change_set_rereferenceA = self.change_set_a
-                change_set_rereferenceB = self.change_set_b
-                self.change_set_a = self.fIO.changes_a
-                self.change_set_b = self.fIO.changes_b
+                    result = result = self.file_io.get_change_sets(self.file_io.changes_a, self.file_io.changes_b)
 
-                
-                self.load_table_contents(self.fileDropped, fileB)
+                # I point the local changeSets to a local changeSet
+                # but I must point the local changeSets back at the mainWindow changeSets
+                # so I user could open different file via file open after they do a click and drag
+                change_set_rereference_a = self.change_set_a
+                change_set_rereference_b = self.change_set_b
+                self.change_set_a = self.file_io.changes_a
+                self.change_set_b = self.file_io.changes_b
 
-                self.change_set_a = change_set_rereferenceA
-                self.change_set_b = change_set_rereferenceB
+                self.load_table_contents(self.file_dropped, fileB)
+
+                self.change_set_a = change_set_rereference_a
+                self.change_set_b = change_set_rereference_b
                 
-                self.fileDropped = ""                
+                self.file_dropped = ""
             
         else:
             event.ignore()
@@ -254,8 +252,7 @@ class MainTable(QWidget):
             self.curr_diff_idx += 1
             self.jump_to_line(self.diff_indices[self.curr_diff_idx])
         
-        self.select_block()        
-        #self.table.repaint()
+        self.select_block()
         return
 
     @pyqtSlot()
@@ -284,12 +281,11 @@ class MainTable(QWidget):
         undoes last change or group of changes
         :return: No return value
         """
-
-        undoStackSize = 0
+        undo_stack_size = 0
         for n in self.block_undo_size:
-            undoStackSize += n
+            undo_stack_size += n
         
-        difference = self.undo_ctrlr.undo_buf_size - undoStackSize        
+        difference = self.undo_ctrlr.undo_buf_size - undo_stack_size
         for i in range(difference):            
             self.block_undo_size.append(1)
         
@@ -305,7 +301,6 @@ class MainTable(QWidget):
                 self.undo_ctrlr.undo_buf_size -= 1
         for row in self.rows:
             row.set_row_state()
-
 
     @pyqtSlot()
     def redo_last_undo(self):
@@ -335,11 +330,11 @@ class MainTable(QWidget):
         
         self.block_undo_size.append(self.selected_block[1] - self.selected_block[0])
                 
-        undoStackSize = 0
+        undo_stack_size = 0
         for n in self.block_undo_size:
-            undoStackSize += n
+            undo_stack_size += n
         
-        difference = undoStackSize - self.undo_ctrlr.undo_buf_size
+        difference = undo_stack_size - self.undo_ctrlr.undo_buf_size
         difference = abs(difference)
         for i in range(difference):
             self.block_undo_size.insert( len(self.block_undo_size)-1, 1)
@@ -350,37 +345,29 @@ class MainTable(QWidget):
     def merge_right(self):
         """
         merge the whole right selection into the left
-        """                
-      
+        """
         self.table.clearSelection()
         for n in range(self.selected_block[0], self.selected_block[1]):
             self.rows[n].merge_right()
 
         self.block_undo_size.append(self.selected_block[1] - self.selected_block[0])
         
-        undoStackSize = 0
+        undo_stack_size = 0
         for n in self.block_undo_size:
-            undoStackSize += n
+            undo_stack_size += n
 
-        difference = undoStackSize - self.undo_ctrlr.undo_buf_size
+        difference = undo_stack_size - self.undo_ctrlr.undo_buf_size
         difference = abs(difference)
         for i in range(difference):
             self.block_undo_size.insert( len(self.block_undo_size)-1, 1)
         
         return
 
-
     def jump_to_line(self, line_num, col=0):
         self.table.clearSelection()
         self.table.scrollToItem(
             self.table.item(line_num-1, col), QtWidgets.QAbstractItemView.PositionAtTop
         )
-        
-        # self.table.scrollToItem(
-        #     self.table.selectRow(line_num), QtWidgets.QAbstractItemView.PositionAtTop
-        # )
-
-    
         
     def add_line(
         self,
@@ -393,6 +380,8 @@ class MainTable(QWidget):
     ):
         """
         Add a row into the table using the right and left text provided as parameters.
+        :param right_line_num:
+        :param left_line_num:
         :param right_text: Right text to display
         :param left_text: Left text to display
         :param line_num: Line number to display. This isn't exactly where it's inserted, just a display value
@@ -462,8 +451,8 @@ class MainTable(QWidget):
                 return False
         self.rows.clear()
         self.table.setRowCount(0)
-        del self.change_set_a.changeList[:]
-        del self.change_set_b.changeList[:]
+        del self.change_set_a.change_list[:]
+        del self.change_set_b.change_list[:]
         self.block_undo_size.clear()
         self.block_redo_size.clear()
         self.curr_diff_idx = -1

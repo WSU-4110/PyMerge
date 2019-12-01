@@ -8,7 +8,7 @@ import main_table
 import FileIO
 import pmEnums
 import diff_resolution
-import fileOpenDialog
+import FileOpenDialog
 import os.path
 import utilities
 

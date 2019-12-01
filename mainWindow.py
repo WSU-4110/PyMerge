@@ -14,7 +14,7 @@ from PyQt5.QtWidgets import *
 
 import ControlButtons
 import FileIO
-import fileOpenDialog
+import FileOpenDialog
 import main_table
 import pmEnums
 import utilities
@@ -71,15 +71,15 @@ class mainWindow(QMainWindow, QMessageBox):
         self.table_widget.clear_table()
         
 
-        fileOpenerA = fileOpenDialog.fileOpenDialog()
-        fileOpenerB = fileOpenDialog.fileOpenDialog()
+        fileOpenerA = FileOpenDialog.FileOpenDialog()
+        fileOpenerB = FileOpenDialog.FileOpenDialog()
         
-        fileOpenerA.openFileNameDialog()
-        fileA = fileOpenerA.fileName
+        fileOpenerA.open_file_name_dialog()
+        fileA = fileOpenerA.file_name
         
         if fileA != "":
-            fileOpenerB.openFileNameDialog()        
-        fileB = fileOpenerB.fileName
+            fileOpenerB.open_file_name_dialog()
+        fileB = fileOpenerB.file_name
 
         if not utilities.file_writable(fileA):
             QMessageBox.about(self, "Error", os.path.basename(fileA) + " is not writable")

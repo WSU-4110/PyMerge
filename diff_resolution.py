@@ -1,8 +1,32 @@
-# from changeSet import change_set
+"""
+###########################################################################
+File:
+Author:
+Description:
+
+
+Copyright (C) 2019
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+###########################################################################
+"""
+
 import changeSet
 import longest_common_subseq
 import pmEnums
 import time
+
 
 def get_next_idx_match(match_list: list or set, curr_idx: int) -> list:
     """
@@ -20,22 +44,26 @@ def get_next_idx_match(match_list: list or set, curr_idx: int) -> list:
 
 
 def diff_set(
-    iFileA, iFileB, file_a_path, file_b_path, ochangeSetA: changeSet.ChangeSet, ochangeSetB: changeSet.ChangeSet
+    file_a,
+    file_b,
+    file_a_path,
+    file_b_path,
+    change_set_a: changeSet.ChangeSet,
+    change_set_b: changeSet.ChangeSet,
 ):
     """
     This function gets the diff between two files and adds each line to a change set.
     Flags are set for each lines depending on if the lines were changes, added, or are the same.
-    :param iFileA: left hand file to compare
-    :param iFileB: right hand file to compare
-    :param ochangeSetA: change set object for the left file
-    :param ochangeSetB: change set object for the right file
+    :param file_a: left hand file to compare
+    :param file_b: right hand file to compare
+    :param change_set_a: change set object for the left file
+    :param change_set_b: change set object for the right file
     :return: pmEnums.CHANGED value indicating if operation was successful
     """
 
-    file_a_lines: list = iFileA.read().splitlines()
-    file_b_lines: list = iFileB.read().splitlines()
+    file_a_lines: list = file_a.read().splitlines()
+    file_b_lines: list = file_b.read().splitlines()
     last_vals: list = [0, 0]  # Last found match indices
-    next_vals: list = [0, 0]  # Next match indices
 
     # Get the raw, padded LCS output
     file_a_lines.append(
@@ -46,18 +74,12 @@ def diff_set(
         file_a_lines, file_b_lines, max(len(file_a_lines), len(file_b_lines))
     )
 
-    start = time.time()
-    #raw_diff = longest_common_subseq.lcs_c_if(file_a_path, file_b_path, "test.xml")
-    #print(raw_diff)
-    end = time.time()
-    print(end - start)
-    #print(raw_diff)
     for n in range(len(raw_diff[0])):
         if raw_diff[0][n] != -1 and raw_diff[1][n] != -1:
-            ochangeSetA.add_change(
+            change_set_a.add_change(
                 n, pmEnums.CHANGEDENUM.SAME, file_a_lines[raw_diff[0][n]]
             )
-            ochangeSetB.add_change(
+            change_set_b.add_change(
                 n, pmEnums.CHANGEDENUM.SAME, file_b_lines[raw_diff[1][n]]
             )
             last_vals = [raw_diff[0][n], raw_diff[1][n]]
@@ -69,10 +91,10 @@ def diff_set(
                 and ((raw_diff[0][n - 1] + 2) == raw_diff[0][n + 1])
                 or ((raw_diff[1][n - 1] + 2) == raw_diff[1][n + 1])
             ):
-                ochangeSetA.add_change(
+                change_set_a.add_change(
                     n, pmEnums.CHANGEDENUM.CHANGED, file_a_lines[raw_diff[0][n - 1] + 1]
                 )
-                ochangeSetB.add_change(
+                change_set_b.add_change(
                     n, pmEnums.CHANGEDENUM.CHANGED, file_b_lines[raw_diff[1][n - 1] + 1]
                 )
             else:
@@ -87,10 +109,10 @@ def diff_set(
                 # If the match index deltas are equal the line flags can default to CHANGED
                 if idx_delta[0] == idx_delta[1]:
                     last_vals = [x + 1 for x in last_vals]
-                    ochangeSetA.add_change(
+                    change_set_a.add_change(
                         n, pmEnums.CHANGEDENUM.CHANGED, file_a_lines[last_vals[0]]
                     )
-                    ochangeSetB.add_change(
+                    change_set_b.add_change(
                         n, pmEnums.CHANGEDENUM.CHANGED, file_b_lines[last_vals[1]]
                     )
 
@@ -99,43 +121,43 @@ def diff_set(
                     # Check if the last index matches are getting close to to the next index matches
                     if last_vals[1] < (next_vals[1] - 1):
                         last_vals = [x + 1 for x in last_vals]
-                        ochangeSetA.add_change(
+                        change_set_a.add_change(
                             n, pmEnums.CHANGEDENUM.CHANGED, file_a_lines[last_vals[0]]
                         )
-                        ochangeSetB.add_change(
+                        change_set_b.add_change(
                             n, pmEnums.CHANGEDENUM.CHANGED, file_b_lines[last_vals[1]]
                         )
                     else:
                         last_vals = [x + 1 for x in last_vals]
-                        ochangeSetA.add_change(
+                        change_set_a.add_change(
                             n, pmEnums.CHANGEDENUM.CHANGED, file_a_lines[last_vals[0]]
                         )
-                        ochangeSetB.add_change(n, pmEnums.CHANGEDENUM.ADDED, "")
+                        change_set_b.add_change(n, pmEnums.CHANGEDENUM.ADDED, "")
 
                 # if the delta is greater on the right side, that means lines were inserted in the right file
                 elif idx_delta[0] < idx_delta[1]:
                     if last_vals[0] < (next_vals[0] - 1):
                         last_vals = [x + 1 for x in last_vals]
-                        ochangeSetA.add_change(
+                        change_set_a.add_change(
                             n, pmEnums.CHANGEDENUM.CHANGED, file_a_lines[last_vals[0]]
                         )
-                        ochangeSetB.add_change(
+                        change_set_b.add_change(
                             n, pmEnums.CHANGEDENUM.CHANGED, file_b_lines[last_vals[1]]
                         )
 
                     else:
                         last_vals = [x + 1 for x in last_vals]
-                        ochangeSetA.add_change(n, pmEnums.CHANGEDENUM.ADDED, "")
-                        ochangeSetB.add_change(
+                        change_set_a.add_change(n, pmEnums.CHANGEDENUM.ADDED, "")
+                        change_set_b.add_change(
                             n, pmEnums.CHANGEDENUM.CHANGED, file_b_lines[last_vals[1]]
                         )
 
                 else:
                     # The default flag is CHANGED
-                    ochangeSetA.add_change(
+                    change_set_a.add_change(
                         n, pmEnums.CHANGEDENUM.CHANGED, file_a_lines[raw_diff[0][n]]
                     )
-                    ochangeSetB.add_change(
+                    change_set_b.add_change(
                         n, pmEnums.CHANGEDENUM.CHANGED, file_b_lines[raw_diff[1][n]]
                     )
 

@@ -1,12 +1,31 @@
-import datetime
+"""
+###########################################################################
+File:
+Author:
+Description:
+
+
+Copyright (C) 2019
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+###########################################################################
+"""
+
 import hashlib
 import os
 import pickle
 import zipfile
-
-
-# TODO: Make it so hash type is determined by some information about file during backup retrieval
-# TODO: Add datetime string to backup file name
 
 
 class Backup(object):
@@ -44,7 +63,12 @@ class Backup(object):
         :return: string containing datetime values
         """
         datetime_str = str(date_time)
-        datetime_str = datetime_str.replace(":", "").replace(" ", "_").replace("-", "").replace('.', '')
+        datetime_str = (
+            datetime_str.replace(":", "")
+            .replace(" ", "_")
+            .replace("-", "")
+            .replace(".", "")
+        )
         return datetime_str
 
     @staticmethod
@@ -64,7 +88,7 @@ class Backup(object):
         :param file: file to be archived
         :return: string containing absolute path to metadata file
         """
-        file_name = file.replace('\\', "/").split("/")[-1]
+        file_name = file.replace("\\", "/").split("/")[-1]
         meta_file_name = self.get_meta_file_name(file)
         meta_info: dict = {
             "NAME": file_name,
@@ -73,7 +97,7 @@ class Backup(object):
             "HASH_TYPE": self.hash_type,
         }
 
-        with open(meta_file_name, 'wb') as meta_file:
+        with open(meta_file_name, "wb") as meta_file:
             pickle.dump({"META": meta_info}, meta_file)
 
         return os.path.abspath(meta_file_name)
@@ -84,7 +108,7 @@ class Backup(object):
         :param file: file to get hash for
         :return: hex digest version of hash
         """
-        with open(file, 'rb') as in_file:
+        with open(file, "rb") as in_file:
             file_buf = in_file.read(self.BLOCK_SIZE)
             # hash_obj = self.hash_func().update(file_buf)
             while len(file_buf) > 0:
@@ -119,11 +143,13 @@ class Backup(object):
         # Create meta data file to use as comparison when backup is retrieved
         meta_file = self.create_meta_file(file)
 
-        with open(hash_file, 'w+') as temp:
+        with open(hash_file, "w+") as temp:
             temp.write(str(self.get_hash(file)))
 
         # Zip the files together
-        with zipfile.ZipFile(f"{backup_dir}/{file}.bak", 'w', zipfile.ZIP_DEFLATED) as backup:
+        with zipfile.ZipFile(
+            f"{backup_dir}/{file}.bak", "w", zipfile.ZIP_DEFLATED
+        ) as backup:
             backup.write(file)
             backup.write(hash_file)
             backup.write(meta_file)
@@ -151,8 +177,8 @@ class Backup(object):
             myzip.extract(f".meta.{file_name}.dat")
 
         # Read the hash file contents
-        with open(f"{self.hash_type}.txt", 'r') as hash_file:
-            hash_string = hash_file.read().strip('\n')
+        with open(f"{self.hash_type}.txt", "r") as hash_file:
+            hash_string = hash_file.read().strip("\n")
 
         # Check the integrity of the file against the included hash
         if not self.check_hash(backup_file.strip(".bak"), hash_string):
@@ -168,18 +194,8 @@ class Backup(object):
             myzip.extract(f"{self.hash_type}.txt")
 
         # Read the hash file contents
-        with open(f"{self.hash_type}.txt", 'r') as hash_file:
-            hash_string = hash_file.read().strip('\n')
+        with open(f"{self.hash_type}.txt", "r") as hash_file:
+            hash_string = hash_file.read().strip("\n")
 
         os.remove(f"{self.hash_type}.txt")
         return hash_string
-
-
-def test():
-    test_class = Backup()
-    #backup = test_class.create_backup("file2.c")
-    #os.remove("file2.c")
-    test_class.retrieve_backup("file2.c.bak", "file2.c")
-    # test_class.create_meta_file("file2.c")
-
-#test()

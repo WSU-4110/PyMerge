@@ -18,6 +18,7 @@ import fileOpenDialog
 import main_table
 import pmEnums
 import utilities
+import os
 
 
 class mainWindow(QMainWindow, QMessageBox):
@@ -79,6 +80,13 @@ class mainWindow(QMainWindow, QMessageBox):
         if fileA != "":
             fileOpenerB.openFileNameDialog()        
         fileB = fileOpenerB.fileName
+
+        if not utilities.file_writable(fileA):
+            QMessageBox.about(self, "Error", os.path.basename(fileA) + " is not writable")
+            return
+        if not utilities.file_writable(fileB):
+            QMessageBox.about(self, "Error", os.path.basename(fileB) + " is not writable")
+            return
         
         result = self.fIO.diffFiles(fileA, fileB)
 

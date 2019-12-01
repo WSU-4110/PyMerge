@@ -1,11 +1,11 @@
+import sys
 import unittest
-import utilities
+
+from PyQt5.QtWidgets import QApplication
+
+import FileIO
 import MainWindow
 import utilities
-import FileIO
-import sys
-import utilities
-from PyQt5.QtWidgets import QApplication
 
 app = QApplication(sys.argv)
 

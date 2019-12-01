@@ -22,11 +22,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ###########################################################################
 """
 
-import unittest
-import MainWindow
 import sys
+import unittest
 
 from PyQt5.QtWidgets import QApplication
+
+import MainWindow
 
 app = QApplication(sys.argv)
 

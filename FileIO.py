@@ -29,6 +29,7 @@ own untill it is time to write changes.
 """
 
 import ntpath
+
 import changeSet
 import diff_resolution
 import pmEnums

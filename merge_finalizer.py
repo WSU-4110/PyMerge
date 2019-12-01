@@ -22,11 +22,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ###########################################################################
 """
 
+import os
 from enum import Enum, unique
 
 import file_backup
 import utilities
-import os
 
 """
 Get data from table -> type checking -> deletions -> original file backup -> truncate file -> write data to file

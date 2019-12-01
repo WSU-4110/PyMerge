@@ -22,8 +22,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ###########################################################################
 """
 
-import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog
+from PyQt5.QtWidgets import QWidget, QFileDialog
 
 
 class FileOpenDialog(QWidget):

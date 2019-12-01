@@ -26,6 +26,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 Main Window
 """
 
+import os
 import os.path
 import subprocess
 import sys
@@ -39,7 +40,6 @@ import FileOpenDialog
 import main_table
 import pmEnums
 import utilities
-import os
 
 
 class MainWindow(QMainWindow, QMessageBox):

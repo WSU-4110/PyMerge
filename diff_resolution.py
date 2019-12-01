@@ -25,7 +25,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import changeSet
 import longest_common_subseq
 import pmEnums
-import time
 
 
 def get_next_idx_match(match_list: list or set, curr_idx: int) -> list:

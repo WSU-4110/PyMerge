@@ -35,13 +35,13 @@ from PyQt5.QtWidgets import (
     QGridLayout,
 )
 
+import FileIO
 # Project imports
 import gui_config as gui_cfg
 import merge_finalizer
 import pmEnums
 import table_row
 import undo_redo
-import FileIO
 
 
 class MainTable(QWidget):

@@ -22,10 +22,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ###########################################################################
 """
 
-from unittest import TestCase
-import file_backup
 import hashlib
 import os
+from unittest import TestCase
+
+import file_backup
 
 
 class TestBackup(TestCase):

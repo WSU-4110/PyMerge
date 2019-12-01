@@ -30,6 +30,7 @@ algorithms in this file. It will only call the main GUI and application function
 """
 
 import sys
+
 import dependency_chk
 
 dependency_chk.check()

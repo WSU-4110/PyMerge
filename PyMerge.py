@@ -1,4 +1,28 @@
 """
+###########################################################################
+File:
+Author:
+Description:
+
+
+Copyright (C) 2019
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+###########################################################################
+"""
+
+"""
 This is the entry point for the PyMerge program. Command line arguments will be passed
 to this file and the functions in this file will invoke the GUI. There will be no merge/compare/GUI
 algorithms in this file. It will only call the main GUI and application functions.
@@ -6,13 +30,13 @@ algorithms in this file. It will only call the main GUI and application function
 """
 
 import sys
+
 import dependency_chk
 
 dependency_chk.check()
 
-import mainWindow
+import MainWindow
 import utilities
-import initialWindow
 
 
 class PyMergeCLI(object):
@@ -111,13 +135,11 @@ PyMerge
     def invoke_application(self, file1: str, file2: str):
         """Invoke the main application here"""
 
-        # initialWindow.startWindow()
-
         if file1 != "" or file2 != "":
             if self.validate_files(file1, file2, path_check=False):
-                mainWindow.startMain(file1, file2)
+                MainWindow.start_main(file1, file2)
         else:
-            mainWindow.startMain()
+            MainWindow.start_main()
         print(file1, file2)
 
     def validate_files(self, file1, file2, path_check=False):

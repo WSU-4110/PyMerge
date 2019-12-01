@@ -1,23 +1,23 @@
-import unittest
-import utilities
-import mainWindow
-import utilities
-import fileIO
 import sys
-import utilities
+import unittest
+
 from PyQt5.QtWidgets import QApplication
+
+import FileIO
+import MainWindow
+import utilities
 
 app = QApplication(sys.argv)
 
 class UnitTest(unittest.TestCase):
 
     def setUp(self):
-        self.mainWindow = mainWindow.mainWindow("file1.c", "file2.c")
-        self.fileIO = fileIO
+        self.mainWindow = MainWindow.MainWindow("file1.c", "file2.c")
+        self.fileIO = FileIO
         self.util = utilities
 
     def test_openFile(self):
-        self.mainWindow.openFile()
+        self.mainWindow.open_file()
         expectedFileA = "/Users/saularraffi/Documents/School Work Archive/Fall " \
                         "2019 Semester/Software Engineering/Lab/PyMerge/file1.c"
         expectedFileB = "/Users/saularraffi/Documents/School Work Archive/Fall " \

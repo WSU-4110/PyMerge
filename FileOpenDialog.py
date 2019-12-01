@@ -22,30 +22,22 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ###########################################################################
 """
 
-"""
-various enumerations, to standardize the output and input that functions 
-are expecting to get. 
-"""
-from enum import Enum
+from PyQt5.QtWidgets import QWidget, QFileDialog
 
 
-class RESULT(Enum):
-    GOOD = 0
-    ERROR = 1
-    NOTIMPL = 2  # not implemented
-    BADFILE = 3  # file mismatch
-    EMPTYFILE = 4
+class FileOpenDialog(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.file_name = ""
+        self.title = 'Open File'
+        self.setGeometry(100, 100, 400, 500)
+              
+    def open_file_name_dialog(self):
+        options = QFileDialog.Options()
+        self.file_name, _ = QFileDialog.getOpenFileName(self, "Open File A", "", "", options=options)
 
 
-class ATTRIB(Enum):
-    DATA = 0
-    CHANGE = 1
-
-
-class CHANGEDENUM(Enum):
-    SAME = 0
-    CHANGED = 1
-    ADDED = 2
-    MOVED = 3
-    PADDING = 4
-    ERROR = 5
+# if __name__ == '__main__':
+#     app = QApplication(sys.argv)
+#     ex = FileOpenDialog()
+#     sys.exit(app.exec_())

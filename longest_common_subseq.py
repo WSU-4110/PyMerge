@@ -1,7 +1,7 @@
 import time
 
 
-use_cython = True
+use_cython = False
 
 try:
     from cython_accelerator import lcs_cython
@@ -124,17 +124,17 @@ def pad_raw_line_matches(match_list, file_length_max):
 
 def padded_lcs(right_set, left_set, file_length_max):
     if use_cython:
-        start = time.time()
+        #start = time.time()
         outp = lcs_cython.padded_lcs(right_set, left_set, myers=USE_MYERS_DIFF)
-        end = time.time()
-        print(end - start)
+        #end = time.time()
+        #print(end - start)
         return outp
     else:
-        start = time.time()
+        #start = time.time()
         if USE_MYERS_DIFF:
             raw_matches = longest_common_subsequence2(right_set, left_set)
         else:
             raw_matches = longest_common_subsequence(right_set, left_set)
-        end = time.time()
-        print(end - start)
+        #end = time.time()
+        #print(end - start)
         return pad_raw_line_matches(raw_matches, file_length_max)

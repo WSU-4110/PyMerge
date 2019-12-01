@@ -36,7 +36,8 @@ class fileIO():
 
         #alg = algorithm.algorithm
         #result = alg.generateChangeSets(alg, fileA, fileB, self.changesA, self.changesB)
-        result = diff_resolution.diff_set(fileA, fileB, self.changesA, self.changesB)
+        # result = diff_resolution.diff_set(fileA, fileB, self.changesA, self.changesB)
+        result = diff_resolution.diff_set(fileA, fileB, iFileA, iFileB, self.changesA, self.changesB)
 
         fileA.close()
         fileB.close()

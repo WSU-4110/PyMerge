@@ -17,13 +17,13 @@ the specifications listed below:
 #### Option 1: Installer:
 Download the appropriate installer for PyMerge.
 
-| OS            | Architecture| Installer     |
-| :---          |    :----:   |          :--- |
-| **Windows**   | x64         | [PyMerge-1.0-windows-x64-installer.exe]()   |
-| **Windows**   | x86         | [PyMerge-1.0-windows-installer.exe]()       |
-| **macOS**     | --          | [PyMerge-1.0-osx-installer]()               |
-| **Linux**     | x64         | [PyMerge-1.0-linux-x64-installer.run]()     |
-| **Linux**     | x86         | [PyMerge-1.0-linux-installer.run]()         |
+| OS            | Architecture | Installer     |
+| :---          |    :----:    |          :--- |
+| **Windows**   | x64          | [PyMerge-1.0-windows-x64-installer.exe]()   |
+| **Windows**   | x86          | [PyMerge-1.0-windows-installer.exe]()       |
+| **macOS**     | --           | [PyMerge-1.0-osx-installer]()               |
+| **Linux**     | x64          | [PyMerge-1.0-linux-x64-installer.run]()     |
+| **Linux**     | x86          | [PyMerge-1.0-linux-installer.run]()         |
 
 #### Option 2: Clone the repository
 You may optionally clone the repository and just run PyMerge.py directly (this is the more 
@@ -79,13 +79,13 @@ To merge a line, press the array button in the center of the comparison table. T
 from one side, to the side that the arrow is pointing to. The line will then change its background
 color to a light blue to indicate that a merge has occurred. 
 
-####Undo/Redo
+#### Undo/Redo
 Accidents happen. To undo or redo a merge, press the curved arrow buttons on the top toolbar,
 or press the 'Ctrl+Z' and 'Ctrl+Y' hot-keys. This will restore the state to what it was 
 before the last merge event.
 
 #### Saving a file
-Once you have finished merging the two files, you can save the files using File->Save. 
+Once you have finished merging the two files, you can save the files using File -> Save. 
 A backup of your original file will be created and the newly merged changes will be 
 written to the original file. The changes are written in-place because creating a
 new file would likely cause issues with any version control tools being used to track

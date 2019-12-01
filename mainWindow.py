@@ -8,6 +8,7 @@ Main Window
 import os.path
 import subprocess
 import sys
+from sys import platform
 
 from PyQt5.QtWidgets import *
 
@@ -24,10 +25,13 @@ class mainWindow(QMainWindow, QMessageBox):
     def __init__(self, fileA=0, fileB=0):
         super().__init__()
         self.setWindowTitle("PyMerge")
-        self.setGeometry(100, 100, 1000, 800)
+        self.setGeometry(10, 50, 1750, 900)
         self.table_widget = 0
         self.control_buttons_widget = 0
         layout = QGridLayout()
+
+        self.fileA = ""
+        self.fileB = ""
 
         # load files and generate changesets
         result = pmEnums.RESULT.ERROR
@@ -66,14 +70,16 @@ class mainWindow(QMainWindow, QMessageBox):
 
         self.table_widget.clear_table()
         
-        fileOpener = fileOpenDialog.fileOpenDialog()
-        fileOpener.openFileNameDialog()
 
-        if fileOpener.fileAName != "":
-            fileOpener.openFileNameDialog()
-
-        fileA = fileOpener.fileAName
-        fileB = fileOpener.fileBName
+        fileOpenerA = fileOpenDialog.fileOpenDialog()
+        fileOpenerB = fileOpenDialog.fileOpenDialog()
+        
+        fileOpenerA.openFileNameDialog()
+        fileA = fileOpenerA.fileName
+        
+        if fileA != "":
+            fileOpenerB.openFileNameDialog()        
+        fileB = fileOpenerB.fileName
 
         if not utilities.file_writable(fileA):
             QMessageBox.about(self, "Error", os.path.basename(fileA) + " is not writable")
@@ -162,7 +168,12 @@ class mainWindow(QMainWindow, QMessageBox):
             self.control_buttons_widget.show()
 
     def openHelp(self):
-        subprocess.Popen("file1.c",shell=True)
+        if platform == "win32":            
+            subprocess.Popen("PyMerge_Manual.pdf",shell=True)
+        else:
+            subprocess.Popen("open PyMerge_Manual.pdf",shell=True)
+
+    
 
 def startMain(fileA=0, fileB=0):
     app = QApplication(sys.argv)

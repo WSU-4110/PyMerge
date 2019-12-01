@@ -28,7 +28,7 @@ class controlButtons(QWidget):
         merge_left_button.setFixedHeight(50)
         merge_left_button.setToolTip('merge left version into right')
         merge_left_button.clicked.connect(self.tableObj.merge_left)
-        grid.addWidget(merge_left_button, 0, 0)
+        grid.addWidget(merge_left_button, 0, 1)
 
 
         undo_change_button = QPushButton()
@@ -37,7 +37,7 @@ class controlButtons(QWidget):
         undo_change_button.setFixedHeight(50)
         undo_change_button.setToolTip("undo last merge")
         undo_change_button.clicked.connect(self.tableObj.undo_last_change)
-        grid.addWidget(undo_change_button, 0, 1)
+        grid.addWidget(undo_change_button, 0, 0)
         
         next_diff_button = QPushButton()
         icon = QtGui.QIcon(gui_config.ICONS["NEXT_DIFF"])
@@ -61,7 +61,7 @@ class controlButtons(QWidget):
         redo_change_button.setFixedHeight(50)
         redo_change_button.setToolTip("redo last change")
         redo_change_button.clicked.connect(self.tableObj.redo_last_undo)
-        grid.addWidget(redo_change_button, 0, 4)
+        grid.addWidget(redo_change_button, 0, 5)
 
         
         merge_right_button = QPushButton()
@@ -70,4 +70,4 @@ class controlButtons(QWidget):
         merge_right_button.setFixedHeight(50)
         merge_right_button.setToolTip("merge right version into left")
         merge_right_button.clicked.connect(self.tableObj.merge_right)
-        grid.addWidget(merge_right_button, 0, 5)
+        grid.addWidget(merge_right_button, 0, 4)

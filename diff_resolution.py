@@ -22,9 +22,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ###########################################################################
 """
 
-import changeSet
+import changeset
 import longest_common_subseq
-import pmEnums
+import pymerge_enums
 
 
 def get_next_idx_match(match_list: list or set, curr_idx: int) -> list:
@@ -47,8 +47,8 @@ def diff_set(
     file_b,
     file_a_path,
     file_b_path,
-    change_set_a: changeSet.ChangeSet,
-    change_set_b: changeSet.ChangeSet,
+    change_set_a: changeset.ChangeSet,
+    change_set_b: changeset.ChangeSet,
 ):
     """
     This function gets the diff between two files and adds each line to a change set.
@@ -76,10 +76,10 @@ def diff_set(
     for n in range(len(raw_diff[0])):
         if raw_diff[0][n] != -1 and raw_diff[1][n] != -1:
             change_set_a.add_change(
-                n, pmEnums.CHANGEDENUM.SAME, file_a_lines[raw_diff[0][n]]
+                n, pymerge_enums.CHANGEDENUM.SAME, file_a_lines[raw_diff[0][n]]
             )
             change_set_b.add_change(
-                n, pmEnums.CHANGEDENUM.SAME, file_b_lines[raw_diff[1][n]]
+                n, pymerge_enums.CHANGEDENUM.SAME, file_b_lines[raw_diff[1][n]]
             )
             last_vals = [raw_diff[0][n], raw_diff[1][n]]
 
@@ -91,17 +91,17 @@ def diff_set(
                 or ((raw_diff[1][n - 1] + 2) == raw_diff[1][n + 1])
             ):
                 change_set_a.add_change(
-                    n, pmEnums.CHANGEDENUM.CHANGED, file_a_lines[raw_diff[0][n - 1] + 1]
+                    n, pymerge_enums.CHANGEDENUM.CHANGED, file_a_lines[raw_diff[0][n - 1] + 1]
                 )
                 change_set_b.add_change(
-                    n, pmEnums.CHANGEDENUM.CHANGED, file_b_lines[raw_diff[1][n - 1] + 1]
+                    n, pymerge_enums.CHANGEDENUM.CHANGED, file_b_lines[raw_diff[1][n - 1] + 1]
                 )
             else:
                 # Get the next matching indices
                 next_vals = get_next_idx_match(raw_diff, n)
 
                 if next_vals == [-1, -1]:
-                    return pmEnums.RESULT.ERROR
+                    return pymerge_enums.RESULT.ERROR
 
                 idx_delta = [next_vals[0] - last_vals[0], next_vals[1] - last_vals[1]]
 
@@ -109,10 +109,10 @@ def diff_set(
                 if idx_delta[0] == idx_delta[1]:
                     last_vals = [x + 1 for x in last_vals]
                     change_set_a.add_change(
-                        n, pmEnums.CHANGEDENUM.CHANGED, file_a_lines[last_vals[0]]
+                        n, pymerge_enums.CHANGEDENUM.CHANGED, file_a_lines[last_vals[0]]
                     )
                     change_set_b.add_change(
-                        n, pmEnums.CHANGEDENUM.CHANGED, file_b_lines[last_vals[1]]
+                        n, pymerge_enums.CHANGEDENUM.CHANGED, file_b_lines[last_vals[1]]
                     )
 
                 # If the delta is greater on the left side, that means lines were inserted in the left file
@@ -121,43 +121,43 @@ def diff_set(
                     if last_vals[1] < (next_vals[1] - 1):
                         last_vals = [x + 1 for x in last_vals]
                         change_set_a.add_change(
-                            n, pmEnums.CHANGEDENUM.CHANGED, file_a_lines[last_vals[0]]
+                            n, pymerge_enums.CHANGEDENUM.CHANGED, file_a_lines[last_vals[0]]
                         )
                         change_set_b.add_change(
-                            n, pmEnums.CHANGEDENUM.CHANGED, file_b_lines[last_vals[1]]
+                            n, pymerge_enums.CHANGEDENUM.CHANGED, file_b_lines[last_vals[1]]
                         )
                     else:
                         last_vals = [x + 1 for x in last_vals]
                         change_set_a.add_change(
-                            n, pmEnums.CHANGEDENUM.CHANGED, file_a_lines[last_vals[0]]
+                            n, pymerge_enums.CHANGEDENUM.CHANGED, file_a_lines[last_vals[0]]
                         )
-                        change_set_b.add_change(n, pmEnums.CHANGEDENUM.ADDED, "")
+                        change_set_b.add_change(n, pymerge_enums.CHANGEDENUM.ADDED, "")
 
                 # if the delta is greater on the right side, that means lines were inserted in the right file
                 elif idx_delta[0] < idx_delta[1]:
                     if last_vals[0] < (next_vals[0] - 1):
                         last_vals = [x + 1 for x in last_vals]
                         change_set_a.add_change(
-                            n, pmEnums.CHANGEDENUM.CHANGED, file_a_lines[last_vals[0]]
+                            n, pymerge_enums.CHANGEDENUM.CHANGED, file_a_lines[last_vals[0]]
                         )
                         change_set_b.add_change(
-                            n, pmEnums.CHANGEDENUM.CHANGED, file_b_lines[last_vals[1]]
+                            n, pymerge_enums.CHANGEDENUM.CHANGED, file_b_lines[last_vals[1]]
                         )
 
                     else:
                         last_vals = [x + 1 for x in last_vals]
-                        change_set_a.add_change(n, pmEnums.CHANGEDENUM.ADDED, "")
+                        change_set_a.add_change(n, pymerge_enums.CHANGEDENUM.ADDED, "")
                         change_set_b.add_change(
-                            n, pmEnums.CHANGEDENUM.CHANGED, file_b_lines[last_vals[1]]
+                            n, pymerge_enums.CHANGEDENUM.CHANGED, file_b_lines[last_vals[1]]
                         )
 
                 else:
                     # The default flag is CHANGED
                     change_set_a.add_change(
-                        n, pmEnums.CHANGEDENUM.CHANGED, file_a_lines[raw_diff[0][n]]
+                        n, pymerge_enums.CHANGEDENUM.CHANGED, file_a_lines[raw_diff[0][n]]
                     )
                     change_set_b.add_change(
-                        n, pmEnums.CHANGEDENUM.CHANGED, file_b_lines[raw_diff[1][n]]
+                        n, pymerge_enums.CHANGEDENUM.CHANGED, file_b_lines[raw_diff[1][n]]
                     )
 
-    return pmEnums.RESULT.GOOD
+    return pymerge_enums.RESULT.GOOD

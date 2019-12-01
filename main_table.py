@@ -35,11 +35,11 @@ from PyQt5.QtWidgets import (
     QGridLayout,
 )
 
-import FileIO
+import file_io
 # Project imports
 import gui_config as gui_cfg
 import merge_finalizer
-import pmEnums
+import pymerge_enums
 import table_row
 import undo_redo
 
@@ -213,9 +213,9 @@ class MainTable(QWidget):
 
                 # I use a local instance of fileIO to generate changesets, since
                 # main_table can't access the main window instance of fileIO
-                self.file_io = FileIO.FileIO()
+                self.file_io = file_io.FileIO()
                 result = self.file_io.diff_files(self.file_dropped, fileB)
-                if result == pmEnums.RESULT.GOOD:
+                if result == pymerge_enums.RESULT.GOOD:
                     result = result = self.file_io.get_change_sets(self.file_io.changes_a, self.file_io.changes_b)
 
                 # I point the local changeSets to a local changeSet
@@ -483,8 +483,8 @@ class MainTable(QWidget):
         for n in range(len(self.change_set_a.change_list) - 1):
             data_a = [""]
             data_b = [""]
-            change_type_a = [pmEnums.CHANGEDENUM.SAME]
-            change_type_b = [pmEnums.CHANGEDENUM.SAME]
+            change_type_a = [pymerge_enums.CHANGEDENUM.SAME]
+            change_type_b = [pymerge_enums.CHANGEDENUM.SAME]
             self.change_set_a.get_change(n, change_type_a, data_a)
             self.change_set_b.get_change(n, change_type_b, data_b)
 
@@ -494,11 +494,11 @@ class MainTable(QWidget):
         n = 0
         while n < len(self.change_set_a.change_list) - 1:
             data_a = [""]
-            change_type_a = [pmEnums.CHANGEDENUM.SAME]
+            change_type_a = [pymerge_enums.CHANGEDENUM.SAME]
             self.change_set_a.get_change(n, change_type_a, data_a)
-            if change_type_a[0] != pmEnums.CHANGEDENUM.SAME:
+            if change_type_a[0] != pymerge_enums.CHANGEDENUM.SAME:
                 self.diff_indices.append(n)
-                while change_type_a[0] != pmEnums.CHANGEDENUM.SAME:
+                while change_type_a[0] != pymerge_enums.CHANGEDENUM.SAME:
                     n += 1
                     self.change_set_a.get_change(n, change_type_a, data_a)
                 self.diff_index_block_end.append(n)
@@ -541,22 +541,19 @@ class MainTable(QWidget):
                 if n >= i:
                    self.curr_diff_idx = j 
                 j += 1
-                    
-            
+
         self.table.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
         self.table.clearSelection()
         self.selected_block[0] = self.diff_indices[self.curr_diff_idx]
         self.selected_block[1] = self.diff_index_block_end[self.curr_diff_idx]
         for n in range(self.diff_indices[self.curr_diff_idx], self.diff_index_block_end[self.curr_diff_idx]):
             self.table.selectRow(n)
-            
-            
-        
+
         self.table.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
 
     @pyqtSlot()
     def cellClickedEvent(self):
-        if self.rows[self.table.currentRow()].change_state_flags[0] == pmEnums.CHANGEDENUM.SAME:            
+        if self.rows[self.table.currentRow()].change_state_flags[0] == pymerge_enums.CHANGEDENUM.SAME:
             self.table.clearSelection()
         else:
             self.select_block(self.table.currentRow())

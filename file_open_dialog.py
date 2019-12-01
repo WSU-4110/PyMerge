@@ -36,8 +36,3 @@ class FileOpenDialog(QWidget):
         options = QFileDialog.Options()
         self.file_name, _ = QFileDialog.getOpenFileName(self, "Open File A", "", "", options=options)
 
-
-# if __name__ == '__main__':
-#     app = QApplication(sys.argv)
-#     ex = FileOpenDialog()
-#     sys.exit(app.exec_())

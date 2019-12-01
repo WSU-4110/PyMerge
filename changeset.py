@@ -27,7 +27,7 @@ class, provides a data structure to make working with file differences (change s
 easier by abstracting the data storage, and providing a single accessor function.
 """
 
-import pmEnums
+import pymerge_enums
 
 
 class ChangeSet(object):
@@ -40,7 +40,7 @@ class ChangeSet(object):
 		change = self.change_list[line_num]
 		change_type[0] = change[1]
 		data[0] = change[2]
-		return pmEnums.RESULT.NOTIMPL
+		return pymerge_enums.RESULT.NOTIMPL
 
 	def add_change(self, line_num, change_type, data):
 		self.change_list.append((line_num, change_type, data))

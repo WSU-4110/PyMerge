@@ -27,30 +27,30 @@ import unittest
 
 from PyQt5.QtWidgets import QApplication
 
-import MainWindow
+import main_window
 
 app = QApplication(sys.argv)
 
 
 class TestMainTable(unittest.TestCase):
     def setUp(self):
-        self.mainWindow = MainWindow.MainWindow("file1.c", "file2.c")
+        self.mainWindow = main_window.MainWindow("file1.c", "file2.c")
         self.table = self.mainWindow.table_widget
-        #for testing button presses on window with no input files
-        self.mainWindow2 = MainWindow.MainWindow()
+        # for testing button presses on window with no input files
+        self.mainWindow2 = main_window.MainWindow()
         self.table2 = self.mainWindow2.table_widget
         
     def test_goto_next_diff(self):        
         self.table.goto_next_diff()
         self.table.goto_next_diff()                
         expectedDiffIndex = 1
-        self.assertEqual( expectedDiffIndex, self.table.curr_diff_idx  )
+        self.assertEqual(expectedDiffIndex, self.table.curr_diff_idx)
         expectedDiffLine = 9
-        self.assertEqual( expectedDiffLine, self.table.table.currentRow() )
+        self.assertEqual(expectedDiffLine, self.table.table.currentRow())
 
-        #an empty table will leave the curr_diff_indx at -1
+        # an empty table will leave the curr_diff_indx at -1
         self.table2.goto_next_diff()
-        self.assertEqual( -1, self.table2.curr_diff_idx)
+        self.assertEqual(-1, self.table2.curr_diff_idx)
 
     def test_goto_prev_diff(self):
         self.table.goto_next_diff()

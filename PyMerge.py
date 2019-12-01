@@ -30,12 +30,11 @@ algorithms in this file. It will only call the main GUI and application function
 """
 
 import sys
-
 import dependency_chk
 
 dependency_chk.check()
 
-import MainWindow
+import main_window
 import utilities
 
 
@@ -137,9 +136,9 @@ PyMerge
 
         if file1 != "" or file2 != "":
             if self.validate_files(file1, file2, path_check=False):
-                MainWindow.start_main(file1, file2)
+                main_window.start_main(file1, file2)
         else:
-            MainWindow.start_main()
+            main_window.start_main()
         print(file1, file2)
 
     def validate_files(self, file1, file2, path_check=False):

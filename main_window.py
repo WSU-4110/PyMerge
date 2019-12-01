@@ -34,11 +34,11 @@ from sys import platform
 
 from PyQt5.QtWidgets import *
 
-import ControlButtons
-import FileIO
-import FileOpenDialog
+import control_buttons
+import file_io
+import file_open_dialog
 import main_table
-import pmEnums
+import pymerge_enums
 import utilities
 
 
@@ -55,11 +55,11 @@ class MainWindow(QMainWindow, QMessageBox):
         self.fileB = ""
 
         # load files and generate changesets
-        result = pmEnums.RESULT.ERROR
-        self.fIO = FileIO.FileIO()
+        result = pymerge_enums.RESULT.ERROR
+        self.fIO = file_io.FileIO()
         if fileA != 0 and fileB != 0:
             result = self.fIO.diff_files(fileA, fileB)
-            if result == pmEnums.RESULT.GOOD:
+            if result == pymerge_enums.RESULT.GOOD:
                 result = self.fIO.get_change_sets(self.fIO.changes_a, self.fIO.changes_b)
 
         self.table_widget = 0
@@ -74,7 +74,7 @@ class MainWindow(QMainWindow, QMessageBox):
             self.table_widget.load_table_contents(fileA, fileB)  # Left list arguments for now
         self.table_widget.load_table_contents()  # Left list arguments for now
         
-        self.control_buttons_widget = ControlButtons.ControlButtons(self.table_widget)
+        self.control_buttons_widget = control_buttons.ControlButtons(self.table_widget)
         layout.addWidget(self.control_buttons_widget, 0, 0)
         widget = QWidget()
         widget.setLayout(layout)
@@ -91,8 +91,8 @@ class MainWindow(QMainWindow, QMessageBox):
 
         self.table_widget.clear_table()
 
-        file_opener_a = FileOpenDialog.FileOpenDialog()
-        file_opener_b = FileOpenDialog.FileOpenDialog()
+        file_opener_a = file_open_dialog.FileOpenDialog()
+        file_opener_b = file_open_dialog.FileOpenDialog()
         
         file_opener_a.open_file_name_dialog()
         file_a = file_opener_a.file_name
@@ -110,10 +110,10 @@ class MainWindow(QMainWindow, QMessageBox):
         
         result = self.fIO.diff_files(file_a, file_b)
 
-        if result == pmEnums.RESULT.GOOD:
+        if result == pymerge_enums.RESULT.GOOD:
             result = self.fIO.get_change_sets(self.fIO.changes_a, self.fIO.changes_b)
 
-        elif result == pmEnums.RESULT.BADFILE:
+        elif result == pymerge_enums.RESULT.BADFILE:
             QMessageBox.about(self, "Error", "Invalid file type")
 
         self.table_widget.load_table_contents(file_a, file_b)

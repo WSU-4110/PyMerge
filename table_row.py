@@ -36,7 +36,7 @@ from PyQt5.QtWidgets import (
 
 # Project imports
 import gui_config as gui_cfg
-import pmEnums
+import pymerge_enums
 import undo_redo
 
 
@@ -74,28 +74,28 @@ class Row(QtCore.QObject):
         self.undo_ctrlr = undo_redo.UndoRedo.get_instance()
 
         # Set the left and right background colors
-        if self.change_state_flags[0] == pmEnums.CHANGEDENUM.CHANGED:
+        if self.change_state_flags[0] == pymerge_enums.CHANGEDENUM.CHANGED:
             self.set_left_background(gui_cfg.COLORS["ROW_DIFF"], buttons=True)
 
-        elif self.change_state_flags[1] == pmEnums.CHANGEDENUM.PADDING:
+        elif self.change_state_flags[1] == pymerge_enums.CHANGEDENUM.PADDING:
             self.set_left_background(gui_cfg.COLORS["ROW_PAD_SPACE"], buttons=True)
 
-        elif self.change_state_flags[0] == pmEnums.CHANGEDENUM.ADDED:
+        elif self.change_state_flags[0] == pymerge_enums.CHANGEDENUM.ADDED:
             self.set_left_background(gui_cfg.COLORS["ROW_PAD_SPACE"], buttons=True)
 
-        elif self.change_state_flags[0] == pmEnums.CHANGEDENUM.SAME:
+        elif self.change_state_flags[0] == pymerge_enums.CHANGEDENUM.SAME:
             self.set_left_background(gui_cfg.COLORS["ROW_DEFAULT"])
 
-        if self.change_state_flags[1] == pmEnums.CHANGEDENUM.CHANGED:
+        if self.change_state_flags[1] == pymerge_enums.CHANGEDENUM.CHANGED:
             self.set_right_background(gui_cfg.COLORS["ROW_DIFF"], buttons=True)
 
-        elif self.change_state_flags[1] == pmEnums.CHANGEDENUM.PADDING:
+        elif self.change_state_flags[1] == pymerge_enums.CHANGEDENUM.PADDING:
             self.set_right_background(gui_cfg.COLORS["ROW_PAD_SPACE"], buttons=True)
 
-        elif self.change_state_flags[1] == pmEnums.CHANGEDENUM.ADDED:
+        elif self.change_state_flags[1] == pymerge_enums.CHANGEDENUM.ADDED:
             self.set_right_background(gui_cfg.COLORS["ROW_PAD_SPACE"], buttons=True)
             
-        elif self.change_state_flags[1] == pmEnums.CHANGEDENUM.SAME:
+        elif self.change_state_flags[1] == pymerge_enums.CHANGEDENUM.SAME:
             self.set_right_background(gui_cfg.COLORS["ROW_DEFAULT"])
 
     def set_right_background(self, background, buttons=False):
@@ -140,7 +140,7 @@ class Row(QtCore.QObject):
         self.undo_ctrlr.record_action(self)        
         self.undo_ctrlr.undo_buf_size += 1
         # Set booleans
-        if self.change_state_flags[1] == pmEnums.CHANGEDENUM.ADDED:
+        if self.change_state_flags[1] == pymerge_enums.CHANGEDENUM.ADDED:
             self.row_deleted[0] = True
             self.row_deleted[1] = True
 
@@ -177,7 +177,7 @@ class Row(QtCore.QObject):
         self.undo_ctrlr.record_action(self)    
         self.undo_ctrlr.undo_buf_size += 1
         # Set booleans
-        if self.change_state_flags[0] == pmEnums.CHANGEDENUM.ADDED:
+        if self.change_state_flags[0] == pymerge_enums.CHANGEDENUM.ADDED:
             self.row_deleted[0] = True
             self.row_deleted[1] = True
 

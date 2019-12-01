@@ -2,7 +2,7 @@ import unittest
 import utilities
 import mainWindow
 import utilities
-import fileIO
+import FileIO
 import sys
 import utilities
 from PyQt5.QtWidgets import QApplication
@@ -13,7 +13,7 @@ class UnitTest(unittest.TestCase):
 
     def setUp(self):
         self.mainWindow = mainWindow.mainWindow("file1.c", "file2.c")
-        self.fileIO = fileIO
+        self.fileIO = FileIO
         self.util = utilities
 
     def test_openFile(self):

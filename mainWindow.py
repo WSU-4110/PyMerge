@@ -13,7 +13,7 @@ from sys import platform
 from PyQt5.QtWidgets import *
 
 import ControlButtons
-import fileIO
+import FileIO
 import fileOpenDialog
 import main_table
 import pmEnums
@@ -35,15 +35,15 @@ class mainWindow(QMainWindow, QMessageBox):
 
         # load files and generate changesets
         result = pmEnums.RESULT.ERROR
-        self.fIO = fileIO.fileIO()
+        self.fIO = FileIO.FileIO()
         if fileA != 0 and fileB != 0:
-            result = self.fIO.diffFiles(fileA, fileB)
+            result = self.fIO.diff_files(fileA, fileB)
             if result == pmEnums.RESULT.GOOD:
-                result = self.fIO.getChangeSets(self.fIO.changesA, self.fIO.changesB)
+                result = self.fIO.get_change_sets(self.fIO.changes_a, self.fIO.changes_b)
 
         self.table_widget = 0   
         #load table
-        self.table_widget = main_table.MainTable(self.fIO.changesA, self.fIO.changesB)            
+        self.table_widget = main_table.MainTable(self.fIO.changes_a, self.fIO.changes_b)
         #add table
 
         layout.addWidget(self.table_widget, 1, 0)
@@ -88,10 +88,10 @@ class mainWindow(QMainWindow, QMessageBox):
             QMessageBox.about(self, "Error", os.path.basename(fileB) + " is not writable")
             return
         
-        result = self.fIO.diffFiles(fileA, fileB)
+        result = self.fIO.diff_files(fileA, fileB)
 
         if result == pmEnums.RESULT.GOOD:
-            result = self.fIO.getChangeSets(self.fIO.changesA, self.fIO.changesB)
+            result = self.fIO.get_change_sets(self.fIO.changes_a, self.fIO.changes_b)
 
         elif result == pmEnums.RESULT.BADFILE:
             QMessageBox.about(self, "Error", "Invalid file type")

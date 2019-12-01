@@ -1,5 +1,27 @@
-# PyQt imports
-# Standard imports
+"""
+###########################################################################
+File:
+Author:
+Description:
+
+
+Copyright (C) 2019
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+###########################################################################
+"""
+
 import os
 
 from PyQt5 import QtGui
@@ -12,8 +34,6 @@ from PyQt5.QtWidgets import (
     QTableWidgetItem,
     QGridLayout,
 )
-from PyQt5.QtCore import QEvent
-from PyQt5.Qt import QResizeEvent
 
 # Project imports
 import gui_config as gui_cfg
@@ -21,7 +41,7 @@ import merge_finalizer
 import pmEnums
 import table_row
 import undo_redo
-import fileIO
+import FileIO
 
 
 class MainTable(QWidget):
@@ -195,17 +215,17 @@ class MainTable(QWidget):
                 fileB = path
 
                 #I use a local instance of fileIO to generate changesets, since                            #main_table can't access the main window instance of fileIO
-                self.fIO = fileIO.fileIO()
-                result = self.fIO.diffFiles(self.fileDropped, fileB)
+                self.fIO = FileIO.FileIO()
+                result = self.fIO.diff_files(self.fileDropped, fileB)
                 if result == pmEnums.RESULT.GOOD:
-                    result = result = self.fIO.getChangeSets(self.fIO.changesA, self.fIO.changesB)
+                    result = result = self.fIO.get_change_sets(self.fIO.changes_a, self.fIO.changes_b)
                 #I point the local changeSets to a local changeSet
                 #but I must point the local changeSets back at the mainWindow changeSets
                 #so I user could open different file via file open after they do a click and drag
                 change_set_rereferenceA = self.change_set_a
                 change_set_rereferenceB = self.change_set_b
-                self.change_set_a = self.fIO.changesA
-                self.change_set_b = self.fIO.changesB
+                self.change_set_a = self.fIO.changes_a
+                self.change_set_b = self.fIO.changes_b
 
                 
                 self.load_table_contents(self.fileDropped, fileB)
@@ -471,7 +491,7 @@ class MainTable(QWidget):
         # Get the change information for each line. Skip the last line, as that is the
         # match token that has been appened on by diff_set in order to capture entire file
         # contents.
-        for n in range(len(self.change_set_a.changeList) - 1):
+        for n in range(len(self.change_set_a.change_list) - 1):
             data_a = [""]
             data_b = [""]
             change_type_a = [pmEnums.CHANGEDENUM.SAME]
@@ -483,7 +503,7 @@ class MainTable(QWidget):
 
         # generate list of diff lines, to enable prev/next diff jump buttons
         n = 0
-        while n < len(self.change_set_a.changeList) - 1:
+        while n < len(self.change_set_a.change_list) - 1:
             data_a = [""]
             change_type_a = [pmEnums.CHANGEDENUM.SAME]
             self.change_set_a.get_change(n, change_type_a, data_a)

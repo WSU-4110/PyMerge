@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import *
 from PyQt5 import QtGui
 import ControlButtons
 import main_table
-import fileIO
+import FileIO
 import pmEnums
 import diff_resolution
 import fileOpenDialog

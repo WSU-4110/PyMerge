@@ -35,10 +35,10 @@ def check():
         install("PyQt5")
     try:
         import Cython
-        print("PyQt5 dependency satisfied.")
+        print("Cython dependency satisfied.")
     except ImportError:
-        print("Couldn't find PyQt5 dependency, attempting to install...")
-        install("PyQt5")
+        print("Couldn't find Cython dependency, attempting to install...")
+        install("Cython")
 
 
 def install(package):

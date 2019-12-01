@@ -10,9 +10,9 @@ import dependency_chk
 
 dependency_chk.check()
 
-import mainWindow
+import MainWindow
 import utilities
-import initialWindow
+import InitialWindow
 
 
 class PyMergeCLI(object):
@@ -115,9 +115,9 @@ PyMerge
 
         if file1 != "" or file2 != "":
             if self.validate_files(file1, file2, path_check=False):
-                mainWindow.startMain(file1, file2)
+                MainWindow.start_main(file1, file2)
         else:
-            mainWindow.startMain()
+            MainWindow.start_main()
         print(file1, file2)
 
     def validate_files(self, file1, file2, path_check=False):

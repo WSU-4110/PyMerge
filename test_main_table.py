@@ -1,6 +1,6 @@
 
 import unittest
-import mainWindow
+import MainWindow
 import sys
 
 from PyQt5.QtWidgets import QApplication
@@ -11,10 +11,10 @@ class TestMainTable(unittest.TestCase):
 
     
     def setUp(self):
-        self.mainWindow = mainWindow.mainWindow("file1.c", "file2.c")
+        self.mainWindow = MainWindow.MainWindow("file1.c", "file2.c")
         self.table = self.mainWindow.table_widget
         #for testing button presses on window with no input files
-        self.mainWindow2 = mainWindow.mainWindow()
+        self.mainWindow2 = MainWindow.MainWindow()
         self.table2 = self.mainWindow2.table_widget
         
     def test_goto_next_diff(self):        

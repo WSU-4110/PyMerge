@@ -1,6 +1,6 @@
 import unittest
 import utilities
-import mainWindow
+import MainWindow
 import utilities
 import FileIO
 import sys
@@ -12,12 +12,12 @@ app = QApplication(sys.argv)
 class UnitTest(unittest.TestCase):
 
     def setUp(self):
-        self.mainWindow = mainWindow.mainWindow("file1.c", "file2.c")
+        self.mainWindow = MainWindow.MainWindow("file1.c", "file2.c")
         self.fileIO = FileIO
         self.util = utilities
 
     def test_openFile(self):
-        self.mainWindow.openFile()
+        self.mainWindow.open_file()
         expectedFileA = "/Users/saularraffi/Documents/School Work Archive/Fall " \
                         "2019 Semester/Software Engineering/Lab/PyMerge/file1.c"
         expectedFileB = "/Users/saularraffi/Documents/School Work Archive/Fall " \

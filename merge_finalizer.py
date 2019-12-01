@@ -1,3 +1,28 @@
+"""
+###########################################################################
+File:
+Author:
+Description:
+
+
+Copyright (C) 2019
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+###########################################################################
+"""
+
+import os
 from enum import Enum, unique
 
 import file_backup
@@ -33,6 +58,17 @@ class MergeFinalizer(object):
         self.outp_file_right: str = outp_file_right
         self.backup = file_backup.Backup()
         self.backup_dir = backup_dir
+
+    @staticmethod
+    def check_for_backup_dir():
+        try:
+            if os.path.exists("file_backup") and os.path.isdir("file_backup"):
+                return True
+            else:
+                os.mkdir("file_backup")
+                return True
+        except OSError:
+            return False
 
     @staticmethod
     def type_checker(data_set: list or set, target_type: type) -> Status:
@@ -102,6 +138,8 @@ class MergeFinalizer(object):
         """
         outp_set_left: list = []
         outp_set_right: list = []
+
+        self.check_for_backup_dir()
 
         if not utilities.file_writable(self.outp_file_left) or not utilities.file_writable(self.outp_file_right):
             return Status.FILE_PERMISSION_ERR

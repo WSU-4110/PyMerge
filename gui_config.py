@@ -1,4 +1,28 @@
 """
+###########################################################################
+File:
+Author:
+Description:
+
+
+Copyright (C) 2019
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+###########################################################################
+"""
+
+"""
 Configurations and globals for GUI
 """
 
@@ -16,8 +40,6 @@ Acceptable additions to gui_config.py:
     - Table column indices: Since the headers and data for the main table need to be matched, setting the indices
         globally is desireable.
 """
-
-
 
 """
 Icon paths
@@ -39,10 +61,10 @@ ICONS = {
     "NEXT_DIFF": "icons/down-arrow.png",
 }
 
-#converted changes to true with the ICONS are converted once
-#this conversion fails if you attempt to convert everything a second time
-#this only happens when the global scope of the ICONS is saved in a software test
-#but the mainWindow is initialized multiple times. 
+# converted changes to true with the ICONS are converted once
+# this conversion fails if you attempt to convert everything a second time
+# this only happens when the global scope of the ICONS is saved in a software test
+# but the mainWindow is initialized multiple times.
 converted = False
 
 """

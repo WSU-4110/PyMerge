@@ -476,8 +476,8 @@ class MainTable(QWidget):
             data_b = [""]
             change_type_a = [pmEnums.CHANGEDENUM.SAME]
             change_type_b = [pmEnums.CHANGEDENUM.SAME]
-            self.change_set_a.getChange(n, change_type_a, data_a)
-            self.change_set_b.getChange(n, change_type_b, data_b)
+            self.change_set_a.get_change(n, change_type_a, data_a)
+            self.change_set_b.get_change(n, change_type_b, data_b)
 
             self.add_line(data_a[0], data_b[0], n, [change_type_a[0], change_type_b[0]])
 
@@ -486,12 +486,12 @@ class MainTable(QWidget):
         while n < len(self.change_set_a.changeList) - 1:
             data_a = [""]
             change_type_a = [pmEnums.CHANGEDENUM.SAME]
-            self.change_set_a.getChange(n, change_type_a, data_a)
+            self.change_set_a.get_change(n, change_type_a, data_a)
             if change_type_a[0] != pmEnums.CHANGEDENUM.SAME:
                 self.diff_indices.append(n)
                 while change_type_a[0] != pmEnums.CHANGEDENUM.SAME:
                     n += 1
-                    self.change_set_a.getChange(n, change_type_a, data_a)
+                    self.change_set_a.get_change(n, change_type_a, data_a)
                 self.diff_index_block_end.append(n)
             n += 1
 

@@ -54,10 +54,10 @@ def diff_set(
     #print(raw_diff)
     for n in range(len(raw_diff[0])):
         if raw_diff[0][n] != -1 and raw_diff[1][n] != -1:
-            ochangeSetA.addChange(
+            ochangeSetA.add_change(
                 n, pmEnums.CHANGEDENUM.SAME, file_a_lines[raw_diff[0][n]]
             )
-            ochangeSetB.addChange(
+            ochangeSetB.add_change(
                 n, pmEnums.CHANGEDENUM.SAME, file_b_lines[raw_diff[1][n]]
             )
             last_vals = [raw_diff[0][n], raw_diff[1][n]]
@@ -69,10 +69,10 @@ def diff_set(
                 and ((raw_diff[0][n - 1] + 2) == raw_diff[0][n + 1])
                 or ((raw_diff[1][n - 1] + 2) == raw_diff[1][n + 1])
             ):
-                ochangeSetA.addChange(
+                ochangeSetA.add_change(
                     n, pmEnums.CHANGEDENUM.CHANGED, file_a_lines[raw_diff[0][n - 1] + 1]
                 )
-                ochangeSetB.addChange(
+                ochangeSetB.add_change(
                     n, pmEnums.CHANGEDENUM.CHANGED, file_b_lines[raw_diff[1][n - 1] + 1]
                 )
             else:
@@ -87,10 +87,10 @@ def diff_set(
                 # If the match index deltas are equal the line flags can default to CHANGED
                 if idx_delta[0] == idx_delta[1]:
                     last_vals = [x + 1 for x in last_vals]
-                    ochangeSetA.addChange(
+                    ochangeSetA.add_change(
                         n, pmEnums.CHANGEDENUM.CHANGED, file_a_lines[last_vals[0]]
                     )
-                    ochangeSetB.addChange(
+                    ochangeSetB.add_change(
                         n, pmEnums.CHANGEDENUM.CHANGED, file_b_lines[last_vals[1]]
                     )
 
@@ -99,43 +99,43 @@ def diff_set(
                     # Check if the last index matches are getting close to to the next index matches
                     if last_vals[1] < (next_vals[1] - 1):
                         last_vals = [x + 1 for x in last_vals]
-                        ochangeSetA.addChange(
+                        ochangeSetA.add_change(
                             n, pmEnums.CHANGEDENUM.CHANGED, file_a_lines[last_vals[0]]
                         )
-                        ochangeSetB.addChange(
+                        ochangeSetB.add_change(
                             n, pmEnums.CHANGEDENUM.CHANGED, file_b_lines[last_vals[1]]
                         )
                     else:
                         last_vals = [x + 1 for x in last_vals]
-                        ochangeSetA.addChange(
+                        ochangeSetA.add_change(
                             n, pmEnums.CHANGEDENUM.CHANGED, file_a_lines[last_vals[0]]
                         )
-                        ochangeSetB.addChange(n, pmEnums.CHANGEDENUM.ADDED, "")
+                        ochangeSetB.add_change(n, pmEnums.CHANGEDENUM.ADDED, "")
 
                 # if the delta is greater on the right side, that means lines were inserted in the right file
                 elif idx_delta[0] < idx_delta[1]:
                     if last_vals[0] < (next_vals[0] - 1):
                         last_vals = [x + 1 for x in last_vals]
-                        ochangeSetA.addChange(
+                        ochangeSetA.add_change(
                             n, pmEnums.CHANGEDENUM.CHANGED, file_a_lines[last_vals[0]]
                         )
-                        ochangeSetB.addChange(
+                        ochangeSetB.add_change(
                             n, pmEnums.CHANGEDENUM.CHANGED, file_b_lines[last_vals[1]]
                         )
 
                     else:
                         last_vals = [x + 1 for x in last_vals]
-                        ochangeSetA.addChange(n, pmEnums.CHANGEDENUM.ADDED, "")
-                        ochangeSetB.addChange(
+                        ochangeSetA.add_change(n, pmEnums.CHANGEDENUM.ADDED, "")
+                        ochangeSetB.add_change(
                             n, pmEnums.CHANGEDENUM.CHANGED, file_b_lines[last_vals[1]]
                         )
 
                 else:
                     # The default flag is CHANGED
-                    ochangeSetA.addChange(
+                    ochangeSetA.add_change(
                         n, pmEnums.CHANGEDENUM.CHANGED, file_a_lines[raw_diff[0][n]]
                     )
-                    ochangeSetB.addChange(
+                    ochangeSetB.add_change(
                         n, pmEnums.CHANGEDENUM.CHANGED, file_b_lines[raw_diff[1][n]]
                     )
 

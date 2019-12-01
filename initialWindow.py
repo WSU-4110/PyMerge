@@ -3,7 +3,7 @@
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5 import QtGui
-import controlButtons
+import ControlButtons
 import main_table
 import fileIO
 import pmEnums

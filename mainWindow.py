@@ -12,7 +12,7 @@ from sys import platform
 
 from PyQt5.QtWidgets import *
 
-import controlButtons
+import ControlButtons
 import fileIO
 import fileOpenDialog
 import main_table
@@ -53,7 +53,7 @@ class mainWindow(QMainWindow, QMessageBox):
             self.table_widget.load_table_contents(fileA, fileB)  # Left list arguments for now
         self.table_widget.load_table_contents()  # Left list arguments for now
         
-        self.control_buttons_widget = controlButtons.controlButtons(self.table_widget)
+        self.control_buttons_widget = ControlButtons.ControlButtons(self.table_widget)
         layout.addWidget(self.control_buttons_widget, 0, 0)
         widget = QWidget()
         widget.setLayout(layout)

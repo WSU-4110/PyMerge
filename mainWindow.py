@@ -8,6 +8,7 @@ Main Window
 import os.path
 import subprocess
 import sys
+from sys import platform
 
 from PyQt5.QtWidgets import *
 
@@ -159,7 +160,12 @@ class mainWindow(QMainWindow, QMessageBox):
             self.control_buttons_widget.show()
 
     def openHelp(self):
-        subprocess.Popen("PyMerge_Manual.pdf",shell=True)
+        if platform == "win32":            
+            subprocess.Popen("PyMerge_Manual.pdf",shell=True)
+        else:
+            subprocess.Popen("open PyMerge_Manual.pdf",shell=True)
+
+    
 
 def startMain(fileA=0, fileB=0):
     app = QApplication(sys.argv)

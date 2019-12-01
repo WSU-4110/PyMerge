@@ -83,6 +83,11 @@ void writeLCSOutpFile(
     for (long long i = 0; i < size; i++)
     {
         writeMatchTag(fd, leftSet[i], rightSet[i], i);
+
+        if (leftSet[i] <= -2 || rightSet[i] <= -2)
+        {
+            break;
+        }
     }
     fprintf(fd, "\t</matches>\n");
     fprintf(fd, "</lcs_output>\n");

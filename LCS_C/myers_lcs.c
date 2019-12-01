@@ -48,9 +48,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 /**********************************************************************************
  * @brief Loads a DiffConfig struct with file info and memory allocations.
- * @param diffConfig
- * @param leftFile
- * @param rightFile
+ * @param diffConfig Diff configuration struct
+ * @param leftFile Left file to load for comparison
+ * @param rightFile Right file to load for comparison
  */
 void loadDiffConfig(DiffConfig_t *diffConfig, const char *leftFile, const char *rightFile)
 {
@@ -75,10 +75,10 @@ void loadDiffConfig(DiffConfig_t *diffConfig, const char *leftFile, const char *
 
 
 /**********************************************************************************
- * @brief
- * @param line1
- * @param line2
- * @return
+ * @brief Uses strcmp to check if two lines are equal, but returns only Boolean_t value
+ * @param line1 Line to compare
+ * @param line2 Line to compare
+ * @return Boolean_t value: 0 for not equal/false and 1 for equal/true
  */
 static inline Boolean_t lineEqual(char *line1, char *line2)
 {
@@ -87,8 +87,8 @@ static inline Boolean_t lineEqual(char *line1, char *line2)
 
 
 /**********************************************************************************
- * @brief
- * @param diffConfig
+ * @brief Loads the contents of a file, line by line into the diff configuration.
+ * @param diffConfig Diff configuration struct
  */
 void loadFileLines(DiffConfig_t *diffConfig)
 {
@@ -107,22 +107,16 @@ void loadFileLines(DiffConfig_t *diffConfig)
     fseek(diffConfig->rightFp, 0, SEEK_SET);
 
     while (getline(&diffConfig->leftLines[i++], &len, diffConfig->leftFp) != NONE) {}
-    //diffConfig->leftLines[diffConfig->maxLineCnt] = "$$ENDTOKEN$$";
-    //printf("%d, %s\n", i, diffConfig->leftLines[i]);
     i = 0U;
     while (getline(&diffConfig->rightLines[i++], &len, diffConfig->rightFp) != NONE) {}
-    //diffConfig->rightLines[diffConfig->maxLineCnt] = "$$ENDTOKEN$$";
-    //
-    //printf("%d, %s\n", i, diffConfig->rightLines[i]);
-
-
 }
 
 
 /**********************************************************************************
- * @brief
- * @param fp
- * @param maxLineLen
+ * @brief Gets the number of lines a in a file.
+ * @param fp File descriptor
+ * @param maxLineLen Max line count between two files. It gets updated in this function for
+                    each new file it checks.
  * @return
  */
 long long getFileLineCnt(FILE *fp, long long *maxLineLen)
@@ -148,8 +142,8 @@ long long getFileLineCnt(FILE *fp, long long *maxLineLen)
 
 
 /**********************************************************************************
- * @brief
- * @param diffConfig
+ * @brief Frees the memory that was allocated for the diff configuration.
+ * @param diffConfig Pointer to the configuration struct
  */
 void freeDiffConfig(DiffConfig_t *diffConfig)
 {
@@ -173,8 +167,8 @@ void freeDiffConfig(DiffConfig_t *diffConfig)
 
 
 /**********************************************************************************
- * @brief
- * @param diffConfig
+ * @brief Eugene Myers linear space and O(ND) variation of longest common subsequence algorithm.
+ * @param diffConfig Configuration struct containing the file descriptors and relevant arrays.
  */
 void lcs(DiffConfig_t *diffConfig)
 {
@@ -214,7 +208,6 @@ void lcs(DiffConfig_t *diffConfig)
                 x_idx = boundedAry[idx] + 1;
             }
             y_idx = x_idx - k;
-            //snake = copySnake(kLines[idx]);
             snake = kLines[idx];
 
             while ((x_idx < diffConfig->leftLineCnt)
@@ -229,13 +222,31 @@ void lcs(DiffConfig_t *diffConfig)
             if ((x_idx >= diffConfig->leftLineCnt) && (y_idx >= diffConfig->rightLineCnt))
             {
                 snake = snake->tail;
+                long outp_idx = 0;
                 while (snake != NULL)
                 {
-                    long long outp_idx = Max(snake->head[0], snake->head[1]);
                     diffConfig->rightOutp[outp_idx] = snake->head[0];
                     diffConfig->leftOutp[outp_idx] = snake->head[1];
+                    outp_idx++;
                     snake = snake->tail;
+
                 }
+
+                reverseArray(diffConfig->leftOutp, outp_idx - 1);
+                reverseArray(diffConfig->rightOutp, outp_idx - 1);
+
+                if (outp_idx <= diffConfig->maxLineCnt)
+                {
+                    // Adding fake matches at the end of the list so that the
+                    // Python function pads correctly
+                    diffConfig->leftOutp[outp_idx] = diffConfig->leftLineCnt;
+                    diffConfig->rightOutp[outp_idx] = diffConfig->rightLineCnt;
+                }
+
+                outp_idx++;
+                diffConfig->leftOutp[outp_idx] = -2;
+                diffConfig->rightOutp[outp_idx] = -2;
+
                 return;
             }
             boundedAry[totalSizeK] = x_idx;
@@ -252,8 +263,8 @@ void lcs(DiffConfig_t *diffConfig)
 
 
 /**********************************************************************************
- * @brief
- * @param snake
+ * @brief Initializes a snake node
+ * @param snake Linked list acting as a path through the edit graph
  */
 static inline void initSnake(struct Snake_t *snake)
 {
@@ -270,9 +281,9 @@ static inline void initSnake(struct Snake_t *snake)
 
 
 /**********************************************************************************
- * @brief
- * @param snake
- * @return
+ * @brief Copies the linked list representation of the edit graph snake
+ * @param snake Linked list acting as a path through the edit graph
+ * @return Pointer to a snake node
  */
 struct Snake_t *copySnake(struct Snake_t *snake)
 {
@@ -305,11 +316,11 @@ struct Snake_t *copySnake(struct Snake_t *snake)
 
 
 /**********************************************************************************
- * @brief
- * @param snake
- * @param x
- * @param y
- * @return
+ * @brief Adds a new node to the beginning of snake
+ * @param snake Linked list representing a path through the edit graph
+ * @param x First integer to store in head
+ * @param y Second integer to store in head
+ * @return Pointer to the new snake head
  */
 static inline struct Snake_t *addSnakeHead(struct Snake_t *snake, long x, long y)
 {
@@ -323,10 +334,10 @@ static inline struct Snake_t *addSnakeHead(struct Snake_t *snake, long x, long y
 
 
 /**********************************************************************************
- * @brief
- * @param a
- * @param b
- * @return
+ * @brief Finds the maximum of two numbers.
+ * @param a First number to compare
+ * @param b Second number to compare
+ * @return Maximum of a and b
  */
 static inline long long Max(long long a, long long b)
 {
@@ -346,6 +357,27 @@ void printSnake(struct Snake_t *snake) {
         current = current->tail;
     }
     printf("\n");
+}
+
+
+/**********************************************************************************
+ * @brief reverses an array in place
+ * @param ary Array to be reversed
+ * @param size Size of the array
+ */
+void reverseArray(long *ary, int size)
+{
+    int i = 0;
+    int j = size;
+
+    while (i < j)
+    {
+        long tmp = ary[i];
+        ary[i] = ary[j];
+        ary[j] = tmp;
+        i++;
+        j--;
+    }
 }
 
 

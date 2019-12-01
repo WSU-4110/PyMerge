@@ -73,6 +73,7 @@ struct Snake_t *copySnake(struct Snake_t *snake);
 static inline struct Snake_t *addSnakeHead(struct Snake_t *snake, long x, long y);
 void printSnake(struct Snake_t *snake);
 static inline long long Max(long long a, long long b);
+void reverseArray(long *ary, int size);
 
 
 

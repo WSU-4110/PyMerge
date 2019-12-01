@@ -1,11 +1,11 @@
 """
 ###########################################################################
-File:
-Author:
-Description:
+File: table_row.py
+Author: Malcolm Hall, John Toniolo
+Description: Module with class that is used to store individual row information.
 
 
-Copyright (C) 2019
+Copyright (C) PyMerge Team 2019
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -22,10 +22,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ###########################################################################
 """
 
-# PyQt imports
-# Standard imports
 from copy import deepcopy
-
 from PyQt5 import QtCore
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import (

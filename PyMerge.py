@@ -1,11 +1,11 @@
 """
 ###########################################################################
-File:
-Author:
-Description:
+File: PyMerge.py
+Author: Malcolm Hall, Saular Raffi, John Toniolo
+Description: Main entry point for the program.
 
 
-Copyright (C) 2019
+Copyright (C) PyMerge Team 2019
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

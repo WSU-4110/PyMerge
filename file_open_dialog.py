@@ -1,11 +1,11 @@
 """
 ###########################################################################
-File:
+File: file_open_dialog.py
 Author:
-Description:
+Description: Creates a dialog box for opening files to load into comparison table.
 
 
-Copyright (C) 2019
+Copyright (C) PyMerge Team 2019
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

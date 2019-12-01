@@ -1,11 +1,12 @@
 """
 ###########################################################################
-File:
-Author:
-Description:
+File: undo_redo.py
+Author: Malcolm Hall, John Toniolo
+Description: Undo/Redo module for recording and setting the previous state of significant
+            user actions.
 
 
-Copyright (C) 2019
+Copyright (C) PyMerge Team 2019
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

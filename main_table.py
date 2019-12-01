@@ -188,29 +188,31 @@ class MainTable(QWidget):
             for url in event.mimeData().urls():
                 path = url.toLocalFile()
             #print(path)            
-            if self.fileDropped == "":
+            if self.fileDropped == "":                
                 self.fileDropped = path
             else:
                 self.clear_table()
                 fileB = path
-                
+
+                #I use a local instance of fileIO to generate changesets, since                            #main_table can't access the main window instance of fileIO
                 self.fIO = fileIO.fileIO()
-                print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
                 result = self.fIO.diffFiles(self.fileDropped, fileB)
                 if result == pmEnums.RESULT.GOOD:
-                    print("result good")
                     result = result = self.fIO.getChangeSets(self.fIO.changesA, self.fIO.changesB)
+                #I point the local changeSets to a local changeSet
+                #but I must point the local changeSets back at the mainWindow changeSets
+                #so I user could open different file via file open after they do a click and drag
                 change_set_rereferenceA = self.change_set_a
                 change_set_rereferenceB = self.change_set_b
                 self.change_set_a = self.fIO.changesA
                 self.change_set_b = self.fIO.changesB
+
                 
                 self.load_table_contents(self.fileDropped, fileB)
-                print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
                 self.change_set_a = change_set_rereferenceA
                 self.change_set_b = change_set_rereferenceB
-
+                
                 self.fileDropped = ""                
             
         else:

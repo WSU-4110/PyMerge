@@ -26,6 +26,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 utilities.py
 General, non-project-specific functions
 """
+
 import hashlib
 import os
 

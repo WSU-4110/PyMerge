@@ -1,9 +1,32 @@
+"""
+###########################################################################
+File:
+Author:
+Description:
+
+
+Copyright (C) 2019
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+###########################################################################
+"""
+
 # PyQt imports
 # Standard imports
 from copy import deepcopy
 
 from PyQt5 import QtCore
-from PyQt5 import QtWidgets
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import (
     QPushButton,
@@ -18,7 +41,6 @@ import undo_redo
 
 
 class Row(QtCore.QObject):
-
     def __init__(
         self,
         row: int,
@@ -63,7 +85,7 @@ class Row(QtCore.QObject):
 
         elif self.change_state_flags[0] == pmEnums.CHANGEDENUM.SAME:
             self.set_left_background(gui_cfg.COLORS["ROW_DEFAULT"])
-            #self.table.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
+
         if self.change_state_flags[1] == pmEnums.CHANGEDENUM.CHANGED:
             self.set_right_background(gui_cfg.COLORS["ROW_DIFF"], buttons=True)
 
@@ -75,10 +97,8 @@ class Row(QtCore.QObject):
             
         elif self.change_state_flags[1] == pmEnums.CHANGEDENUM.SAME:
             self.set_right_background(gui_cfg.COLORS["ROW_DEFAULT"])
-            #self.table.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
 
     def set_right_background(self, background, buttons=False):
-        #self.table.item(self.row_num, gui_cfg.RIGHT_TXT_COL_IDX).setFlags(QtCore.Qt.ItemIsEditable)
         self.table.item(self.row_num, gui_cfg.RIGHT_TXT_COL_IDX).setBackground(
             background
         )        

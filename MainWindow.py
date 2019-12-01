@@ -63,13 +63,13 @@ class MainWindow(QMainWindow, QMessageBox):
                 result = self.fIO.get_change_sets(self.fIO.changes_a, self.fIO.changes_b)
 
         self.table_widget = 0
-        #load table
+        # load table
         self.table_widget = main_table.MainTable(self.fIO.changes_a, self.fIO.changes_b)
-        #add table
+        # add table
 
         layout.addWidget(self.table_widget, 1, 0)
 
-        #load table with fileA and B if present from command line
+        # load table with fileA and B if present from command line
         if fileA != 0 and fileB != 0:
             self.table_widget.load_table_contents(fileA, fileB)  # Left list arguments for now
         self.table_widget.load_table_contents()  # Left list arguments for now
@@ -90,7 +90,6 @@ class MainWindow(QMainWindow, QMessageBox):
     def open_file(self):
 
         self.table_widget.clear_table()
-        
 
         file_opener_a = FileOpenDialog.FileOpenDialog()
         file_opener_b = FileOpenDialog.FileOpenDialog()

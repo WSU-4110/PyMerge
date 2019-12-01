@@ -74,20 +74,11 @@ class UndoRedoAction(object):
     __slots__ = [
         "obj_copy",
         "obj_ref",
-        "row_obj",
-        "row_num",
-        "table",
-        "left_text",
-        "right_text",
-        "line_num",
-        "right_background_color",
-        "left_background_color",
     ]
 
     def __init__(self, record_obj):
         self.obj_copy = record_obj.__dict__.copy()
         self.obj_ref = record_obj
-        
 
     def set_state(self):
         """
@@ -96,7 +87,7 @@ class UndoRedoAction(object):
         """
         # Copy the copied attribute dictionary over to the object reference        
         for key in self.obj_ref.__dict__:
-            if self.obj_ref.right_button.isEnabled() == True:            
+            if self.obj_ref.right_button.isEnabled():
                 self.obj_ref.right_button.setEnabled(False)
                 self.obj_ref.left_button.setEnabled(False)
             else:
@@ -146,25 +137,22 @@ class UndoRedo(object):
     def record_action(self, record_obj):
         self._undo_buf.stack_push(UndoRedoAction(record_obj))
 
-
     def undo(self) -> bool:
-        
         undo_obj: UndoRedoAction = self._undo_buf.stack_pop()  # Get the state we want to set
         
         # Check if object is None, then push the recorded current state.
         if undo_obj is not None:
             self._redo_buf.stack_push(UndoRedoAction(undo_obj.obj_ref))        
-            #Restore the state to what was popped
+            # Restore the state to what was popped
             undo_obj.set_state()
             return True
 
         return False
 
     def redo(self) -> bool:
-
         redo_obj: UndoRedoAction = self._redo_buf.stack_pop()
 
-            # Check if object is None, then push the recorded current state.
+        # Check if object is None, then push the recorded current state.
         if redo_obj is not None:
             self._undo_buf.stack_push(UndoRedoAction(redo_obj.obj_ref))
 

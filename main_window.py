@@ -40,6 +40,7 @@ import file_open_dialog
 import main_table
 import pymerge_enums
 import utilities
+import initial_window
 
 
 class MainWindow(QMainWindow, QMessageBox):
@@ -83,7 +84,7 @@ class MainWindow(QMainWindow, QMessageBox):
 
     def init_ui(self):
         # start GUI
-
+        self.init_window = initial_window.initialWindow.show()
         self.menu_items()
         self.show()
 

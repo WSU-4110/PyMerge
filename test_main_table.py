@@ -34,7 +34,7 @@ app = QApplication(sys.argv)
 
 class TestMainTable(unittest.TestCase):
     def setUp(self):
-        self.mainWindow = MainWindow.MainWindow("file1.c", "file2.c")
+        self.mainWindow = MainWindow.MainWindow("./file1.c", "file2.c")
         self.table = self.mainWindow.table_widget
         #for testing button presses on window with no input files
         self.mainWindow2 = MainWindow.MainWindow()

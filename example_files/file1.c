@@ -6,12 +6,11 @@
 
 
 
-
+typedef structtypedefC
 {
 	float derivState;      	/* Last position input
 	*/
-	float intgrtState;      	/* Integrator state */
-	float intgrtState;      	/* Integrator state */
+        float NEW_VARIABLE
 	float intgrtState;      	/* Integrator state */
 	float intgrtMax;    /* Maximum allowable integrator state   */
 	float intgrtMin;    /* Minimum allowable integrator state   */
@@ -21,19 +20,6 @@
 	float kD;     	/* derivative gain  */
 } SPid;
 
-
-
-void InitPID(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
-{
-	pid->kP = kP;
-	pid->kI = kI;
-	pid->k_D = kD;
-	pid->intgrtMin = iMin;
-	pid->intgrtMax = iMax;
-}
-//other comment
-
-void InitPID(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
 void InitPID(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
 {
 	pid->kP = kP;
@@ -43,7 +29,14 @@ void InitPID(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
 	pid->intgrtMax = iMax;
 }
 
-
+void InitPID(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
+{
+	pid->kP = kP;
+	pid->kI = kI;
+	pid->k_D = kD;
+	pid->intgrtMin = iMin;
+	pid->intgrtMax = iMax;
+}
 
 
 }
@@ -57,3 +50,4 @@ void InitPIDfunctionB(Spid* pid, float kP, float kI, float kD, float iMin, float
 }
 //changed comment
 
+}

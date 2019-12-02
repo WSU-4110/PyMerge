@@ -194,9 +194,9 @@ class MainWindow(QMainWindow, QMessageBox):
     @staticmethod
     def open_help():
         if platform == "win32":            
-            subprocess.Popen("PyMerge_Manual.pdf",shell=True)
+            subprocess.Popen(".\docs\PyMerge_Manual.pdf",shell=True)
         else:
-            subprocess.Popen("open PyMerge_Manual.pdf",shell=True)
+            subprocess.Popen("open ./docs/PyMerge_Manual.pdf",shell=True)
 
 
 def start_main(fileA=0, fileB=0):

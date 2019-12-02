@@ -1,9 +1,29 @@
-# PyQt imports
-# Standard imports
-from copy import deepcopy
+"""
+###########################################################################
+File: table_row.py
+Author: Malcolm Hall, John Toniolo
+Description: Module with class that is used to store individual row information.
 
+
+Copyright (C) PyMerge Team 2019
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+###########################################################################
+"""
+
+from copy import deepcopy
 from PyQt5 import QtCore
-from PyQt5 import QtWidgets
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import (
     QPushButton,
@@ -13,25 +33,11 @@ from PyQt5.QtWidgets import (
 
 # Project imports
 import gui_config as gui_cfg
-import pmEnums
+import pymerge_enums
 import undo_redo
 
 
 class Row(QtCore.QObject):
-    # __slots__ = [
-    #     "row",
-    #     "table",
-    #     "right_text",
-    #     "left_text",
-    #     "line_num",
-    #     "change_state_flags",
-    #     "deleted",
-    #     "actual_indices",
-    #     "right_button",
-    #     "left_button",
-    #     "undo_ctrlr"
-    # ]
-
     def __init__(
         self,
         row: int,
@@ -65,33 +71,31 @@ class Row(QtCore.QObject):
         self.undo_ctrlr = undo_redo.UndoRedo.get_instance()
 
         # Set the left and right background colors
-        if self.change_state_flags[0] == pmEnums.CHANGEDENUM.CHANGED:
+        if self.change_state_flags[0] == pymerge_enums.CHANGEDENUM.CHANGED:
             self.set_left_background(gui_cfg.COLORS["ROW_DIFF"], buttons=True)
 
-        elif self.change_state_flags[1] == pmEnums.CHANGEDENUM.PADDING:
+        elif self.change_state_flags[1] == pymerge_enums.CHANGEDENUM.PADDING:
             self.set_left_background(gui_cfg.COLORS["ROW_PAD_SPACE"], buttons=True)
 
-        elif self.change_state_flags[0] == pmEnums.CHANGEDENUM.ADDED:
+        elif self.change_state_flags[0] == pymerge_enums.CHANGEDENUM.ADDED:
             self.set_left_background(gui_cfg.COLORS["ROW_PAD_SPACE"], buttons=True)
 
-        elif self.change_state_flags[0] == pmEnums.CHANGEDENUM.SAME:
+        elif self.change_state_flags[0] == pymerge_enums.CHANGEDENUM.SAME:
             self.set_left_background(gui_cfg.COLORS["ROW_DEFAULT"])
-            #self.table.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
-        if self.change_state_flags[1] == pmEnums.CHANGEDENUM.CHANGED:
+
+        if self.change_state_flags[1] == pymerge_enums.CHANGEDENUM.CHANGED:
             self.set_right_background(gui_cfg.COLORS["ROW_DIFF"], buttons=True)
 
-        elif self.change_state_flags[1] == pmEnums.CHANGEDENUM.PADDING:
+        elif self.change_state_flags[1] == pymerge_enums.CHANGEDENUM.PADDING:
             self.set_right_background(gui_cfg.COLORS["ROW_PAD_SPACE"], buttons=True)
 
-        elif self.change_state_flags[1] == pmEnums.CHANGEDENUM.ADDED:
+        elif self.change_state_flags[1] == pymerge_enums.CHANGEDENUM.ADDED:
             self.set_right_background(gui_cfg.COLORS["ROW_PAD_SPACE"], buttons=True)
             
-        elif self.change_state_flags[1] == pmEnums.CHANGEDENUM.SAME:
+        elif self.change_state_flags[1] == pymerge_enums.CHANGEDENUM.SAME:
             self.set_right_background(gui_cfg.COLORS["ROW_DEFAULT"])
-            #self.table.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
 
     def set_right_background(self, background, buttons=False):
-        #self.table.item(self.row_num, gui_cfg.RIGHT_TXT_COL_IDX).setFlags(QtCore.Qt.ItemIsEditable)
         self.table.item(self.row_num, gui_cfg.RIGHT_TXT_COL_IDX).setBackground(
             background
         )        
@@ -133,7 +137,7 @@ class Row(QtCore.QObject):
         self.undo_ctrlr.record_action(self)        
         self.undo_ctrlr.undo_buf_size += 1
         # Set booleans
-        if self.change_state_flags[1] == pmEnums.CHANGEDENUM.ADDED:
+        if self.change_state_flags[1] == pymerge_enums.CHANGEDENUM.ADDED:
             self.row_deleted[0] = True
             self.row_deleted[1] = True
 
@@ -170,7 +174,7 @@ class Row(QtCore.QObject):
         self.undo_ctrlr.record_action(self)    
         self.undo_ctrlr.undo_buf_size += 1
         # Set booleans
-        if self.change_state_flags[0] == pmEnums.CHANGEDENUM.ADDED:
+        if self.change_state_flags[0] == pymerge_enums.CHANGEDENUM.ADDED:
             self.row_deleted[0] = True
             self.row_deleted[1] = True
 

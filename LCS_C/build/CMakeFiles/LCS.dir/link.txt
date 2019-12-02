@@ -1,0 +1,1 @@
+/Library/Developer/CommandLineTools/usr/bin/cc -O3 -Wall -Wextra -Ofast -Wall -Wextra -DNDEBUG -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/LCS.dir/main.c.o CMakeFiles/LCS.dir/myers_lcs.c.o CMakeFiles/LCS.dir/xml_writer.c.o  -o LCS 

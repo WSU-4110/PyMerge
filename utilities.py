@@ -1,7 +1,32 @@
 """
+###########################################################################
+File: utilities.py
+Author: Malcolm Hall, John Toniolo, Saular Raffi
+Description:
+
+
+Copyright (C) PyMerge Team 2019
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+###########################################################################
+"""
+
+"""
 utilities.py
 General, non-project-specific functions
 """
+
 import hashlib
 import os
 
@@ -83,7 +108,6 @@ def hash_list(inp_list):
     return
 
 
-# @staticmethod
 def valid_file_ext(file: str) -> bool:
     illegal_exts = {"zip", "bzip", "mp3", "wav", "jpg", "png", "mp4", "ppt", "ods", "tar", "wma", "aif", "m4a",
                     "mpg", "vob", "wmv", "obj", "gif", "tiff", "3dm", "3ds", "svg", "xls", "xlsx", "7z", "",

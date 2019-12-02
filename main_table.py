@@ -1,5 +1,27 @@
-# PyQt imports
-# Standard imports
+"""
+###########################################################################
+File: main_table.py
+Author: Malcolm Hall, John Toniolo, Saular Raffi
+Description:
+
+
+Copyright (C) PyMerge Team 2019
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+###########################################################################
+"""
+
 import os
 
 from PyQt5 import QtGui
@@ -12,13 +34,12 @@ from PyQt5.QtWidgets import (
     QTableWidgetItem,
     QGridLayout,
 )
-from PyQt5.QtCore import QEvent
-from PyQt5.Qt import QResizeEvent
 
+import file_io
 # Project imports
 import gui_config as gui_cfg
 import merge_finalizer
-import pmEnums
+import pymerge_enums
 import table_row
 import undo_redo
 
@@ -35,9 +56,7 @@ class MainTable(QWidget):
         self.setLayout(grid)
         self.table = QTableWidget()
         self.table.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
-        
-
-        
+        self.file_dropped = ""
         self.table.setRowCount(0)  # Set the initial row count to 0
         self.table.setColumnCount(5)  # Set the column count to 5
         self.setAcceptDrops(True)
@@ -59,12 +78,10 @@ class MainTable(QWidget):
         self.left_file: str = ""
         self.right_file: str = ""
 
-
         self.table.verticalHeader().setVisible(
             False
         )  # Disable the automatic line numbers.
         self.table.setVerticalScrollMode(0)
-
 
         # Set the head text
         self.table.setHorizontalHeaderItem(0, QTableWidgetItem("Line"))
@@ -103,8 +120,8 @@ class MainTable(QWidget):
         self.table.setEditTriggers(QTableWidget.NoEditTriggers)
 
         # Convert icon paths from gui_config.py to QIcon objects
-        #gui_cgf.converted ensures test software can run correctly
-        if gui_cfg.converted == False:
+        # gui_cgf.converted ensures test software can run correctly
+        if not gui_cfg.converted:
             gui_cfg.convert_icon_dict()
 
         grid.addWidget(self.table)
@@ -184,8 +201,38 @@ class MainTable(QWidget):
         if event.mimeData().hasUrls:
             event.setDropAction(Qt.CopyAction)
             event.accept()
-            links = event.mimeData().urls()[0]
-            print(links)
+
+            for url in event.mimeData().urls():
+                path = url.toLocalFile()
+
+            if self.file_dropped == "":
+                self.file_dropped = path
+            else:
+                self.clear_table()
+                fileB = path
+
+                # I use a local instance of fileIO to generate changesets, since
+                # main_table can't access the main window instance of fileIO
+                self.file_io = file_io.FileIO()
+                result = self.file_io.diff_files(self.file_dropped, fileB)
+                if result == pymerge_enums.RESULT.GOOD:
+                    result = result = self.file_io.get_change_sets(self.file_io.changes_a, self.file_io.changes_b)
+
+                # I point the local changeSets to a local changeSet
+                # but I must point the local changeSets back at the mainWindow changeSets
+                # so I user could open different file via file open after they do a click and drag
+                change_set_rereference_a = self.change_set_a
+                change_set_rereference_b = self.change_set_b
+                self.change_set_a = self.file_io.changes_a
+                self.change_set_b = self.file_io.changes_b
+
+                self.load_table_contents(self.file_dropped, fileB)
+
+                self.change_set_a = change_set_rereference_a
+                self.change_set_b = change_set_rereference_b
+                
+                self.file_dropped = ""
+            
         else:
             event.ignore()
 
@@ -205,8 +252,7 @@ class MainTable(QWidget):
             self.curr_diff_idx += 1
             self.jump_to_line(self.diff_indices[self.curr_diff_idx])
         
-        self.select_block()        
-        #self.table.repaint()
+        self.select_block()
         return
 
     @pyqtSlot()
@@ -235,12 +281,11 @@ class MainTable(QWidget):
         undoes last change or group of changes
         :return: No return value
         """
-
-        undoStackSize = 0
+        undo_stack_size = 0
         for n in self.block_undo_size:
-            undoStackSize += n
+            undo_stack_size += n
         
-        difference = self.undo_ctrlr.undo_buf_size - undoStackSize        
+        difference = self.undo_ctrlr.undo_buf_size - undo_stack_size
         for i in range(difference):            
             self.block_undo_size.append(1)
         
@@ -256,7 +301,6 @@ class MainTable(QWidget):
                 self.undo_ctrlr.undo_buf_size -= 1
         for row in self.rows:
             row.set_row_state()
-
 
     @pyqtSlot()
     def redo_last_undo(self):
@@ -286,11 +330,11 @@ class MainTable(QWidget):
         
         self.block_undo_size.append(self.selected_block[1] - self.selected_block[0])
                 
-        undoStackSize = 0
+        undo_stack_size = 0
         for n in self.block_undo_size:
-            undoStackSize += n
+            undo_stack_size += n
         
-        difference = undoStackSize - self.undo_ctrlr.undo_buf_size
+        difference = undo_stack_size - self.undo_ctrlr.undo_buf_size
         difference = abs(difference)
         for i in range(difference):
             self.block_undo_size.insert( len(self.block_undo_size)-1, 1)
@@ -301,37 +345,29 @@ class MainTable(QWidget):
     def merge_right(self):
         """
         merge the whole right selection into the left
-        """                
-      
+        """
         self.table.clearSelection()
         for n in range(self.selected_block[0], self.selected_block[1]):
             self.rows[n].merge_right()
 
         self.block_undo_size.append(self.selected_block[1] - self.selected_block[0])
         
-        undoStackSize = 0
+        undo_stack_size = 0
         for n in self.block_undo_size:
-            undoStackSize += n
+            undo_stack_size += n
 
-        difference = undoStackSize - self.undo_ctrlr.undo_buf_size
+        difference = undo_stack_size - self.undo_ctrlr.undo_buf_size
         difference = abs(difference)
         for i in range(difference):
             self.block_undo_size.insert( len(self.block_undo_size)-1, 1)
         
         return
 
-
     def jump_to_line(self, line_num, col=0):
         self.table.clearSelection()
         self.table.scrollToItem(
             self.table.item(line_num-1, col), QtWidgets.QAbstractItemView.PositionAtTop
         )
-        
-        # self.table.scrollToItem(
-        #     self.table.selectRow(line_num), QtWidgets.QAbstractItemView.PositionAtTop
-        # )
-
-    
         
     def add_line(
         self,
@@ -344,6 +380,8 @@ class MainTable(QWidget):
     ):
         """
         Add a row into the table using the right and left text provided as parameters.
+        :param right_line_num:
+        :param left_line_num:
         :param right_text: Right text to display
         :param left_text: Left text to display
         :param line_num: Line number to display. This isn't exactly where it's inserted, just a display value
@@ -413,8 +451,8 @@ class MainTable(QWidget):
                 return False
         self.rows.clear()
         self.table.setRowCount(0)
-        del self.change_set_a.changeList[:]
-        del self.change_set_b.changeList[:]
+        del self.change_set_a.change_list[:]
+        del self.change_set_b.change_list[:]
         self.block_undo_size.clear()
         self.block_redo_size.clear()
         self.curr_diff_idx = -1
@@ -442,27 +480,27 @@ class MainTable(QWidget):
         # Get the change information for each line. Skip the last line, as that is the
         # match token that has been appened on by diff_set in order to capture entire file
         # contents.
-        for n in range(len(self.change_set_a.changeList) - 1):
+        for n in range(len(self.change_set_a.change_list) - 1):
             data_a = [""]
             data_b = [""]
-            change_type_a = [pmEnums.CHANGEDENUM.SAME]
-            change_type_b = [pmEnums.CHANGEDENUM.SAME]
-            self.change_set_a.getChange(n, change_type_a, data_a)
-            self.change_set_b.getChange(n, change_type_b, data_b)
+            change_type_a = [pymerge_enums.CHANGEDENUM.SAME]
+            change_type_b = [pymerge_enums.CHANGEDENUM.SAME]
+            self.change_set_a.get_change(n, change_type_a, data_a)
+            self.change_set_b.get_change(n, change_type_b, data_b)
 
             self.add_line(data_a[0], data_b[0], n, [change_type_a[0], change_type_b[0]])
 
         # generate list of diff lines, to enable prev/next diff jump buttons
         n = 0
-        while n < len(self.change_set_a.changeList) - 1:
+        while n < len(self.change_set_a.change_list) - 1:
             data_a = [""]
-            change_type_a = [pmEnums.CHANGEDENUM.SAME]
-            self.change_set_a.getChange(n, change_type_a, data_a)
-            if change_type_a[0] != pmEnums.CHANGEDENUM.SAME:
+            change_type_a = [pymerge_enums.CHANGEDENUM.SAME]
+            self.change_set_a.get_change(n, change_type_a, data_a)
+            if change_type_a[0] != pymerge_enums.CHANGEDENUM.SAME:
                 self.diff_indices.append(n)
-                while change_type_a[0] != pmEnums.CHANGEDENUM.SAME:
+                while change_type_a[0] != pymerge_enums.CHANGEDENUM.SAME:
                     n += 1
-                    self.change_set_a.getChange(n, change_type_a, data_a)
+                    self.change_set_a.get_change(n, change_type_a, data_a)
                 self.diff_index_block_end.append(n)
             n += 1
 
@@ -503,22 +541,19 @@ class MainTable(QWidget):
                 if n >= i:
                    self.curr_diff_idx = j 
                 j += 1
-                    
-            
+
         self.table.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
         self.table.clearSelection()
         self.selected_block[0] = self.diff_indices[self.curr_diff_idx]
         self.selected_block[1] = self.diff_index_block_end[self.curr_diff_idx]
         for n in range(self.diff_indices[self.curr_diff_idx], self.diff_index_block_end[self.curr_diff_idx]):
             self.table.selectRow(n)
-            
-            
-        
+
         self.table.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
 
     @pyqtSlot()
     def cellClickedEvent(self):
-        if self.rows[self.table.currentRow()].change_state_flags[0] == pmEnums.CHANGEDENUM.SAME:            
+        if self.rows[self.table.currentRow()].change_state_flags[0] == pymerge_enums.CHANGEDENUM.SAME:
             self.table.clearSelection()
         else:
             self.select_block(self.table.currentRow())

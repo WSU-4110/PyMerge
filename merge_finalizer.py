@@ -1,3 +1,28 @@
+"""
+###########################################################################
+File: merge_finalizer.py
+Author: Malcolm Hall
+Description: Checks for merge validity, file permissions, and performs the final file write.
+
+
+Copyright (C) PyMerge Team 2019
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+###########################################################################
+"""
+
+import os
 from enum import Enum, unique
 
 import file_backup
@@ -33,6 +58,17 @@ class MergeFinalizer(object):
         self.outp_file_right: str = outp_file_right
         self.backup = file_backup.Backup()
         self.backup_dir = backup_dir
+
+    @staticmethod
+    def check_for_backup_dir():
+        try:
+            if os.path.exists("file_backup") and os.path.isdir("file_backup"):
+                return True
+            else:
+                os.mkdir("file_backup")
+                return True
+        except OSError:
+            return False
 
     @staticmethod
     def type_checker(data_set: list or set, target_type: type) -> Status:
@@ -103,39 +139,41 @@ class MergeFinalizer(object):
         outp_set_left: list = []
         outp_set_right: list = []
 
-        if utilities.file_writable(self.outp_file_left) and utilities.file_writable(self.outp_file_right):
-            if (
-                self.type_checker(left_set, target_type=str) == Status.TYPE_CHK_SUCCESS
-                and self.type_checker(right_set, target_type=str) == Status.TYPE_CHK_SUCCESS
-            ):
-                if (
-                    self.deletion(left_set, outp_set_left) == Status.DELETE_SUCCESS
-                    and self.deletion(right_set, outp_set_right) == Status.DELETE_SUCCESS
-                ):
-                    if self.backup_file() == Status.BACKUP_SUCCESS:
-                        try:
-                            with open(self.outp_file_left, "w") as file:
-                                for line in outp_set_left:
-                                    file.write(line)
-                                    if "\n" not in line:
-                                        file.write("\n")
-                        except (FileExistsError, FileNotFoundError):
-                            return Status.FILE_WRITE_ERROR
-                        try:
-                            with open(self.outp_file_right, "w") as file:
-                                for line in outp_set_right:
-                                    file.write(line)
-                                    if "\n" not in line:
-                                        file.write("\n")
-                        except (FileExistsError, FileNotFoundError):
-                            return Status.FILE_WRITE_ERROR
-                    else:
-                        return Status.BACKUP_ERROR
-                else:
-                    return Status.DELETE_ERROR
-            else:
-                return Status.TYPE_CHK_ERROR
-        else:
+        self.check_for_backup_dir()
+
+        if not utilities.file_writable(self.outp_file_left) or not utilities.file_writable(self.outp_file_right):
             return Status.FILE_PERMISSION_ERR
+
+        elif (
+            self.type_checker(left_set, target_type=str) != Status.TYPE_CHK_SUCCESS
+            or self.type_checker(right_set, target_type=str) != Status.TYPE_CHK_SUCCESS
+        ):
+            return Status.TYPE_CHK_ERROR
+
+        elif (
+            self.deletion(left_set, outp_set_left) != Status.DELETE_SUCCESS
+            or self.deletion(right_set, outp_set_right) != Status.DELETE_SUCCESS
+        ):
+            return Status.DELETE_ERROR
+
+        elif self.backup_file() != Status.BACKUP_SUCCESS:
+            return Status.BACKUP_ERROR
+        else:
+            try:
+                with open(self.outp_file_left, "w") as file:
+                    for line in outp_set_left:
+                        file.write(line)
+                        if "\n" not in line:
+                            file.write("\n")
+            except (FileExistsError, FileNotFoundError):
+                return Status.FILE_WRITE_ERROR
+            try:
+                with open(self.outp_file_right, "w") as file:
+                    for line in outp_set_right:
+                        file.write(line)
+                        if "\n" not in line:
+                            file.write("\n")
+            except (FileExistsError, FileNotFoundError):
+                return Status.FILE_WRITE_ERROR
 
         return Status.MERGE_FINALIZE_SUCCESS

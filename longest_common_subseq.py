@@ -1,7 +1,28 @@
-import time
+"""
+###########################################################################
+File: longest_common_subseq.py
+Author: Malcolm Hall
+Description: Implementation of the longest common subsequence algorithm.
 
 
-use_cython = True
+Copyright (C) PyMerge Team 2019
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+###########################################################################
+"""
+
+use_cython = False
 
 try:
     from cython_accelerator import lcs_cython
@@ -15,47 +36,6 @@ USE_MYERS_DIFF = True
 def mat_print(mat):
     for row in mat:
         print(row)
-
-
-def longest_common_subsequence(right_set, left_set):
-    idx_matches = [[], []]  # Index matches
-    right_size = len(right_set)  # Calculate the size only once
-    left_size = len(left_set)
-    lcs_matrix = [[0 for x in range(left_size + 1)] for y in range(right_size + 1)]  # Declare the sub-sequence matrix
-
-    for i in range(right_size + 1):
-        for j in range(left_size + 1):
-            if i == 0 or j == 0:
-                lcs_matrix[i][j] = 0
-            if right_set[i - 1] == left_set[j - 1]:
-                lcs_matrix[i][j] = lcs_matrix[i - 1][j - 1] + 1
-            else:
-                lcs_matrix[i][j] = max(lcs_matrix[i - 1][j], lcs_matrix[i][j - 1])
-
-    idx = lcs_matrix[right_size][left_size]
-
-    lcs = [""] * (idx + 1)
-
-    i = right_size
-    j = left_size
-    while i > 0 and j > 0:
-        if right_set[i - 1] == left_set[j - 1]:
-            lcs[idx - 1] = right_set[i - 1]
-            idx_matches[0].append(i - 1)
-            idx_matches[1].append(j - 1)
-            i = i - 1
-            j = j - 1
-            idx = idx - 1
-
-        elif lcs_matrix[i - 1][j] > lcs_matrix[i][j - 1]:
-            i = i - 1
-        else:
-            j = j - 1
-
-    idx_matches[0].reverse()
-    idx_matches[1].reverse()
-
-    return idx_matches
 
 
 def longest_common_subsequence2(left_set, right_set):
@@ -124,17 +104,8 @@ def pad_raw_line_matches(match_list, file_length_max):
 
 def padded_lcs(right_set, left_set, file_length_max):
     if use_cython:
-        start = time.time()
         outp = lcs_cython.padded_lcs(right_set, left_set, myers=USE_MYERS_DIFF)
-        end = time.time()
-        print(end - start)
         return outp
     else:
-        start = time.time()
-        if USE_MYERS_DIFF:
-            raw_matches = longest_common_subsequence2(right_set, left_set)
-        else:
-            raw_matches = longest_common_subsequence(right_set, left_set)
-        end = time.time()
-        print(end - start)
+        raw_matches = longest_common_subsequence2(right_set, left_set)
         return pad_raw_line_matches(raw_matches, file_length_max)

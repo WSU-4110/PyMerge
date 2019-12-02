@@ -28,6 +28,9 @@ import sys
 
 
 def check():
+    """
+    Check for specific Python packages required by PyMerge
+    """
     try:
         import PyQt5
         print("PyQt5 dependency satisfied.")
@@ -42,7 +45,10 @@ def check():
         install("Cython")
 
 
-def install(package):
+def install(package: str):
+    """
+    Attempt to install a Python package using pip
+    """
     try:
         subprocess.call([sys.executable, "-m", "pip", "install", package])
     except:

@@ -31,7 +31,6 @@ import pymerge_enums
 
 
 class ChangeSet(object):
-
 	def __init__(self):
 		self.change_list: list = []
 		self.change_set_ready: bool = False

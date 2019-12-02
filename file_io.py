@@ -39,13 +39,13 @@ import os
 import os.path
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QMessageBox
 
+
 class FileIO(object):
     def __init__(self):
         self.changes_b = changeset.ChangeSet()
         self.changes_a = changeset.ChangeSet()
 
     def diff_files(self, file_a, file_b):
-
         if file_a == "" or file_b == "":
             return pymerge_enums.RESULT.EMPTYFILE
 
@@ -78,7 +78,6 @@ class FileIO(object):
                 return pymerge_enums.RESULT.READONLYB
 
             return pymerge_enums.RESULT.GOOD
-
 
     def get_change_sets(self, file_a, file_b):
         file_a = self.changes_a

@@ -1,7 +1,7 @@
 """
 ###########################################################################
 File: pymerge_enums.py
-Author: John Toniolo
+Author:
 Description: Enumerations for project-wide constants.
 
 

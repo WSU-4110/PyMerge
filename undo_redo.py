@@ -1,7 +1,7 @@
 """
 ###########################################################################
 File: undo_redo.py
-Author: Malcolm Hall, John Toniolo
+Author:
 Description: Undo/Redo module for recording and setting the previous state of significant
             user actions.
 

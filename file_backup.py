@@ -1,7 +1,7 @@
 """
 ###########################################################################
 File: file_backup.py
-Author: Malcolm Hall
+Author:
 Description: Module for creating file backups before file merges are saved.
 
 

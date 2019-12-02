@@ -1,8 +1,9 @@
 """
 ###########################################################################
 File: diff_resolution.py
-Author: Malcolm Hall
-Description:
+Author:
+Description: Module to classify each of the lines in a diff results set.
+            Marks each line as added, changed, or same.
 
 
 Copyright (C) PyMerge Team 2019

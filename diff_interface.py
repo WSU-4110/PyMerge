@@ -1,8 +1,8 @@
 """
 ###########################################################################
 File: diff_interface.py
-Author: Malcolm Hall
-Description:
+Author:
+Description: Python interface for the longest common subsequence executable.
 
 
 Copyright (C) PyMerge Team 2019

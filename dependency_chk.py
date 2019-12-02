@@ -1,8 +1,9 @@
 """
 ###########################################################################
 File: dependency_chk.py
-Author: Malcolm Hall
-Description:
+Author:
+Description: Checks if certain packages are installed on user's computer. If not,
+            it attempts to install missing packages.
 
 
 Copyright (C) PyMerge Team 2019

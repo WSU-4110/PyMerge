@@ -2,7 +2,7 @@
 ###########################################################################
 File: changeset.py
 Author:
-Description:
+Description: Data structure for diff classifications/results.
 
 
 Copyright (C) PyMerge Team 2019

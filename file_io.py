@@ -2,7 +2,7 @@
 ###########################################################################
 File: file_io.py
 Author:
-Description:
+Description: An input/output interface for user selected files.
 
 
 Copyright (C) PyMerge Team 2019

@@ -1,7 +1,7 @@
 """
 ###########################################################################
 File: test_main_table.py
-Author: John Toniolo
+Author:
 Description: Unit tests for main_table.py
 
 

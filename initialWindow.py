@@ -26,7 +26,7 @@ import utilities
 from PyQt5 import QtCore
 
 
-class initialWindow(QMainWindow, QMessageBox):
+class initialWindow(QMessageBox):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("PyMerge-init")
@@ -55,6 +55,9 @@ class initialWindow(QMainWindow, QMessageBox):
         compare.setStyleSheet("background-color: #5B6FFF")
         compare.clicked.connect(self.switch_to_main_window)
 
+        self.show()
+
+    def openWindow(self):
         self.show()
 
     @pyqtSlot()

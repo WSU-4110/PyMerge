@@ -20,6 +20,7 @@ import pmEnums
 import utilities
 import ntpath
 import os
+import initialWindow
 
 
 class mainWindow(QMainWindow, QMessageBox):
@@ -63,6 +64,7 @@ class mainWindow(QMainWindow, QMessageBox):
 
     def initUI(self):
         # start GUI
+        initialWindow.startMain()
         self.menuItems()
         self.show()
 

@@ -1,11 +1,11 @@
 """
 ###########################################################################
-File:
-Author:
-Description:
+File: test_main_table.py
+Author: John Toniolo
+Description: Unit tests for main_table.py
 
 
-Copyright (C) 2019
+Copyright (C) PyMerge Team 2019
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -27,30 +27,30 @@ import unittest
 
 from PyQt5.QtWidgets import QApplication
 
-import MainWindow
+import main_window
 
 app = QApplication(sys.argv)
 
 
 class TestMainTable(unittest.TestCase):
     def setUp(self):
-        self.mainWindow = MainWindow.MainWindow("file1.c", "file2.c")
+        self.mainWindow = main_window.MainWindow("example_files/file1.c", "example_files/file2.c")
         self.table = self.mainWindow.table_widget
-        #for testing button presses on window with no input files
-        self.mainWindow2 = MainWindow.MainWindow()
+        # for testing button presses on window with no input files
+        self.mainWindow2 = main_window.MainWindow()
         self.table2 = self.mainWindow2.table_widget
         
     def test_goto_next_diff(self):        
         self.table.goto_next_diff()
         self.table.goto_next_diff()                
         expectedDiffIndex = 1
-        self.assertEqual( expectedDiffIndex, self.table.curr_diff_idx  )
+        self.assertEqual(expectedDiffIndex, self.table.curr_diff_idx)
         expectedDiffLine = 9
-        self.assertEqual( expectedDiffLine, self.table.table.currentRow() )
+        self.assertEqual(expectedDiffLine, self.table.table.currentRow())
 
-        #an empty table will leave the curr_diff_indx at -1
+        # an empty table will leave the curr_diff_indx at -1
         self.table2.goto_next_diff()
-        self.assertEqual( -1, self.table2.curr_diff_idx)
+        self.assertEqual(-1, self.table2.curr_diff_idx)
 
     def test_goto_prev_diff(self):
         self.table.goto_next_diff()
@@ -74,7 +74,7 @@ class TestMainTable(unittest.TestCase):
         expectedLastDiffLine = 58
         self.assertEqual( expectedLastDiffLine, self.table.table.currentRow() )        
         
-        #empty tables index should be left at -1 when prev is hit.
+        # empty tables index should be left at -1 when prev is hit.
         self.table2.goto_prev_diff()
         self.assertEqual( -1, self.table2.curr_diff_idx)
 
@@ -86,10 +86,10 @@ class TestMainTable(unittest.TestCase):
         expectedLineNine = ""
         expectedLineTen = "typedef structtypedef"
         
-        self.assertEqual( expectedLineNine, self.table.rows[8].left_text)
-        self.assertEqual( expectedLineNine, self.table.rows[8].right_text)
-        self.assertEqual( expectedLineTen, self.table.rows[9].left_text)
-        self.assertEqual( expectedLineTen, self.table.rows[9].right_text)
+        self.assertEqual(expectedLineNine, self.table.rows[8].left_text)
+        self.assertEqual(expectedLineNine, self.table.rows[8].right_text)
+        self.assertEqual(expectedLineTen, self.table.rows[9].left_text)
+        self.assertEqual(expectedLineTen, self.table.rows[9].right_text)
 
     def test_merge_right(self):
         self.table.goto_next_diff()
@@ -99,10 +99,10 @@ class TestMainTable(unittest.TestCase):
         expectedLineTen = ""
         expectedLineNine = "typedef structtypedefC"
         
-        self.assertEqual( expectedLineNine, self.table.rows[8].left_text)
-        self.assertEqual( expectedLineNine, self.table.rows[8].right_text)
-        self.assertEqual( expectedLineTen, self.table.rows[9].left_text)
-        self.assertEqual( expectedLineTen, self.table.rows[9].right_text)
+        self.assertEqual(expectedLineNine, self.table.rows[8].left_text)
+        self.assertEqual(expectedLineNine, self.table.rows[8].right_text)
+        self.assertEqual(expectedLineTen, self.table.rows[9].left_text)
+        self.assertEqual(expectedLineTen, self.table.rows[9].right_text)
 
     def test_undo(self):
         self.table.goto_next_diff()

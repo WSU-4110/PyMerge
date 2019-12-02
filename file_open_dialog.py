@@ -1,11 +1,11 @@
 """
 ###########################################################################
-File:
+File: file_open_dialog.py
 Author:
-Description:
+Description: Creates a dialog box for opening files to load into comparison table.
 
 
-Copyright (C) 2019
+Copyright (C) PyMerge Team 2019
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -36,8 +36,3 @@ class FileOpenDialog(QWidget):
         options = QFileDialog.Options()
         self.file_name, _ = QFileDialog.getOpenFileName(self, "Open File A", "", "", options=options)
 
-
-# if __name__ == '__main__':
-#     app = QApplication(sys.argv)
-#     ex = FileOpenDialog()
-#     sys.exit(app.exec_())

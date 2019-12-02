@@ -1,11 +1,11 @@
 """
 ###########################################################################
-File:
-Author:
+File: utilities.py
+Author: Malcolm Hall, John Toniolo, Saular Raffi
 Description:
 
 
-Copyright (C) 2019
+Copyright (C) PyMerge Team 2019
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -108,7 +108,6 @@ def hash_list(inp_list):
     return
 
 
-# @staticmethod
 def valid_file_ext(file: str) -> bool:
     illegal_exts = {"zip", "bzip", "mp3", "wav", "jpg", "png", "mp4", "ppt", "ods", "tar", "wma", "aif", "m4a",
                     "mpg", "vob", "wmv", "obj", "gif", "tiff", "3dm", "3ds", "svg", "xls", "xlsx", "7z", "",

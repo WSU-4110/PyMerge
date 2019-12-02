@@ -2,14 +2,15 @@
 //asdf
 
 #include "PID.h"
+#include "otherfile"
 
 
 
-
-typedef structtypedef
+typedef structtypedefC
 {
 	float derivState;      	/* Last position input
 	*/
+        float NEW_VARIABLE
 	float intgrtState;      	/* Integrator state */
 	float intgrtMax;    /* Maximum allowable integrator state   */
 	float intgrtMin;    /* Minimum allowable integrator state   */
@@ -18,9 +19,6 @@ typedef structtypedef
 	float kP;    	/* proportional gain    */
 	float kD;     	/* derivative gain  */
 } SPid;
-//comment
-
-
 
 void InitPID(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
 {
@@ -30,7 +28,6 @@ void InitPID(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
 	pid->intgrtMin = iMin;
 	pid->intgrtMax = iMax;
 }
-//other comment
 
 void InitPID(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
 {
@@ -40,6 +37,17 @@ void InitPID(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
 	pid->intgrtMin = iMin;
 	pid->intgrtMax = iMax;
 }
-//other comment
+
+
+}
+void InitPIDfunctionB(Spid* pid, float kP, float kI, float kD, float iMin, float iMax)
+{
+	pid->kP = kP;
+	pid->kI = kI;
+	pid->k_D = kD;
+	pid->intgrtMin = iMin;
+	pid->intgrtMax = iMax;
+}
+//changed comment
 
 }

@@ -1,7 +1,7 @@
 """
 ###########################################################################
 File: main_window.py
-Author: John Toniolo, Malcolm Hall, Saular Raffi
+Author:
 Description:
 
 

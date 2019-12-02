@@ -1,7 +1,7 @@
 """
 ###########################################################################
 File: PyMerge.py
-Author: Malcolm Hall, Saular Raffi, John Toniolo
+Author:
 Description: Main entry point for the program.
 
 
@@ -41,7 +41,7 @@ import utilities
 class PyMergeCLI(object):
     def __init__(self, *args):
         self.options: list = self.sanitize(args[0][1:])
-        self.file_size_lim: int = 2000000        
+        self.file_size_lim: int = 20000  # 2KB limit until interface for C implementation of LCS is done
         self.cli()
 
     def cli(self):
@@ -56,11 +56,12 @@ class PyMergeCLI(object):
         if opt_length == 0:
             self.invoke_application(left_file, right_file)
             return
-        elif opt_length == 1 and self.options[0] == "--help":
+        elif opt_length == 1:
             if self.options[0] == "--help":
                 self.help_func()
             elif self.options[0] == "--about":
                 self.about_func()
+            return
         elif opt_length == 2:
             if utilities.check_paths(self.options[0], self.options[1]):
                 left_file = self.options[0]
@@ -98,7 +99,8 @@ PyMerge
     @staticmethod
     def about_func():
         print(
-            "The PyMerge project page can be found here: https://github.com/WSU-4110/PyMerge/blob/master/README.md\n"
+            "PyMerge is a cross-platform file diff/merge tool.\n\n"
+            "The PyMerge project page can be found here: https://github.com/WSU-4110/PyMerge\n"
         )
 
     @staticmethod

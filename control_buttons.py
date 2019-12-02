@@ -2,7 +2,7 @@
 ###########################################################################
 File: control_buttons.py
 Author:
-Description:
+Description: Main window toolbar buttons.
 
 
 Copyright (C) PyMerge Team 2019

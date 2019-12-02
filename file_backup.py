@@ -1,11 +1,11 @@
 """
 ###########################################################################
-File:
-Author:
-Description:
+File: file_backup.py
+Author: Malcolm Hall
+Description: Module for creating file backups before file merges are saved.
 
 
-Copyright (C) 2019
+Copyright (C) PyMerge Team 2019
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import hashlib
 import os
 import pickle
+import pathlib
 import zipfile
 
 
@@ -80,7 +81,7 @@ class Backup(object):
 
     @staticmethod
     def get_meta_file_name(file_name: str):
-        return f".meta.{file_name}.dat"
+        return f".meta.{pathlib.Path(file_name).name}.dat"
 
     def create_meta_file(self, file: str) -> str:
         """
@@ -148,7 +149,7 @@ class Backup(object):
 
         # Zip the files together
         with zipfile.ZipFile(
-            f"{backup_dir}/{file}.bak", "w", zipfile.ZIP_DEFLATED
+            f"{backup_dir}/{pathlib.Path(file).name}.bak", "w", zipfile.ZIP_DEFLATED
         ) as backup:
             backup.write(file)
             backup.write(hash_file)

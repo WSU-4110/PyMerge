@@ -1,11 +1,11 @@
 """
 ###########################################################################
-File:
-Author:
-Description:
+File: pymerge_enums.py
+Author: John Toniolo
+Description: Enumerations for project-wide constants.
 
 
-Copyright (C) 2019
+Copyright (C) PyMerge Team 2019
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -22,20 +22,30 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ###########################################################################
 """
 
-import sys
-
-from PyQt5.QtWidgets import *
-
-
-class InitialWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("Initial Window")
-        self.setGeometry(1000, 1000, 2000, 1000)
+"""
+various enumerations, to standardize the output and input that functions 
+are expecting to get. 
+"""
+from enum import Enum
 
 
-def start_window():
-    app = QApplication(sys.argv)
-    ex = InitialWindow()
+class RESULT(Enum):
+    GOOD = 0
+    ERROR = 1
+    NOTIMPL = 2  # not implemented
+    BADFILE = 3  # file mismatch
+    EMPTYFILE = 4
 
 
+class ATTRIB(Enum):
+    DATA = 0
+    CHANGE = 1
+
+
+class CHANGEDENUM(Enum):
+    SAME = 0
+    CHANGED = 1
+    ADDED = 2
+    MOVED = 3
+    PADDING = 4
+    ERROR = 5

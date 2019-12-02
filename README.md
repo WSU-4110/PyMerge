@@ -19,11 +19,11 @@ Download the appropriate installer for PyMerge.
 
 | OS            | Architecture | Installer     |
 | :---          |    :----:    |          :--- |
-| **Windows**   | x64          | [PyMerge-1.0-windows-x64-installer.exe]()   |
-| **Windows**   | x86          | [PyMerge-1.0-windows-installer.exe]()       |
-| **macOS**     | --           | [PyMerge-1.0-osx-installer]()               |
-| **Linux**     | x64          | [PyMerge-1.0-linux-x64-installer.run]()     |
-| **Linux**     | x86          | [PyMerge-1.0-linux-installer.run]()         |
+| **Windows**   | x64          | [PyMerge-1.0-windows-x64-installer.exe](./installation)   |
+| **Windows**   | x86          | [PyMerge-1.0-windows-installer.exe](./installation)       |
+| **macOS**     | --           | [PyMerge-1.0-osx-installer](./installation)               |
+| **Linux**     | x64          | [PyMerge-1.0-linux-x64-installer.run](./installation)     |
+| **Linux**     | x86          | [PyMerge-1.0-linux-installer.run](./installation)         |
 
 #### Option 2: Clone the repository
 You may optionally clone the repository and just run PyMerge.py directly (this is the more 
@@ -101,13 +101,13 @@ backup files are just ZIP archives.
 
 ### Acknowledgements
 #### Icons
-* add.png: 
-* down-arrow.png:
-* up-arrow.png:
-* left-arrow.png: 
-* right-arrow.png:
-* undo-arrow.png:
-* redo-arrow.png:
+* add.png: Icon made by [Smashicons](https://www.flaticon.com/authors/smashicons) from www.flaticon.com
+* down-arrow.png:Icon made by [Pixel perfect](https://www.flaticon.com/authors/pixel-perfect) from www.flaticon.com
+* up-arrow.png:Icon made by [Pixel perfect](https://www.flaticon.com/authors/pixel-perfect) from www.flaticon.com
+* left-arrow.png: Icon made by [Lyolya](https://www.flaticon.com/authors/lyolya) from www.flaticon.com
+* right-arrow.png:Icon made by [Lyolya](https://www.flaticon.com/authors/lyolya) from www.flaticon.com
+* undo-arrow.png:Icon made by [FreePik](https://www.flaticon.com/authors/freepik) from www.flaticon.com
+* redo-arrow.png:Icon made by [FreePik](https://www.flaticon.com/authors/freepik) from www.flaticon.com
 
 #### Installer builder:
 * BitRock InstallBuilder Enterprise 19.8.0 \

@@ -1,11 +1,11 @@
 """
 ###########################################################################
-File:
-Author:
-Description:
+File: test_backup.py
+Author: Malcolm Hall
+Description: Unit tests for file_backup.py
 
 
-Copyright (C) 2019
+Copyright (C) PyMerge Team 2019
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,11 +1,11 @@
 """
 ###########################################################################
-File:
-Author:
+File: initial_window.py
+Author: Saular Raffi
 Description:
 
 
-Copyright (C) 2019
+Copyright (C) PyMerge Team 2019
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -22,25 +22,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ###########################################################################
 """
 
-"""
-class, provides a data structure to make working with file differences (change sets)
-easier by abstracting the data storage, and providing a single accessor function.
-"""
+import sys
 
-import pmEnums
+from PyQt5.QtWidgets import *
 
 
-class ChangeSet(object):
+class InitialWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Initial Window")
+        self.setGeometry(1000, 1000, 2000, 1000)
 
-	def __init__(self):
-		self.change_list: list = []
-		self.change_set_ready: bool = False
 
-	def get_change(self, line_num, change_type, data):
-		change = self.change_list[line_num]
-		change_type[0] = change[1]
-		data[0] = change[2]
-		return pmEnums.RESULT.NOTIMPL
+def start_window():
+    app = QApplication(sys.argv)
+    ex = InitialWindow()
 
-	def add_change(self, line_num, change_type, data):
-		self.change_list.append((line_num, change_type, data))
+

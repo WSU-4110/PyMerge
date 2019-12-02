@@ -1,6 +1,6 @@
-#Installing PyMerge
+## Installing PyMerge
 
-## Using BitRock InstallBuilder
+### Using BitRock InstallBuilder
 If you have a valid BitRock InstallBuilder license, you can use the configuration file found
 in this directory to create custom installation files. 
 
@@ -8,10 +8,10 @@ The InstallBuilder configuration file, PyMerge_Installer.xml, is located in this
 can be loaded into InstallBuilder to create custom installation programs. The  file paths in
 PyMerge_Installer.xml may need to be changed to reflect those on your machine.
 
-## Installation files
+### Installation files
 Executable installers are included for macOS, Windows, and Linux.
 
-## How to install PyMerge
+### How to install PyMerge
 Download the appropriate installer for PyMerge.
 
 | OS            | Architecture | Installer     |

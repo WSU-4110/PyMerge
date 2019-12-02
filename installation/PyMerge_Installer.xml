@@ -55,13 +55,13 @@
                 </folder>
                 <folder>
                     <description>Program Files</description>
-                    <destination>${installdir}/PyMerge</destination>
+                    <destination>${installdir}</destination>
                     <name>programfileswindows64</name>
                     <platforms>windows-x64</platforms>
                 </folder>
                 <folder>
                     <description>Program Files</description>
-                    <destination>${installdir}/PyMerge</destination>
+                    <destination>${installdir}</destination>
                     <name>programfilesosx</name>
                     <platforms>osx</platforms>
                 </folder>
@@ -204,6 +204,12 @@
                             <origin>/Users/malcolmhall/PyMerge/PyMerge.bat</origin>
                         </distributionFile>
                     </distributionFileList>
+                </folder>
+                <folder>
+                    <description>file_backup</description>
+                    <destination>${installdir}/app/file_backup</destination>
+                    <name>file_backup</name>
+                    <platforms>all</platforms>
                 </folder>
             </folderList>
             <startMenuShortcutList>

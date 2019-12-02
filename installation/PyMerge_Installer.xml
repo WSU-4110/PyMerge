@@ -136,8 +136,11 @@
             </startMenuShortcutList>
         </component>
     </componentList>
+    <enableGtkDarkThemesSupport>1</enableGtkDarkThemesSupport>
     <enableRollback>1</enableRollback>
     <enableTimestamp>1</enableTimestamp>
+    <outputDirectory>/Users/malcolmhall/PyMerge/installation</outputDirectory>
+    <readmeFileEncoding>utf-8</readmeFileEncoding>
     <vendor>The PyMerge Team</vendor>
     <licenseFileList>
         <licenseFile>

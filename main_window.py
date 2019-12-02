@@ -192,11 +192,15 @@ class MainWindow(QMainWindow, QMessageBox):
                 subprocess.Popen("../doc/PyMerge_Manual.pdf", shell=True)
             elif os.path.exists("PyMerge_Manual.pdf") and os.path.isfile("PyMerge_Manual.pdf"):
                 subprocess.Popen("PyMerge_Manual.pdf", shell=True)
+            elif os.path.exists("docs/PyMerge_Manual.pdf") and os.path.isfile("docs/PyMerge_Manual.pdf"):
+                subprocess.Popen("docs/PyMerge_Manual.pdf", shell=True)
         else:
             if os.path.exists("../doc/PyMerge_Manual.pdf") and os.path.isfile("../doc/PyMerge_Manual.pdf"):
-                subprocess.Popen("open ../doc/PyMerge_Manual.pdf", shell=True)
+                subprocess.Popen("open ../docs/PyMerge_Manual.pdf", shell=True)
             elif os.path.exists("PyMerge_Manual.pdf") and os.path.isfile("PyMerge_Manual.pdf"):
                 subprocess.Popen("open PyMerge_Manual.pdf", shell=True)
+            elif os.path.exists("docs/PyMerge_Manual.pdf") and os.path.isfile("docs/PyMerge_Manual.pdf"):
+                subprocess.Popen("open docs/PyMerge_Manual.pdf", shell=True)
 
 
 def start_main(fileA=0, fileB=0):

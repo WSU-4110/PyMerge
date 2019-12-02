@@ -113,6 +113,30 @@
                         <distributionFile>
                             <origin>/Users/malcolmhall/PyMerge/utilities.py</origin>
                         </distributionFile>
+                        <distributionFile>
+                            <origin>/Users/malcolmhall/PyMerge/diff_interface.py</origin>
+                        </distributionFile>
+                        <distributionFile>
+                            <origin>/Users/malcolmhall/PyMerge/dependency_chk.py</origin>
+                        </distributionFile>
+                        <distributionFile>
+                            <origin>/Users/malcolmhall/PyMerge/file_open_dialog.py</origin>
+                        </distributionFile>
+                        <distributionFile>
+                            <origin>/Users/malcolmhall/PyMerge/merge_finalizer.py</origin>
+                        </distributionFile>
+                        <distributionFile>
+                            <origin>/Users/malcolmhall/PyMerge/table_row.py</origin>
+                        </distributionFile>
+                        <distributionDirectory>
+                            <origin>/Users/malcolmhall/PyMerge/icons</origin>
+                        </distributionDirectory>
+                        <distributionDirectory>
+                            <origin>/Users/malcolmhall/PyMerge/LCS_C</origin>
+                        </distributionDirectory>
+                        <distributionDirectory>
+                            <origin>/Users/malcolmhall/PyMerge/cython_accelerator</origin>
+                        </distributionDirectory>
                     </distributionFileList>
                 </folder>
                 <folder>
@@ -120,6 +144,66 @@
                     <destination>${installdir}/doc</destination>
                     <name>doc</name>
                     <platforms>all</platforms>
+                    <distributionFileList>
+                        <distributionFile>
+                            <origin>/Users/malcolmhall/PyMerge/docs/PyMerge_Manual.pdf</origin>
+                        </distributionFile>
+                    </distributionFileList>
+                </folder>
+                <folder>
+                    <description>toplvl_items</description>
+                    <destination>${installdir}</destination>
+                    <name>toplvl_itemsMacOS</name>
+                    <platforms>osx</platforms>
+                    <distributionFileList>
+                        <distributionFile>
+                            <origin>/Users/malcolmhall/PyMerge/PyMerge.sh</origin>
+                        </distributionFile>
+                    </distributionFileList>
+                </folder>
+                <folder>
+                    <description>toplvl_items</description>
+                    <destination>${installdir}</destination>
+                    <name>toplvl_itemsLinux</name>
+                    <platforms>linux</platforms>
+                    <distributionFileList>
+                        <distributionFile>
+                            <origin>/Users/malcolmhall/PyMerge/PyMerge.sh</origin>
+                        </distributionFile>
+                    </distributionFileList>
+                </folder>
+                <folder>
+                    <description>toplvl_items</description>
+                    <destination>${installdir}</destination>
+                    <name>toplvl_itemsLinux64</name>
+                    <platforms>linux-x64</platforms>
+                    <distributionFileList>
+                        <distributionFile>
+                            <origin>/Users/malcolmhall/PyMerge/PyMerge.sh</origin>
+                        </distributionFile>
+                    </distributionFileList>
+                </folder>
+                <folder>
+                    <description>toplvl_items</description>
+                    <destination>${installdir}</destination>
+                    <name>toplvl_itemsWin</name>
+                    <platforms>windows</platforms>
+                    <distributionFileList>
+                        <distributionFile>
+                            <origin>/Users/malcolmhall/PyMerge/PyMerge.bat</origin>
+                        </distributionFile>
+                    </distributionFileList>
+                </folder>
+                <folder>
+                    <description>toplvl_items</description>
+                    <destination>${installdir}</destination>
+                    <name>toplvl_itemsWin64</name>
+                    <platforms>windows-x64</platforms>
+                    <distributionFileList>
+                        <distributionFile>
+                            <origin>/Users/malcolmhall/PyMerge/PyMerge.bat</origin>
+                        </distributionFile>
+                    </distributionFileList>
                 </folder>
             </folderList>
             <startMenuShortcutList>

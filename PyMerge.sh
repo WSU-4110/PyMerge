@@ -32,6 +32,8 @@ python3_exec=""  # Python executable to call
 # These are the valid Python versions to run PyMerge with
 declare -a python_versions=("python3.5" "python3.6" "python3.7" "python3.8" "python3.9")
 
+cd app
+
 # Check for Python 3.5+ by looping through the array of accepted Python versions.
 # This is done to make it easier to update the list of accepted versions
 for version in "${python_versions[@]}"
@@ -53,12 +55,14 @@ fi
 
 
 # In git repository, PyMerge.sh and PyMerge.bat are in the same directory as
-# the Python files being called. In the installed version, PyMerge.sh and PyMerge.bat
-# located one directory above the Python files so both paths need to be checked.
+# the Python files being called. In the installed version, PyMerge.sh is located
+# inside the /app/ folder so the path to PyMerge.py needs to be set accordingly.
 if test -f "$invocation_file"; then
   invocation_file_final="$invocation_file"
 elif test -f "../$invocation_file"; then
   invocation_file_final="../$invocation_file"
+elif test -f "app/$invocation_file"; then
+  invocation_file_final="app/$invocation_file"
 else
   echo "Could not find PyMerge.py! Exiting..."
   exit 0

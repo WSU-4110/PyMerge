@@ -18,7 +18,7 @@ Download the appropriate installer for PyMerge.
 | :---          |    :----:    |          :--- |
 | **Windows**   | x64          | PyMerge-1.0-windows-x64-installer.exe   |
 | **Windows**   | x86          | PyMerge-1.0-windows-installer.exe      |
-| **macOS**     | --           | PyMerge-1.0-osx-installer               |
+| **macOS**     | --           | PyMerge-1.0-osx-installer.app              |
 | **Linux**     | x64          | PyMerge-1.0-linux-x64-installer.run     |
 | **Linux**     | x86          | PyMerge-1.0-linux-installer.run         |
 

@@ -86,8 +86,8 @@ class TestMainTable(unittest.TestCase):
         expectedLineNine = ""
         expectedLineTen = "typedef structtypedef"
         
-        self.assertEqual(expectedLineNine, self.table.rows[8].left_text)
         self.assertEqual(expectedLineNine, self.table.rows[8].right_text)
+        self.assertEqual(expectedLineNine, self.table.rows[8].left_text)
         self.assertEqual(expectedLineTen, self.table.rows[9].left_text)
         self.assertEqual(expectedLineTen, self.table.rows[9].right_text)
 
@@ -99,8 +99,8 @@ class TestMainTable(unittest.TestCase):
         expectedLineTen = ""
         expectedLineNine = "typedef structtypedefC"
         
-        self.assertEqual(expectedLineNine, self.table.rows[8].left_text)
         self.assertEqual(expectedLineNine, self.table.rows[8].right_text)
+        self.assertEqual(expectedLineNine, self.table.rows[8].left_text)
         self.assertEqual(expectedLineTen, self.table.rows[9].left_text)
         self.assertEqual(expectedLineTen, self.table.rows[9].right_text)
 

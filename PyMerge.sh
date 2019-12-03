@@ -32,7 +32,7 @@ python3_exec=""  # Python executable to call
 # These are the valid Python versions to run PyMerge with
 declare -a python_versions=("python3.5" "python3.6" "python3.7" "python3.8" "python3.9")
 
-cd app
+cd app || exit
 
 # Check for Python 3.5+ by looping through the array of accepted Python versions.
 # This is done to make it easier to update the list of accepted versions

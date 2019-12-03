@@ -72,10 +72,7 @@ class Stack(object):
 
 
 class UndoRedoAction(object):
-    __slots__ = [
-        "obj_copy",
-        "obj_ref",
-    ]
+    __slots__ = ["obj_copy", "obj_ref",]
 
     def __init__(self, record_obj):
         self.obj_copy = record_obj.__dict__.copy()
@@ -117,7 +114,7 @@ class UndoRedo(object):
             UndoRedo._instance = self
 
     @staticmethod
-    def get_instance(buf_size=15):
+    def get_instance(buf_size=200):
         if UndoRedo._instance is None:
             UndoRedo(buf_size)
         return UndoRedo._instance
@@ -136,9 +133,16 @@ class UndoRedo(object):
             self._buf_size = value
 
     def record_action(self, record_obj):
+        """
+        Record the state of a class/object and push onto stack.
+        """
         self._undo_buf.stack_push(UndoRedoAction(record_obj))
 
     def undo(self) -> bool:
+        """
+        Pops an UndoRedoAction from the stack and sets the state of its referenced
+        object.
+        """
         undo_obj: UndoRedoAction = self._undo_buf.stack_pop()  # Get the state we want to set
         
         # Check if object is None, then push the recorded current state.
@@ -147,7 +151,6 @@ class UndoRedo(object):
             # Restore the state to what was popped
             undo_obj.set_state()
             return True
-
         return False
 
     def redo(self) -> bool:

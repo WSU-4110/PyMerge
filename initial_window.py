@@ -29,15 +29,14 @@ from PyQt5 import QtWidgets
 import ntpath
 
 # from mainWindow import mainWindow
-import mainWindow
 
 from PyQt5 import QtGui
-import controlButtons
+import control_buttons
 import main_table
-import fileIO
-import pmEnums
+import file_io
+import enum
 import diff_resolution
-import fileOpenDialog
+import file_open_dialog
 import os.path
 import utilities
 from PyQt5 import QtCore
@@ -114,7 +113,6 @@ class initialWindow(QMessageBox):
         self.hide()
         # self.window = QtWidgets.QMainWindow
         # QtGui.QDialog.closeEvent(self, event)
-        mainWindow.startMain(self.fileA, self.fileB)
 
 def startMain():
     app = QApplication(sys.argv)

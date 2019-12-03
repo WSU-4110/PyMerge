@@ -1,7 +1,7 @@
 """
 ###########################################################################
 File: main_table.py
-Author: Malcolm Hall, John Toniolo, Saular Raffi
+Author:
 Description:
 
 
@@ -33,6 +33,9 @@ from PyQt5.QtWidgets import (
     QTableWidget,
     QTableWidgetItem,
     QGridLayout,
+    QApplication,
+    QPushButton,
+    QMessageBox
 )
 
 import file_io
@@ -42,7 +45,7 @@ import merge_finalizer
 import pymerge_enums
 import table_row
 import undo_redo
-
+import utilities
 
 class MainTable(QWidget):
     def __init__(self, change_set_a, change_set_b):
@@ -210,6 +213,11 @@ class MainTable(QWidget):
             else:
                 self.clear_table()
                 fileB = path
+
+                if not utilities.file_writable(self.file_dropped):            
+                    QMessageBox.about(self, "Warning ", os.path.basename(self.file_dropped) + " is read only")
+                if not utilities.file_writable(fileB):            
+                    QMessageBox.about(self, "Warning ", os.path.basename(fileB) + " is read only")
 
                 # I use a local instance of fileIO to generate changesets, since
                 # main_table can't access the main window instance of fileIO

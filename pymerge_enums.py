@@ -1,7 +1,7 @@
 """
 ###########################################################################
 File: pymerge_enums.py
-Author: John Toniolo
+Author:
 Description: Enumerations for project-wide constants.
 
 
@@ -35,6 +35,8 @@ class RESULT(Enum):
     NOTIMPL = 2  # not implemented
     BADFILE = 3  # file mismatch
     EMPTYFILE = 4
+    READONLYA = 5
+    READONLYB = 6
 
 
 class ATTRIB(Enum):

@@ -137,6 +137,9 @@
                         <distributionDirectory>
                             <origin>/Users/malcolmhall/PyMerge/cython_accelerator</origin>
                         </distributionDirectory>
+                        <distributionFile>
+                            <origin>/Users/malcolmhall/PyMerge/docs/PyMerge_Manual.pdf</origin>
+                        </distributionFile>
                     </distributionFileList>
                 </folder>
                 <folder>

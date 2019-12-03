@@ -139,6 +139,9 @@ class MergeFinalizer(object):
         outp_set_left: list = []
         outp_set_right: list = []
 
+        if not self.set_equal(left_set, right_set):
+            return Status.FILE_WRITE_ERROR
+
         self.check_for_backup_dir()
 
         if not utilities.file_writable(self.outp_file_left) or not utilities.file_writable(self.outp_file_right):

@@ -1,8 +1,9 @@
 """
 ###########################################################################
 File: initial_window.py
-Author: Saular Raffi
-Description:
+Author:
+Description: Window that appears immediately after PyMerge opens. Appears before
+            the comparison window.
 
 
 Copyright (C) PyMerge Team 2019

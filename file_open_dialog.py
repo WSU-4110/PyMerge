@@ -32,7 +32,7 @@ class FileOpenDialog(QWidget):
         self.title = 'Open File'
         self.setGeometry(100, 100, 400, 500)
               
-    def open_file_name_dialog(self):
+    def open_file_name_dialog(self, openWhat):
         options = QFileDialog.Options()
-        self.file_name, _ = QFileDialog.getOpenFileName(self, "Open File A", "", "", options=options)
+        self.file_name, _ = QFileDialog.getOpenFileName(self, "Open " + openWhat, "", "", options=options)
 

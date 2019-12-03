@@ -1,7 +1,7 @@
 """
 ###########################################################################
 File: merge_finalizer.py
-Author: Malcolm Hall
+Author:
 Description: Checks for merge validity, file permissions, and performs the final file write.
 
 

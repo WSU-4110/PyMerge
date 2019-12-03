@@ -1,7 +1,7 @@
 """
 ###########################################################################
 File: main_window.py
-Author: John Toniolo, Malcolm Hall, Saular Raffi
+Author:
 Description:
 
 
@@ -69,6 +69,12 @@ class MainWindow(QMainWindow, QMessageBox):
 
         layout.addWidget(self.table_widget, 1, 0)
 
+        if result == pymerge_enums.RESULT.READONLYA:
+            QMessageBox.about(self, "Warning ", os.path.basename(fileA) + " is read only")
+
+        elif result == pymerge_enums.RESULT.READONLYB:
+            QMessageBox.about(self, "Warning ", os.path.basename(fileB) + " is read only")
+        
         # load table with fileA and B if present from command line
         if fileA != 0 and fileB != 0:
             self.table_widget.load_table_contents(fileA, fileB)  # Left list arguments for now
@@ -94,19 +100,12 @@ class MainWindow(QMainWindow, QMessageBox):
         file_opener_a = file_open_dialog.FileOpenDialog()
         file_opener_b = file_open_dialog.FileOpenDialog()
         
-        file_opener_a.open_file_name_dialog()
+        file_opener_a.open_file_name_dialog("file A")
         file_a = file_opener_a.file_name
         
         if file_a != "":
-            file_opener_b.open_file_name_dialog()
+            file_opener_b.open_file_name_dialog("file B")
         file_b = file_opener_b.file_name
-
-        if not utilities.file_writable(file_a):
-            QMessageBox.about(self, "Error", os.path.basename(file_a) + " is not writable")
-            return
-        if not utilities.file_writable(file_b):
-            QMessageBox.about(self, "Error", os.path.basename(file_b) + " is not writable")
-            return
         
         result = self.fIO.diff_files(file_a, file_b)
 
@@ -115,6 +114,13 @@ class MainWindow(QMainWindow, QMessageBox):
 
         elif result == pymerge_enums.RESULT.BADFILE:
             QMessageBox.about(self, "Error", "Invalid file type")
+
+        elif result == pymerge_enums.RESULT.READONLYA:
+            QMessageBox.about(self, "Warning ", os.path.basename(file_a) + " is read only")
+
+        elif result == pymerge_enums.RESULT.READONLYB:
+            QMessageBox.about(self, "Warning ", os.path.basename(file_b) + " is read only")
+
 
         self.table_widget.load_table_contents(file_a, file_b)
         return result
@@ -201,6 +207,7 @@ class MainWindow(QMainWindow, QMessageBox):
                 subprocess.Popen("open PyMerge_Manual.pdf", shell=True)
             elif os.path.exists("docs/PyMerge_Manual.pdf") and os.path.isfile("docs/PyMerge_Manual.pdf"):
                 subprocess.Popen("open docs/PyMerge_Manual.pdf", shell=True)
+
 
 
 def start_main(fileA=0, fileB=0):

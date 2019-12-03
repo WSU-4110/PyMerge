@@ -1,8 +1,8 @@
 """
 ###########################################################################
 File: diff_interface.py
-Author: Malcolm Hall
-Description:
+Author:
+Description: Python interface for the longest common subsequence executable.
 
 
 Copyright (C) PyMerge Team 2019
@@ -28,9 +28,13 @@ from xml.etree import ElementTree as ET
 import longest_common_subseq
 
 
-def lcs_c_if(left_file, right_file, outp_file):
-    ret_obj = subprocess.run(["LCS_C/build/LCS", right_file, left_file, outp_file], stdout=subprocess.PIPE)
-    raw_matches = [[], []]
+def lcs_c_if(left_file: str, right_file: str, outp_file: str) -> list:
+    """
+    Creates a subprocess calling the LCS executable, passing the left and right files as arguments.
+    The function then parses the XML output and pads the lines using the function in longest_common_subseq.py
+    """
+    ret_obj = subprocess.run(["LCS_C/build/LCS", left_file, right_file, outp_file], stdout=subprocess.PIPE)
+    raw_matches: list = [[], []]
 
     tree = ET.parse(outp_file)
     root = tree.getroot()
@@ -45,6 +49,6 @@ def lcs_c_if(left_file, right_file, outp_file):
 
     raw_matches[0] = raw_matches[0][:-1]
     raw_matches[1] = raw_matches[1][:-1]
-    outp = longest_common_subseq.pad_raw_line_matches(raw_matches, -1)
+    outp: str = longest_common_subseq.pad_raw_line_matches(raw_matches, -1)
 
     return outp

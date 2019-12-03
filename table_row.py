@@ -1,7 +1,7 @@
 """
 ###########################################################################
 File: table_row.py
-Author: Malcolm Hall, John Toniolo
+Author:
 Description: Module with class that is used to store individual row information.
 
 

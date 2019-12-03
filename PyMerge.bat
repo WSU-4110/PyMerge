@@ -38,6 +38,8 @@ SET python3_exec=""
 :: These are the valid Python versions to run PyMerge with
 SET python_versions=python3.5 python3.6 python3.7 python3.8 python3.9
 
+cd app
+
 for %%v in (%python_versions%) do (
   if ... (
     :: Set the Python version we'll use to start the progam

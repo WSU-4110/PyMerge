@@ -125,6 +125,10 @@ class MainWindow(QMainWindow, QMessageBox):
         self.table_widget.load_table_contents(file_a, file_b)
         return result
 
+    def set_files(self, fileA, fileB):
+        self.fileA = fileA
+        self.fileB = fileB
+
     def menu_items(self):
         # ~~~~~~~~~~~~~~~~~~~~~~~~
         # MENUBAR

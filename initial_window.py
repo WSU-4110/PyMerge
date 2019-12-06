@@ -59,8 +59,9 @@ class InitialWindow(QWidget):
     def import_file1_on_click(self):
         self.importFile1Button.setEnabled(False)
         print('Importing file 1')
-        filename, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File')
-        self.fileA = filename
+        file_opener = file_open_dialog.FileOpenDialog()
+        file_opener.open_file_name_dialog("file A")
+        self.fileA = file_opener.file_name
 
         self.file_label1.setText(ntpath.basename(self.fileA))
         self.file_label1.move(60, 150)
@@ -71,8 +72,9 @@ class InitialWindow(QWidget):
     def import_file2_on_click(self):
         self.importFile2Button.setEnabled(False)
         print('Importing file 2')
-        filename, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File')
-        self.fileB = filename
+        file_opener = file_open_dialog.FileOpenDialog()
+        file_opener.open_file_name_dialog("file B")
+        self.fileB = file_opener.file_name
 
         self.file_label2.setText(ntpath.basename(self.fileB))
         self.file_label2.move(360, 150)
@@ -82,9 +84,7 @@ class InitialWindow(QWidget):
     @pyqtSlot()
     def switch_to_main_window(self):
         print("\nswitching to main window\n")
-        print(self.fileA)
-        print(self.fileB)
-        self.close()
+        main_window.MainWindow.set_files(self.fileA, self.fileB)
 
 def openInitialWindow():
     app = QApplication(sys.argv)

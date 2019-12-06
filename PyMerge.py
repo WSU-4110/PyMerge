@@ -36,6 +36,7 @@ dependency_chk.check()
 
 import main_window
 import utilities
+import initial_window
 
 
 class PyMergeCLI(object):
@@ -135,6 +136,8 @@ PyMerge
 
     def invoke_application(self, file1: str, file2: str):
         """Invoke the main application here"""
+
+        # initial_window.openInitialWindow()
 
         if file1 != "" or file2 != "":
             if self.validate_files(file1, file2, path_check=False):

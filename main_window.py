@@ -33,13 +33,14 @@ import sys
 from sys import platform
 
 from PyQt5.QtWidgets import *
+from PyQt5.QtCore import pyqtSlot
 
 import control_buttons
 import file_io
 import file_open_dialog
 import main_table
 import pymerge_enums
-import utilities
+import ntpath
 
 
 class MainWindow(QMainWindow, QMessageBox):
@@ -106,7 +107,11 @@ class MainWindow(QMainWindow, QMessageBox):
         if file_a != "":
             file_opener_b.open_file_name_dialog("file B")
         file_b = file_opener_b.file_name
-        
+
+        self.open_file_helper(file_a, file_b)
+
+    def open_file_helper(self, file_a, file_b):
+
         result = self.fIO.diff_files(file_a, file_b)
 
         if result == pymerge_enums.RESULT.GOOD:
@@ -121,9 +126,27 @@ class MainWindow(QMainWindow, QMessageBox):
         elif result == pymerge_enums.RESULT.READONLYB:
             QMessageBox.about(self, "Warning ", os.path.basename(file_b) + " is read only")
 
-
         self.table_widget.load_table_contents(file_a, file_b)
         return result
+
+    @pyqtSlot()
+    def import_file1(self):
+        print("Importing file 1")
+        file_opener = file_open_dialog.FileOpenDialog()
+        file_opener.open_file_name_dialog("file A")
+        # self.fileA = file_opener.file_name
+
+    @pyqtSlot()
+    def import_file2(self):
+        print("Importing file 2")
+        file_opener = file_open_dialog.FileOpenDialog()
+        file_opener.open_file_name_dialog("file B")
+        # self.fileB = file_opener.file_name
+
+    @pyqtSlot()
+    def merge_files(self):
+        print("Merging " + ntpath.basename(self.fileA) + " and " + ntpath.basename(self.fileB))
+        self.openFileHelper(self.fileA, self.fileB)
 
     def menu_items(self):
         # ~~~~~~~~~~~~~~~~~~~~~~~~

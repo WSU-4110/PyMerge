@@ -50,7 +50,7 @@ class ControlButtons(QWidget):
         import_file1_button.setIcon(icon)
         import_file1_button.setFixedHeight(50)
         import_file1_button.setToolTip("import left file")
-        import_file1_button.clicked.connect(self.mainTableObj.import_file1)
+        # import_file1_button.clicked.connect(self.mainTableObj.import_file1)
         grid.addWidget(import_file1_button, 1, 0)
 
         merge_button = QPushButton()
@@ -58,7 +58,7 @@ class ControlButtons(QWidget):
         merge_button.setIcon(icon)
         merge_button.setFixedWidth(50)
         merge_button.setToolTip("merge files")
-        merge_button.clicked.connect(self.mainTableObj.merge_files)
+        # merge_button.clicked.connect(self.mainTableObj.merge_files)
         grid.addWidget(merge_button, 1, 2)
 
         import_file2_button = QPushButton()
@@ -66,7 +66,7 @@ class ControlButtons(QWidget):
         import_file2_button.setIcon(icon)
         import_file2_button.setFixedHeight(50)
         import_file2_button.setToolTip("import right file")
-        import_file2_button.clicked.connect(self.mainTableObj.import_file2)
+        # import_file2_button.clicked.connect(self.mainTableObj.import_file2)
         grid.addWidget(import_file2_button, 1, 5)
 
         merge_left_button = QPushButton()

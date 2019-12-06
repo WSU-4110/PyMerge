@@ -1,7 +1,7 @@
 """
 ###########################################################################
 File: gui_config.py
-Author: Malcolm Hall
+Author:
 Description: Configurations for GUI styling. Makes style objects available to all modules.
 
 

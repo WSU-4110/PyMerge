@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ::!/bin/bash
 ::##########################################################################
 :: File: PyMerge.sh
@@ -70,3 +71,6 @@ if exist %invocation_file% (
   exit 0
 )
 
+=======
+python3 PyMerge.py
+>>>>>>> 98e19d2129e5fb9c4f672af457ff3d14070a462c

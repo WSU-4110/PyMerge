@@ -1,7 +1,7 @@
 """
 ###########################################################################
 File: merge_finalizer.py
-Author: Malcolm Hall
+Author:
 Description: Checks for merge validity, file permissions, and performs the final file write.
 
 
@@ -138,6 +138,9 @@ class MergeFinalizer(object):
         """
         outp_set_left: list = []
         outp_set_right: list = []
+
+        if not self.set_equal(left_set, right_set):
+            return Status.FILE_WRITE_ERROR
 
         self.check_for_backup_dir()
 

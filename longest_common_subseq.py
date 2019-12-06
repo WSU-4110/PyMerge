@@ -1,7 +1,7 @@
 """
 ###########################################################################
 File: longest_common_subseq.py
-Author: Malcolm Hall
+Author:
 Description: Implementation of the longest common subsequence algorithm.
 
 

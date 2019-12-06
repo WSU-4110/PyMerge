@@ -1,8 +1,8 @@
 """
 ###########################################################################
 File: utilities.py
-Author: Malcolm Hall, John Toniolo, Saular Raffi
-Description:
+Author:
+Description: Non-project specific standalone functions
 
 
 Copyright (C) PyMerge Team 2019

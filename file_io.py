@@ -2,7 +2,7 @@
 ###########################################################################
 File: file_io.py
 Author:
-Description:
+Description: An input/output interface for user selected files.
 
 
 Copyright (C) PyMerge Team 2019
@@ -35,6 +35,10 @@ import diff_resolution
 import pymerge_enums
 import utilities
 
+import os
+import os.path
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QMessageBox
+
 
 class FileIO(object):
     def __init__(self):
@@ -42,7 +46,6 @@ class FileIO(object):
         self.changes_a = changeset.ChangeSet()
 
     def diff_files(self, file_a, file_b):
-
         if file_a == "" or file_b == "":
             return pymerge_enums.RESULT.EMPTYFILE
 
@@ -57,19 +60,24 @@ class FileIO(object):
             print("\n[-] Unacceptable file type:", file_b_base_name, "\n")
             return pymerge_enums.RESULT.BADFILE
 
-        file_a = open(file_a, "r")
-        file_b = open(file_b, "r")
+        file_a_open = open(file_a, "r")
+        file_b_open = open(file_b, "r")
 
         result = diff_resolution.diff_set(
-            file_a, file_b, file_a, file_b, self.changes_a, self.changes_b
+            file_a_open, file_b_open, file_a_open, file_b_open, self.changes_a, self.changes_b
         )
 
-        file_a.close()
-        file_b.close()
+        file_a_open.close()
+        file_b_open.close()
 
         if result == pymerge_enums.RESULT.GOOD:
+            if not utilities.file_writable(file_a):            
+                return pymerge_enums.RESULT.READONLYA
+
+            if not utilities.file_writable(file_b):
+                return pymerge_enums.RESULT.READONLYB
+
             return pymerge_enums.RESULT.GOOD
-        return pymerge_enums.RESULT.NOTIMPL
 
     def get_change_sets(self, file_a, file_b):
         file_a = self.changes_a

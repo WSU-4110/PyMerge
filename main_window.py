@@ -40,6 +40,7 @@ import file_open_dialog
 import main_table
 import pymerge_enums
 import utilities
+from PyQt5.QtCore import pyqtSlot
 
 
 class MainWindow(QMainWindow, QMessageBox):
@@ -53,6 +54,7 @@ class MainWindow(QMainWindow, QMessageBox):
 
         self.fileA = ""
         self.fileB = ""
+        self.statusBar = QStatusBar()
 
         # load files and generate changesets
         result = pymerge_enums.RESULT.ERROR
@@ -95,7 +97,6 @@ class MainWindow(QMainWindow, QMessageBox):
 
     def open_file(self):
 
-        self.statusBar = QStatusBar()
         self.statusBar.showMessage("Opening file...")
         self.setStatusBar(self.statusBar)
 
@@ -148,16 +149,19 @@ class MainWindow(QMainWindow, QMessageBox):
         save_file_button = QAction("Save Files", self)
         save_file_button.setShortcut('Ctrl+s')
         save_file_button.triggered.connect(self.table_widget.write_merged_files)
+        save_file_button.triggered.connect(self.clear_status_bar)
         file_menu.addAction(save_file_button)
 
         merge_left_btn = QAction("Merge Left", self)
         merge_left_btn.setShortcut('Ctrl+l')
         merge_left_btn.triggered.connect(self.table_widget.merge_left)
+        merge_left_btn.triggered.connect(self.unsaved_changes)
         edit_menu.addAction(merge_left_btn)
 
         merge_right_btn = QAction("Merge Right", self)
         merge_right_btn.setShortcut('Ctrl+r')
         merge_right_btn.triggered.connect(self.table_widget.merge_right)
+        merge_left_btn.triggered.connect(self.unsaved_changes)
         edit_menu.addAction(merge_right_btn)
 
         prev_diff_btn = QAction("Previous Difference", self)
@@ -173,11 +177,13 @@ class MainWindow(QMainWindow, QMessageBox):
         undo_change_btn = QAction("Undo", self)
         undo_change_btn.setShortcut('Ctrl+z')
         undo_change_btn.triggered.connect(self.table_widget.undo_last_change)
+        merge_left_btn.triggered.connect(self.unsaved_changes)
         edit_menu.addAction(undo_change_btn)
 
         redo_change_btn = QAction("Redo", self)
         redo_change_btn.setShortcut('Ctrl+y')
         redo_change_btn.triggered.connect(self.table_widget.redo_last_undo)
+        merge_left_btn.triggered.connect(self.unsaved_changes)
         edit_menu.addAction(redo_change_btn)
 
         hide_show_btns = QAction("Hide/Show Buttons", self)
@@ -213,6 +219,15 @@ class MainWindow(QMainWindow, QMessageBox):
             elif os.path.exists("docs/PyMerge_Manual.pdf") and os.path.isfile("docs/PyMerge_Manual.pdf"):
                 subprocess.Popen("open docs/PyMerge_Manual.pdf", shell=True)
 
+    @pyqtSlot()
+    def unsaved_changes(self):
+        self.statusBar.showMessage("Unsaved changes...")
+        self.setStatusBar(self.statusBar)
+        print("hello")
+
+    @pyqtSlot()
+    def clear_status_bar(self):
+        self.statusBar.clearMessage()
 
 
 def start_main(fileA=0, fileB=0):

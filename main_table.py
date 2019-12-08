@@ -46,6 +46,7 @@ import pymerge_enums
 import table_row
 import undo_redo
 import utilities
+import main_window
 
 class MainTable(QWidget):
     def __init__(self, change_set_a, change_set_b):

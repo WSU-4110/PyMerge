@@ -95,6 +95,10 @@ class MainWindow(QMainWindow, QMessageBox):
 
     def open_file(self):
 
+        self.statusBar = QStatusBar()
+        self.statusBar.showMessage("Opening file...")
+        self.setStatusBar(self.statusBar)
+
         self.table_widget.clear_table()
 
         file_opener_a = file_open_dialog.FileOpenDialog()
@@ -121,6 +125,7 @@ class MainWindow(QMainWindow, QMessageBox):
         elif result == pymerge_enums.RESULT.READONLYB:
             QMessageBox.about(self, "Warning ", os.path.basename(file_b) + " is read only")
 
+        self.statusBar.clearMessage()
 
         self.table_widget.load_table_contents(file_a, file_b)
         return result

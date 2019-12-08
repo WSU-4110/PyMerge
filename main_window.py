@@ -201,8 +201,8 @@ class MainWindow(QMainWindow, QMessageBox):
             elif os.path.exists(".\docs\PyMerge_Manual.pdf") and os.path.isfile(".\docs\PyMerge_Manual.pdf"):
                 subprocess.Popen(".\docs\PyMerge_Manual.pdf", shell=True)
         else:
-            if os.path.exists("../doc/PyMerge_Manual.pdf") and os.path.isfile("../doc/PyMerge_Manual.pdf"):
-                subprocess.Popen("open ../docs/PyMerge_Manual.pdf", shell=True)
+            if os.path.exists("./doc/PyMerge_Manual.pdf") and os.path.isfile("./doc/PyMerge_Manual.pdf"):
+                subprocess.Popen("open ./docs/PyMerge_Manual.pdf", shell=True)
             elif os.path.exists("PyMerge_Manual.pdf") and os.path.isfile("PyMerge_Manual.pdf"):
                 subprocess.Popen("open PyMerge_Manual.pdf", shell=True)
             elif os.path.exists("docs/PyMerge_Manual.pdf") and os.path.isfile("docs/PyMerge_Manual.pdf"):

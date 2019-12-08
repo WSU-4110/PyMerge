@@ -250,7 +250,8 @@ class MainTable(QWidget):
         """
         Scrolls the table window to the next difference incrementally (starts at the first diff)
         :return: No return value
-        """        
+        """
+
         if len(self.diff_indices) == 0:
             return
 

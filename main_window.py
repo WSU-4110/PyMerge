@@ -161,7 +161,7 @@ class MainWindow(QMainWindow, QMessageBox):
         merge_right_btn = QAction("Merge Right", self)
         merge_right_btn.setShortcut('Ctrl+r')
         merge_right_btn.triggered.connect(self.table_widget.merge_right)
-        merge_left_btn.triggered.connect(self.unsaved_changes)
+        merge_right_btn.triggered.connect(self.unsaved_changes)
         edit_menu.addAction(merge_right_btn)
 
         prev_diff_btn = QAction("Previous Difference", self)
@@ -177,13 +177,13 @@ class MainWindow(QMainWindow, QMessageBox):
         undo_change_btn = QAction("Undo", self)
         undo_change_btn.setShortcut('Ctrl+z')
         undo_change_btn.triggered.connect(self.table_widget.undo_last_change)
-        merge_left_btn.triggered.connect(self.unsaved_changes)
+        undo_change_btn.triggered.connect(self.unsaved_changes)
         edit_menu.addAction(undo_change_btn)
 
         redo_change_btn = QAction("Redo", self)
         redo_change_btn.setShortcut('Ctrl+y')
         redo_change_btn.triggered.connect(self.table_widget.redo_last_undo)
-        merge_left_btn.triggered.connect(self.unsaved_changes)
+        redo_change_btn.triggered.connect(self.unsaved_changes)
         edit_menu.addAction(redo_change_btn)
 
         hide_show_btns = QAction("Hide/Show Buttons", self)
@@ -221,13 +221,16 @@ class MainWindow(QMainWindow, QMessageBox):
 
     @pyqtSlot()
     def unsaved_changes(self):
+        self.statusBar = QStatusBar()
         self.statusBar.showMessage("Unsaved changes...")
         self.setStatusBar(self.statusBar)
-        print("hello")
 
     @pyqtSlot()
     def clear_status_bar(self):
         self.statusBar.clearMessage()
+
+    def test(self):
+        print("this is a test")
 
 
 def start_main(fileA=0, fileB=0):

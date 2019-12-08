@@ -1,7 +1,7 @@
 """
 ###########################################################################
 File: main_window.py
-Author: John Toniolo, Malcolm Hall, Saular Raffi
+Author:
 Description:
 
 
@@ -193,10 +193,21 @@ class MainWindow(QMainWindow, QMessageBox):
 
     @staticmethod
     def open_help():
-        if platform == "win32":            
-            subprocess.Popen(".\docs\PyMerge_Manual.pdf",shell=True)
+        if platform == "win32":
+            if os.path.exists("../doc/PyMerge_Manual.pdf") and os.path.isfile("../doc/PyMerge_Manual.pdf"):
+                subprocess.Popen("../doc/PyMerge_Manual.pdf", shell=True)
+            elif os.path.exists("PyMerge_Manual.pdf") and os.path.isfile("PyMerge_Manual.pdf"):
+                subprocess.Popen("PyMerge_Manual.pdf", shell=True)
+            elif os.path.exists("docs/PyMerge_Manual.pdf") and os.path.isfile("docs/PyMerge_Manual.pdf"):
+                subprocess.Popen("docs/PyMerge_Manual.pdf", shell=True)
         else:
-            subprocess.Popen("open ./docs/PyMerge_Manual.pdf",shell=True)
+            if os.path.exists("../doc/PyMerge_Manual.pdf") and os.path.isfile("../doc/PyMerge_Manual.pdf"):
+                subprocess.Popen("open ../docs/PyMerge_Manual.pdf", shell=True)
+            elif os.path.exists("PyMerge_Manual.pdf") and os.path.isfile("PyMerge_Manual.pdf"):
+                subprocess.Popen("open PyMerge_Manual.pdf", shell=True)
+            elif os.path.exists("docs/PyMerge_Manual.pdf") and os.path.isfile("docs/PyMerge_Manual.pdf"):
+                subprocess.Popen("open docs/PyMerge_Manual.pdf", shell=True)
+
 
 
 def start_main(fileA=0, fileB=0):

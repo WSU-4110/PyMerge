@@ -1,7 +1,7 @@
 """
 ###########################################################################
 File: main_table.py
-Author: Malcolm Hall, John Toniolo, Saular Raffi
+Author:
 Description:
 
 

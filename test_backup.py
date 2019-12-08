@@ -1,7 +1,7 @@
 """
 ###########################################################################
 File: test_backup.py
-Author: Malcolm Hall
+Author:
 Description: Unit tests for file_backup.py
 
 

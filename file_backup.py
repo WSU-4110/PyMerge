@@ -1,7 +1,7 @@
 """
 ###########################################################################
 File: file_backup.py
-Author: Malcolm Hall
+Author:
 Description: Module for creating file backups before file merges are saved.
 
 
@@ -74,13 +74,19 @@ class Backup(object):
 
     @staticmethod
     def check_for_backup_folder():
+        """
+        Checks if the folder 'backup' exists and creates it if it doesn't.
+        """
         if not os.path.exists("backup"):
             os.mkdir("backup")
         else:
             pass
 
     @staticmethod
-    def get_meta_file_name(file_name: str):
+    def get_meta_file_name(file_name: str) -> str:
+        """
+        Create the file name for the backup meta file.
+        """
         return f".meta.{pathlib.Path(file_name).name}.dat"
 
     def create_meta_file(self, file: str) -> str:
@@ -127,7 +133,10 @@ class Backup(object):
         return str(hash_value) == str(self.get_hash(file))
 
     @staticmethod
-    def get_hash_file_name(hash_type: str):
+    def get_hash_file_name(hash_type: str) -> str:
+        """
+        Create the name for the backup hash file.
+        """
         return f"{hash_type}.txt"
 
     def create_backup(self, file: str, backup_dir: str) -> str:
@@ -190,6 +199,9 @@ class Backup(object):
         os.remove(f".meta.{file_name}.dat")
 
     def get_hash_from_backup(self, backup_file: str) -> str:
+        """
+        Gets the hash value from the text file stored in the backup archive.
+        """
         # Extract the archive contents
         with zipfile.ZipFile(backup_file) as myzip:
             myzip.extract(f"{self.hash_type}.txt")

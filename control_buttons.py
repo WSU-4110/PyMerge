@@ -28,8 +28,8 @@ Widget to contain the buttons/control panel for the merge tool.
 
 from PyQt5 import QtGui
 from PyQt5.QtWidgets import *
-
 import gui_config
+import main_window
 
 
 class ControlButtons(QWidget):
@@ -37,6 +37,7 @@ class ControlButtons(QWidget):
 
         self.table_obj = QTableWidget()
         self.table_obj = table_obj
+        self.window_obj = main_window
         super().__init__()
         self.setGeometry(200, 200, 200, 200)
         self.button_layout()

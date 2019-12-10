@@ -35,8 +35,8 @@ from PyQt5.QtWidgets import (
     QGridLayout,
     QApplication,
     QPushButton,
-    QMessageBox
-)
+    QMessageBox,
+    QStatusBar)
 
 import file_io
 # Project imports
@@ -244,12 +244,15 @@ class MainTable(QWidget):
         else:
             event.ignore()
 
+
+
     @pyqtSlot()
     def goto_next_diff(self):
         """
         Scrolls the table window to the next difference incrementally (starts at the first diff)
         :return: No return value
-        """        
+        """
+
         if len(self.diff_indices) == 0:
             return
 

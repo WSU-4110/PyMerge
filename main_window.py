@@ -221,16 +221,12 @@ class MainWindow(QMainWindow, QMessageBox):
 
     @pyqtSlot()
     def unsaved_changes(self):
-        self.statusBar = QStatusBar()
         self.statusBar.showMessage("Unsaved changes...")
         self.setStatusBar(self.statusBar)
 
     @pyqtSlot()
     def clear_status_bar(self):
         self.statusBar.clearMessage()
-
-    def test(self):
-        print("this is a test")
 
 
 def start_main(fileA=0, fileB=0):

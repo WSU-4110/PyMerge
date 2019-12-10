@@ -35,8 +35,8 @@ from PyQt5.QtWidgets import (
     QGridLayout,
     QApplication,
     QPushButton,
-    QMessageBox
-)
+    QMessageBox,
+    QStatusBar)
 
 import file_io
 # Project imports
@@ -46,7 +46,6 @@ import pymerge_enums
 import table_row
 import undo_redo
 import utilities
-import main_window
 
 class MainTable(QWidget):
     def __init__(self, change_set_a, change_set_b):
@@ -244,6 +243,8 @@ class MainTable(QWidget):
             
         else:
             event.ignore()
+
+
 
     @pyqtSlot()
     def goto_next_diff(self):

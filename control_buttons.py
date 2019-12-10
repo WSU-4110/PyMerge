@@ -52,7 +52,6 @@ class ControlButtons(QWidget):
         merge_left_button.setFixedHeight(50)
         merge_left_button.setToolTip("merge left version into right")
         merge_left_button.clicked.connect(self.table_obj.merge_left)
-        merge_left_button.clicked.connect(self.window_obj.MainWindow.unsaved_changes)
         grid.addWidget(merge_left_button, 0, 1)
 
         undo_change_button = QPushButton()
@@ -61,7 +60,6 @@ class ControlButtons(QWidget):
         undo_change_button.setFixedHeight(50)
         undo_change_button.setToolTip("undo last merge")
         undo_change_button.clicked.connect(self.table_obj.undo_last_change)
-        undo_change_button.clicked.connect(self.window_obj.MainWindow.unsaved_changes)
         grid.addWidget(undo_change_button, 0, 0)
 
         next_diff_button = QPushButton()
@@ -86,7 +84,6 @@ class ControlButtons(QWidget):
         redo_change_button.setFixedHeight(50)
         redo_change_button.setToolTip("redo last change")
         redo_change_button.clicked.connect(self.table_obj.redo_last_undo)
-        redo_change_button.clicked.connect(self.window_obj.MainWindow.unsaved_changes)
         grid.addWidget(redo_change_button, 0, 5)
 
         merge_right_button = QPushButton()
@@ -95,5 +92,4 @@ class ControlButtons(QWidget):
         merge_right_button.setFixedHeight(50)
         merge_right_button.setToolTip("merge right version into left")
         merge_right_button.clicked.connect(self.table_obj.merge_right)
-        merge_right_button.clicked.connect(self.window_obj.MainWindow.unsaved_changes)
         grid.addWidget(merge_right_button, 0, 4)

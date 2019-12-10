@@ -521,10 +521,13 @@ class MainTable(QWidget):
         merge_writer = merge_finalizer.MergeFinalizer(
             self.left_file, self.right_file, "file_backup"
         )
+        if not merge_writer.set_equal(merged_file_contents[0][:-1], merged_file_contents[1][:-1]):
+            print("Warning: Files are not identicle, merge all lines before saving in order for files to be 100% syncronized.")
+            
         merge_writer.finalize_merge(
             merged_file_contents[0][:-1], merged_file_contents[1][:-1]
         )
-
+        
     def load_test_files(self, file1: str, file2: str):
         """
         Load two arbitrary files as as test
